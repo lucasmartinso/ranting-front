@@ -24,7 +24,9 @@ export default function LoginScreen() {
     try {
       setClicked(true);
       setPassword("");  
-      await AxiosRequest.login(userData);
+      const promise = await AxiosRequest.login(userData);
+      console.log(promise.token);
+      console.log(promise.user);
       navigate("/");
     } catch (error) {
       console.log(error);
