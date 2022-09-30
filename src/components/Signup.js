@@ -1,6 +1,8 @@
 import { useState } from "react"
 import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
+import { ThreeDots } from "react-loader-spinner"
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpScreen() { 
   const [name,setName] = useState("");
@@ -8,7 +10,15 @@ export default function SignUpScreen() {
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
   const [confirmPassword,setConfirmPassword] = useState("");
-  const [clicked,setClicked] = useState(false)
+  const [clicked,setClicked] = useState(false);
+  const [error,setError] = useState(true);
+  const navigate = useNavigate();
+
+  async function register() { 
+    setClicked(true);
+    setConfirmPassword("");
+    setPassword("");  
+  }
 
   return(
     <Container>
@@ -17,8 +27,8 @@ export default function SignUpScreen() {
         <img src={logo} alt="logo"/>
       </Title>
 
-      <form >
-      <Main>
+      <form onSubmit={register}>
+      <Main error={error}>
         <input
             type="text"
             placeholder="Name"
@@ -54,9 +64,22 @@ export default function SignUpScreen() {
             onChange={(event) => setConfirmPassword(event.target.value)}
             required
         />
-        <button>Register</button>
+        <button>
+          {clicked ? (
+            <ThreeDots color="white" height={80} width={100} />
+          ) : ("Register")}
+        </button>
       </Main>
       </form>
+      
+      {error ? (
+      <Error>
+          <button>
+            <span>Username or password are wrong</span>
+            <span id="x" onClick={() => setError(false)}>X</span>
+          </button>
+      </Error>
+      ) : ""}
     </Container>
   )
 }
@@ -67,7 +90,6 @@ const Container = styled.div`
   display: flex; 
   flex-direction: column;
 `
-
 const Title = styled.div`
   width: 100%; 
   height: 100%;
@@ -86,7 +108,7 @@ const Main = styled.div`
   display: flex; 
   align-items: center;
   flex-direction: column;
-  margin-bottom: 80px;
+  margin-bottom: ${props => props.error ? ("25px") : ("40px")};
 
   input { 
     width: 80%; 
@@ -124,7 +146,41 @@ const Main = styled.div`
 
     &:active {  
       transform: scale(0.98);
-      ox-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
+  }
+`
+const Error = styled.div` 
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  justify-content: center; 
+
+  button { 
+    width: 80%; 
+    height: 70px; 
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding: 0px 20px 0px 20px;
+    background-color: #FF7474;
+    color: rgba(255,255,255,1);
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid rgba(120, 177, 89, 0.25);
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    transition: 0.2s all;
+
+   span#x { 
+    &:hover { 
+      cursor: pointer;
+    }
+
+    &:active {  
+      transform: scale(0.98);
+      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+   }
   }
 `
