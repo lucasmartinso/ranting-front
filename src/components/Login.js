@@ -5,12 +5,9 @@ import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
 import * as AxiosRequest from "../repositories/AxiosRequests"
 
-export default function SignUpScreen() { 
-  const [name,setName] = useState("");
-  const [email,setEmail] = useState("");
-  const [username,setUsername] = useState("");
+export default function LoginScreen() { 
+  const [usernameEmail,setUsernameEmail] = useState("");
   const [password,setPassword] = useState("");
-  const [confirmPassword,setConfirmPassword] = useState("");
   const [clicked,setClicked] = useState(false);
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,19 +17,15 @@ export default function SignUpScreen() {
     event.preventDefault();
 
     const userData = { 
-      name,
-      username,
-      email,
-      password,
-      confirmPassword
+      usernameEmail,
+      password
     }
 
     try {
       setClicked(true);
-      setConfirmPassword("");
       setPassword("");  
       await AxiosRequest.login(userData);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);
@@ -50,25 +43,11 @@ export default function SignUpScreen() {
 
       <form onSubmit={register}>
       <Main error={error}>
-        <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            required
-        />
-        <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-        />
          <input
             type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            placeholder="Username or email"
+            value={usernameEmail}
+            onChange={(event) => setUsernameEmail(event.target.value)}
             required
         />
         <input
@@ -78,17 +57,10 @@ export default function SignUpScreen() {
             onChange={(event) => setPassword(event.target.value)}
             required
         />
-        <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-            required
-        />
         <button>
           {clicked ? (
             <ThreeDots color="white" height={80} width={100} />
-          ) : ("Register")}
+          ) : ("Login")}
         </button>
       </Main>
       </form>
@@ -102,8 +74,8 @@ export default function SignUpScreen() {
       </Error>
       ) : ""}
 
-      <Message onClick={() => navigate("/login")}>
-        <span>Already registred? Sign-in!</span>
+      <Message onClick={() => navigate("/")}>
+        <span>First time? Sign-up!</span>
       </Message>
     </Container>
   )
