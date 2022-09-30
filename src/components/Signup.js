@@ -3,6 +3,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
+import * as AxiosRequest from "../repositories/AxiosRequests"
 
 export default function SignUpScreen() { 
   const [name,setName] = useState("");
@@ -11,16 +12,33 @@ export default function SignUpScreen() {
   const [password,setPassword] = useState("");
   const [confirmPassword,setConfirmPassword] = useState("");
   const [clicked,setClicked] = useState(false);
-  const [error,setError] = useState(true);
+  const [error,setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const URL = "http://localhost:5000/sign-up"
 
   async function register(event) { 
     event.preventDefault();
-    
-    setClicked(true);
-    setConfirmPassword("");
-    setPassword("");  
+
+    const userData = { 
+      name,
+      username,
+      email,
+      password,
+      confirmPassword
+    }
+
+    try {
+      setClicked(true);
+      setConfirmPassword("");
+      setPassword("");  
+      await AxiosRequest.signup(userData);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.response.data);
+      setClicked(false);
+      setError(true);
+    }
   }
 
   return(
@@ -78,7 +96,7 @@ export default function SignUpScreen() {
       {error ? (
       <Error>
           <button>
-            <span>Username or password are wrong</span>
+            <span>{errorMessage}</span>
             <span id="x" onClick={() => setError(false)}>X</span>
           </button>
       </Error>
