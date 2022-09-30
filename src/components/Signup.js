@@ -72,7 +72,7 @@ const Title = styled.div`
   height: 100%;
   display: flex; 
   justify-content: center;
-  margin-top: 70px;
+  margin-top: 50px;
 
   img { 
     width: 500px;
@@ -106,10 +106,18 @@ const Main = styled.div`
     width: 80%; 
     height: 70px; 
     display: flex;
+    align-items: center; 
+    justify-content: center;
     background-color: #000000;
-    font-color: rgba(255,255,255,1);
+    color: rgba(255,255,255,1);
+    font-size: 30px;
+    font-weight: bold;
     border: 2px solid rgba(120, 177, 89, 0.25);
     box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
+
+    &:hover { 
+      cursor: pointer;
+    }
   }
 `
