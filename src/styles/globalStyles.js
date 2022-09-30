@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body{
     background-color:#359FE4;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Raleway', sans-serif;
   }
   html{
     @media (max-width:612px) {
