@@ -25,8 +25,8 @@ export default function LoginScreen() {
       setClicked(true);
       setPassword("");  
       const promise = await AxiosRequest.login(userData);
-      console.log(promise.token);
-      console.log(promise.user);
+      localStorage.setItem("MY_TOKEN",promise.token);
+      localStorage.setItem("USER_DATA",promise.user);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -76,7 +76,7 @@ export default function LoginScreen() {
       </Error>
       ) : ""}
 
-      <Message onClick={() => navigate("/")}>
+      <Message onClick={() => navigate("/sign-up")}>
         <span>First time? Sign-up!</span>
       </Message>
     </Container>
