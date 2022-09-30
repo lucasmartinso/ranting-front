@@ -18,13 +18,18 @@ const Container = styled.div`
   height: 100%; 
   display: flex; 
   flex-direction: column;
+  align-items: center;
 `
 const Title = styled.div`
-    width: 100%; 
+    width: 90%; 
     height: 100%;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 60px;
 
     img { 
-        width: 100px;
+        width: 140px;
         height: 70px;
     }
 `
