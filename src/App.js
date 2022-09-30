@@ -5,6 +5,7 @@ import GlobalStyle from "./styles/globalStyles";
 import LoginScreen from "./components/Login";
 import TokenContext from"./contexts/tokenContext";
 import UserContext from "./contexts/userContext"
+import MainScreen from "./components/Main";
 
 export default function App() {
   const [token,setToken] = useState(localStorage.getItem("MY_TOKEN"));
@@ -18,6 +19,7 @@ export default function App() {
           <Routes>
               <Route path="/sign-up" element={<SignUpScreen />} />
               <Route path="/login" element={<LoginScreen />} />
+              <Route path="/restaurants" element={<MainScreen />} />
           </Routes>
       </BrowserRouter>
     </UserContext.Provider>
