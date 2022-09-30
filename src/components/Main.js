@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function MainScreen() { 
     const { userData } = useContext(UserContext);
-    const { token, setToken } = useContext(TokenContext);
+    const { token } = useContext(TokenContext);
     const navigate = useNavigate();
     console.log(userData);
     console.log(token);
-    setToken("")
     return(
         <Container>
             <Title>
@@ -32,7 +31,16 @@ export default function MainScreen() {
 
             <Main>
                 <ul>
-                    
+                    <Place>
+                        <Overall>
+                            <span>Paris 6</span>
+                            <h3>4,7 ⭐</h3>
+                        </Overall>
+                        <Info>
+                            <img src="https://s.yimg.com/uu/api/res/1.2/yJgQLWYXVhVDgw.PFwCQ.g--~B/aD01MjE7dz03Njg7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/pt/afp.com.br/6eab9e01093eb739a7a12cfecd85b6b0" alt="place"/>
+                        </Info>
+                                                
+                    </Place>
                 </ul>
             </Main>
         </Container>
@@ -133,7 +141,58 @@ const Sign = styled.div`
 const Main = styled.div`
     width: 100%; 
     height: 100%; 
-    display: flex; 
-    align-items: center; 
-    flex-direction: row;
+
+    ul { 
+        width: 100%; 
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+    }
+`
+const Place = styled.li`
+    width: 90%;
+    height: 350px;
+    background-color: white;
+    margin-top: 150px;
+    border-radius: 12px;
+    padding: 25px 0px 0px 0px;
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+
+    &:hover { 
+        cursor: pointer;
+    }
+
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+    
+`
+const Overall = styled.div`
+    width: 12%; 
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+
+    span { 
+        margin-bottom: 10px;
+    }
+`
+const Info = styled.div`
+    width: 88%; 
+    height: 100%;
+    display: flex;
+
+    img { 
+        width: 97%;
+        height: 65%;
+        object-fit: cover;
+        border-radius: 6px;
+    }
 `
