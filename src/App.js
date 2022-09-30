@@ -6,6 +6,8 @@ import LoginScreen from "./components/Login";
 
 
 export default function App() {
+  const [token,setToken] = useState(localStorage.getItem("MY_TOKEN"));
+  const [userData, setUserData] = useState(localStorage.getItem("USER_DATA"));
   return (
     <>
     <GlobalStyle />
