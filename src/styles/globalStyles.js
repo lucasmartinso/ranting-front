@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing:border-box;
   }
   body{
-    background-color:#333333;
+    background-color:#359FE4;
     font-family: 'Lato', sans-serif;
   }
   html{
