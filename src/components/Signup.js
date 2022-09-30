@@ -8,6 +8,7 @@ export default function SignUpScreen() {
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
   const [confirmPassword,setConfirmPassword] = useState("");
+  const [clicked,setClicked] = useState(false)
 
   return(
     <Container>
@@ -115,9 +116,15 @@ const Main = styled.div`
     border: 2px solid rgba(120, 177, 89, 0.25);
     box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
+    transition: 0.2s all;
 
     &:hover { 
       cursor: pointer;
+    }
+
+    &:active {  
+      transform: scale(0.98);
+      ox-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
   }
 `
