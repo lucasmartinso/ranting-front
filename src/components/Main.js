@@ -47,7 +47,7 @@ export default function MainScreen() {
                                 <h4>Salmão</h4>
                             </TextBox> 
                             <TextBox>
-                                <span>N de avaliações:</span>
+                                <span>Número de avaliações:</span>
                                 <h4>372</h4>
                             </TextBox>
                             <TextBox>
@@ -197,7 +197,7 @@ const Place = styled.li`
 `
 const Container2 = styled.div`
     width: 100%; 
-    height: 60%; 
+    height: 70%; 
     display: flex;
 `
 const Overall = styled.div`
@@ -244,7 +244,7 @@ const Ranting = styled.div`
     width: 100%; 
     display: flex;
     justify-content: center;
-    align-items: space-between;
+    padding: 10px 0px 0px 0px;
     font-family: 'Playball', cursive;
     font-size: 24px;
 `
