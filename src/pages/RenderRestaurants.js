@@ -1,44 +1,44 @@
 import styled from "styled-components";
 
-export default function RenderRestaurants() { 
+export default function RenderRestaurants(restaurantData) { 
     return( 
         <Place>
-                        <Container2>
-                            <Overall>
-                                <span>Paris 6 <ion-icon name="checkmark-circle"></ion-icon></span>
-                                <h3>4,7 ⭐</h3>
-                            </Overall>
-                            <Info>
-                                <img src="https://i0.wp.com/sarapateando.com.br/wp-content/uploads/2021/05/47b15ddd-6b2b-4926-a3b7-57bb9e08abda.jpg?fit=1280%2C960&ssl=1" alt="place"/>
-                            </Info>
-                        </Container2>
-                        <Ranting>
-                            <TextBox>
-                                <span>Carro chefe:</span>
-                                <h4>Salmão</h4>
-                            </TextBox> 
-                            <TextBox>
-                                <span>Número de avaliações:</span>
-                                <h4>372</h4>
-                            </TextBox>
-                            <TextBox>
-                                <span>Comida:</span>
-                                <h4> 4,8 ⭐</h4>
-                            </TextBox>
-                            <TextBox>
-                                <span>Atendimento:</span>
-                                <h4> 4,8 ⭐</h4>
-                            </TextBox>
-                            <TextBox>
-                                <span>Preço:</span>
-                                <h4> 4,8 ⭐</h4>
-                            </TextBox>
-                            <TextBox>
-                                <span>Ambiente:</span>
-                                <h4> 4,8 ⭐</h4>
-                            </TextBox>
-                        </Ranting>                 
-                    </Place>
+            <Container2>
+                <Overall>
+                    <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
+                    <h3>4,7 ⭐</h3>
+                </Overall>
+                <Info>
+                    <img src="https://i0.wp.com/sarapateando.com.br/wp-content/uploads/2021/05/47b15ddd-6b2b-4926-a3b7-57bb9e08abda.jpg?fit=1280%2C960&ssl=1" alt="place"/>
+                </Info>
+            </Container2>
+            <Ranting>
+                <TextBox>
+                    <span>Carro chefe:</span>
+                    <h4>Salmão</h4>
+                </TextBox> 
+                <TextBox>
+                    <span>Número de avaliações:</span>
+                    <h4>372</h4>
+                </TextBox>
+                <TextBox>
+                    <span>Comida:</span>
+                    <h4> 4,8 ⭐</h4>
+                </TextBox>
+                <TextBox>
+                    <span>Atendimento:</span>
+                    <h4> 4,8 ⭐</h4>
+                </TextBox>
+                <TextBox>
+                    <span>Preço:</span>
+                    <h4> 4,8 ⭐</h4>
+                </TextBox>
+                <TextBox>
+                    <span>Ambiente:</span>
+                    <h4> 4,8 ⭐</h4>
+                </TextBox>
+            </Ranting>                 
+        </Place>
     )
 }
 

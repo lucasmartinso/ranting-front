@@ -83,10 +83,11 @@ const Title = styled.div`
     display: flex; 
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px;
+    padding-top: 30px;
     position: fixed;
     top: 0;
     z-index: 1;
+    background-color: #359FE4;
 
     span {
         display: flex; 
@@ -113,6 +114,7 @@ const Title = styled.div`
     img { 
         width: 140px;
         height: 70px;
+        border-radius: 0px 0px 10px 10px;
     }
 `
 const UserProfile = styled.div`
