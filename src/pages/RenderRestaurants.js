@@ -41,12 +41,12 @@ export default function RenderRestaurants(restaurantData) {
                     </TextBox>
                 </Ranting>  
             ): (<NoRanting>
-                    <New>⭐NEW⭐</New>
+                    <New><span>⭐NEW⭐</span></New>
                     <TextBox>
                         <span>Specialty Food:</span>
                         <h4>{restaurantData.type}</h4>
                     </TextBox> 
-                    <New>⭐NEW⭐</New>
+                    <New><span>⭐NEW⭐</span></New>
                 </NoRanting>
                 )}               
         </Place>
@@ -139,7 +139,10 @@ const NoRanting = styled.div`
 const New = styled.div`
     text-align: center;
     margin-right: 20px;
-    font-weight: 500;
+
+    span { 
+        font-weight: 700;
+    }
 `
 const TextBox = styled.li`
     text-align: center;

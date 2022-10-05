@@ -7,11 +7,13 @@ import TokenContext from "../contexts/tokenContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as axiosRequests from "../repositories/AxiosRequests";
+import SearchBox from "../pages/SearchBox";
 
 export default function MainScreen() { 
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [places, setPlaces] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
@@ -27,6 +29,12 @@ export default function MainScreen() {
     console.log(places);
 
     return(
+        <>
+        {openModal ? (
+            <SearchBox 
+
+            />
+        ): ""}
         <Container>
             <Title>
                 <span><ion-icon name="search-sharp"></ion-icon> Search</span>
@@ -68,6 +76,7 @@ export default function MainScreen() {
                 </ul>
             </Main>
         </Container>
+        </>
     )
 }
 
