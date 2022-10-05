@@ -26,7 +26,15 @@ export default function LoginScreen() {
       setPassword("");  
       const promise = await AxiosRequest.login(userData);
       localStorage.setItem("MY_TOKEN",promise.token);
-      localStorage.setItem("USER_DATA",promise.user);
+      
+      const userInfo = JSON.stringify({
+        "id": promise.user.id,
+        "name": promise.user.name,
+        "username": promise.user.username,
+        "mainPhoto": promise.user.mainPhoto
+      });
+
+      localStorage.setItem("USER_DATA",userInfo);
       navigate("/");
     } catch (error) {
       console.log(error);

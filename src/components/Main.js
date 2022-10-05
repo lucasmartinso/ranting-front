@@ -9,7 +9,8 @@ export default function MainScreen() {
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const navigate = useNavigate();
-    console.log(userData);
+    const user = JSON.parse(userData);
+    console.log(user);
     console.log(token);
     return(
         <Container>
@@ -18,8 +19,11 @@ export default function MainScreen() {
                 <img src={logo} alt="logo"/>
                 {token ? (
                 <UserProfile>
-                    <span>Olá, son</span>
-                    <img src="https://s.yimg.com/uu/api/res/1.2/yJgQLWYXVhVDgw.PFwCQ.g--~B/aD01MjE7dz03Njg7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/pt/afp.com.br/6eab9e01093eb739a7a12cfecd85b6b0" alt="profile"/>
+                    <span>Olá, {user.name}</span>
+                    {user.mainPhoto ? (
+                        <img src={user.mainPhoto} alt="profile"/>
+                    ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
+                    
                 </UserProfile>
                 ): (
                     <Sign>
@@ -128,6 +132,13 @@ const UserProfile = styled.div`
         object-fit: cover;
         border-radius: 50%;
         margin-left: 5px;
+    }
+
+    ion-icon { 
+        margin-left: 5px;
+        width: 40px;
+        height: 40px;
+        color : white;
     }
 `
 const Sign = styled.div`
