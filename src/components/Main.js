@@ -55,13 +55,14 @@ export default function MainScreen() {
                             name = {place.name}
                             mainPhoto = {place.mainPhoto}
                             score = {place.score}
-                            type = {place.typefood}
+                            typefood = {place.typefood}
                             food = {place.food}
                             price = {place.price}
                             attendance = {place.attendance}
                             environment = {place.environment}
                             ratings = {place.numberRatings}
                             verify = {place.verify}
+                            type = {place.type}
                         />
                     ))}
                 </ul>

@@ -6,38 +6,49 @@ export default function RenderRestaurants(restaurantData) {
             <Container2>
                 <Overall>
                     <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
-                    <h3>4,7 ⭐</h3>
+                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</h3>
                 </Overall>
                 <Info>
-                    <img src="https://i0.wp.com/sarapateando.com.br/wp-content/uploads/2021/05/47b15ddd-6b2b-4926-a3b7-57bb9e08abda.jpg?fit=1280%2C960&ssl=1" alt="place"/>
+                    <img src={restaurantData.mainPhoto} alt="place"/>
                 </Info>
             </Container2>
-            <Ranting>
-                <TextBox>
-                    <span>Carro chefe:</span>
-                    <h4>Salmão</h4>
-                </TextBox> 
-                <TextBox>
-                    <span>Número de avaliações:</span>
-                    <h4>372</h4>
-                </TextBox>
-                <TextBox>
-                    <span>Comida:</span>
-                    <h4> 4,8 ⭐</h4>
-                </TextBox>
-                <TextBox>
-                    <span>Atendimento:</span>
-                    <h4> 4,8 ⭐</h4>
-                </TextBox>
-                <TextBox>
-                    <span>Preço:</span>
-                    <h4> 4,8 ⭐</h4>
-                </TextBox>
-                <TextBox>
-                    <span>Ambiente:</span>
-                    <h4> 4,8 ⭐</h4>
-                </TextBox>
-            </Ranting>                 
+
+            {Number(restaurantData.score) !== 0 ? (
+                <Ranting>
+                    <TextBox>
+                        <span>Specialty Food:</span>
+                        <h4>{restaurantData.typefood}</h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>Reviews:</span>
+                        <h4>{restaurantData.ratings}</h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Food:</span>
+                        <h4> {Number(restaurantData.food).toFixed(1)} ⭐</h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Attendance:</span>
+                        <h4> {Number(restaurantData.attendance).toFixed(1)} ⭐</h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Price:</span>
+                        <h4> {Number(restaurantData.price).toFixed(1)} ⭐</h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Environment:</span>
+                        <h4> {Number(restaurantData.environment).toFixed(1)} ⭐</h4>
+                    </TextBox>
+                </Ranting>  
+            ): (<NoRanting>
+                    <New>⭐NEW⭐</New>
+                    <TextBox>
+                        <span>Specialty Food:</span>
+                        <h4>{restaurantData.type}</h4>
+                    </TextBox> 
+                    <New>⭐NEW⭐</New>
+                </NoRanting>
+                )}               
         </Place>
     )
 }
@@ -92,6 +103,10 @@ const Overall = styled.div`
     h3 { 
         font-weight: black;
     }
+
+    h4 { 
+        color: red;
+    }
 `
 const Info = styled.div`
     width: 85%; 
@@ -113,11 +128,28 @@ const Ranting = styled.div`
     font-family: 'Playball', cursive;
     font-size: 24px;
 `
+const NoRanting = styled.div`
+    width: 100%; 
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0px 0px 0px;
+    font-family: 'Playball', cursive;
+    font-size: 24px;
+`
+const New = styled.div`
+    text-align: center;
+    margin-right: 20px;
+    font-weight: 500;
+`
 const TextBox = styled.li`
     text-align: center;
     margin-right: 20px;
 
     span {
         font-weight: 500;
+    }
+
+    h4 { 
+        padding-top: 5px;
     }
 `
