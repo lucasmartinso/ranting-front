@@ -13,7 +13,7 @@ export default function MainScreen() {
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [places, setPlaces] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
+    const [openModal, setOpenModal] = useState(true);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
@@ -32,7 +32,8 @@ export default function MainScreen() {
         <>
         {openModal ? (
             <SearchBox 
-
+                openModal = {openModal}
+                setOpenModal = {setOpenModal}
             />
         ): ""}
         <Container>
