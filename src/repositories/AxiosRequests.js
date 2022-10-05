@@ -11,3 +11,9 @@ export async function login(userData) {
     
     return promise.data;
 }
+
+export async function getPlaces() {
+    const promise = await axios.post(`${URL}/places`)
+
+    return promise.data;
+}
