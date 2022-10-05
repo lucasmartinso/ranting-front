@@ -1,18 +1,31 @@
-import { useContext } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
+import * as axiosRequests from "../repositories/AxiosRequests";
 
 export default function MainScreen() { 
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
+    const [places, setPlaces] = useState([]);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
-    console.log(user);
-    console.log(token);
+
+    useEffect(async () => {
+        try {
+            const promise = await axiosRequests.getPlaces();
+            setPlaces(promise);
+        } catch (error) {
+            console.log(error);
+        }
+    },[]);
+
+    console.log(places);
+
     return(
         <Container>
             <Title>
@@ -36,8 +49,21 @@ export default function MainScreen() {
 
             <Main>
                 <ul>
-                    <RenderRestaurants />
-                    <RenderRestaurants />
+                    {places.map(place => (
+                        <RenderRestaurants 
+                            id = {place.id}
+                            name = {place.name}
+                            mainPhoto = {place.mainPhoto}
+                            score = {place.score}
+                            type = {place.typefood}
+                            food = {place.food}
+                            price = {place.price}
+                            attendance = {place.attendance}
+                            environment = {place.environment}
+                            ratings = {place.numberRatings}
+                            verify = {place.verify}
+                        />
+                    ))}
                 </ul>
             </Main>
         </Container>

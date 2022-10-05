@@ -13,7 +13,7 @@ export async function login(userData) {
 }
 
 export async function getPlaces() {
-    const promise = await axios.post(`${URL}/places`)
+    const promise = await axios.get(`${URL}/places`)
 
     return promise.data;
 }
