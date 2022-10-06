@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
 import * as axiosRequest from "../repositories/AxiosRequests"
+import RenderSearchPlaces from "../subpages/RenderSearchPlaces";
 
 export default function SearchBox({setOpenModal}) { 
     const [search,setSearch] = useState("");
@@ -14,6 +15,7 @@ export default function SearchBox({setOpenModal}) {
 
         try {
             const promise = await axiosRequest.search(name);
+            console.log(promise);
             setPlaces(promise);
         } catch (error) {
             console.log(error);
@@ -42,7 +44,15 @@ export default function SearchBox({setOpenModal}) {
             </Box>
             <Places>
                 <ul>
-                    
+                {places.map(place => (
+                        <RenderSearchPlaces 
+                            id = {place.id}
+                            name = {place.name}
+                            score = {place.score}    
+                            mainPhoto = {place.mainPhoto} 
+                            verify = {place.verify}               
+                        />
+                    ))}
                 </ul>
             </Places>
         </Background>

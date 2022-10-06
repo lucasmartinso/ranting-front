@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-export default function RenderSearchPlaces() { 
+export default function RenderSearchPlaces(placeData) { 
     return(
         <Place>
-            <span>Paris 6<ion-icon name="checkmark-circle"></ion-icon></span>
-            <span>4,5 ⭐</span>
+            <span>{placeData.name}<ion-icon name="checkmark-circle"></ion-icon></span>
+            <span>{Number(placeData.score) !== 0 ? (`${Number(placeData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</span>
         </Place>
     )
 }
