@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
 import * as axiosRequest from "../repositories/AxiosRequests"
 import RenderSearchPlaces from "../subpages/RenderSearchPlaces";
+import notFound from "../styles/images/NotFound.png"
 
 export default function SearchBox({setOpenModal}) { 
     const [search,setSearch] = useState("");
@@ -12,15 +13,17 @@ export default function SearchBox({setOpenModal}) {
         setSearch(event);
         const name = event;
         console.log(name);
-
+        
         try {
-            const promise = await axiosRequest.search(name);
-            console.log(promise);
-            setPlaces(promise);
+            if(name.length>2) {
+                const promise = await axiosRequest.search(name);
+                setPlaces(promise);
+            }
         } catch (error) {
             console.log(error);
+            setPlaces([]);
         }
-    }
+    }   
 
     return( 
         <Background>
@@ -43,6 +46,7 @@ export default function SearchBox({setOpenModal}) {
                 </Search>
             </Box>
             <Places>
+                {places.length !==0 ? (
                 <ul>
                 {places.map(place => (
                         <RenderSearchPlaces 
@@ -54,6 +58,11 @@ export default function SearchBox({setOpenModal}) {
                         />
                     ))}
                 </ul>
+                ) : (
+                    <NotFound>
+                        <img src={notFound} alt="Not Found"/>
+                    </NotFound>
+                )}
             </Places>
         </Background>
     )
@@ -158,4 +167,12 @@ const Places = styled.div`
     display: flex; 
     flex-direction: column;
     padding-top: 20px;
+`
+const NotFound = styled.div`
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 `
