@@ -17,3 +17,9 @@ export async function getPlaces() {
 
     return promise.data;
 }
+
+export async function search(name) {
+    const promise = await axios.post(`${URL}/places/search`, null, {params: {name}});
+
+    return promise.data;
+}

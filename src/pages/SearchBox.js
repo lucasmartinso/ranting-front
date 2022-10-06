@@ -1,8 +1,23 @@
-import { useState } from "react"
-import styled from "styled-components"
+import { useState } from "react";
+import styled from "styled-components";
+import { DebounceInput } from "react-debounce-input";
+import * as axiosRequest from "../repositories/AxiosRequests"
 
 export default function SearchBox({setOpenModal}) { 
     const [search,setSearch] = useState("");
+
+    async function searchPlace(event) {
+        setSearch(event);
+        const name = event;
+        console.log(name);
+
+        try {
+            const promise = await axiosRequest.search(name);
+            console.log(promise);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return( 
         <Background>
@@ -13,11 +28,13 @@ export default function SearchBox({setOpenModal}) {
                 </Cancel>
                 <Search>
                     <ion-icon name="search-sharp"></ion-icon>
-                    <input
+                    <DebounceInput
                         type="text"
                         placeholder="Place name..."
+                        minLength={3}
+                        debounceTimeout={400}
                         value={search}
-                        onChange={(event) => setSearch(event.target.value)}
+                        onChange={(event) => searchPlace(event.target.value)}
                         required
                     />
                 </Search>
