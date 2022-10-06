@@ -32,13 +32,12 @@ export default function MainScreen() {
         <>
         {openModal ? (
             <SearchBox 
-                openModal = {openModal}
                 setOpenModal = {setOpenModal}
             />
         ): ""}
         <Container>
             <Title>
-                <span><ion-icon name="search-sharp"></ion-icon> Search</span>
+                <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
                 {token ? (
                 <UserProfile>
