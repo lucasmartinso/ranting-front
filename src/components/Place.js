@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
+import * as axiosRequest from "../repositories/AxiosRequests";
 
 export default function PlaceScreen() { 
     const { userData } = useContext(UserContext);
@@ -12,6 +14,11 @@ export default function PlaceScreen() {
     const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
+
+    useEffect(async() => { 
+        const promise = await axiosRequest.getPlace(1);
+        console.log(promise);
+    },[]);
 
     return(
         <>
@@ -40,6 +47,11 @@ export default function PlaceScreen() {
                 )}
             </Title>
 
+            <Line1>
+                <div>.</div>
+            </Line1>
+
+
             <Photo>
                 <img src="https://i0.wp.com/sarapateando.com.br/wp-content/uploads/2021/05/47b15ddd-6b2b-4926-a3b7-57bb9e08abda.jpg?fit=1280%2C960&ssl=1" alt="title"/>
             </Photo>
@@ -53,19 +65,19 @@ export default function PlaceScreen() {
                 <Description>
                     <TextBox>
                         <span>Specialty Food:</span>
-                        <h4></h4>
+                        <h4>1</h4>
                     </TextBox> 
                     <TextBox>
                         <span>Reviews:</span>
-                        <h4></h4>
+                        <h4>1</h4>
                     </TextBox>
                     <TextBox>
                         <span>Food:</span>
-                        <h4></h4>
+                        <h4>1</h4>
                     </TextBox>
                     <TextBox>
                         <span>Attendance:</span>
-                        <h4></h4>
+                        <h4>1</h4>
                     </TextBox>
                     <TextBox>
                         <span>Price:</span>
@@ -183,7 +195,6 @@ const Sign = styled.div`
 const Photo = styled.div`
     width: 100%; 
     height: 100%;
-    margin-top: 100px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -193,7 +204,7 @@ const Photo = styled.div`
         width: 100%;
         height: 300px;
         object-fit: cover;
-        border-radius: 0px 0px 50px 50px;
+        border-radius: 10px;;
         -webkit-mask-image: linear-gradient(360deg, transparent 0%, black 80%);
     }
 `
@@ -207,6 +218,20 @@ const Line = styled.div`
 
     div {
         width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top: 15px;
+    }
+`
+const Line1 = styled.div`
+    width: 100%; 
+    height: 28px;
+    display: flex; 
+    justify-content: center;
+    margin-top: 78px;
+
+    div {
+        width: 98%;
         height: 1px;
         border: 1px solid #D4D4D4;
         margin-top: 15px;

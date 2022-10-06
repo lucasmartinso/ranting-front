@@ -23,3 +23,9 @@ export async function search(name) {
 
     return promise.data;
 }
+
+export async function getPlace(id) { 
+    const promise = await axios.get(`${URL}/places/${id}`);
+    
+    return promise.data;
+}
