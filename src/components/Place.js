@@ -48,9 +48,35 @@ export default function PlaceScreen() {
                 <div>.</div>
             </Line>
 
-            <Description>
+            <Main>
                 <h3>Paris 6 <ion-icon name="checkmark-circle"></ion-icon></h3>
-            </Description>
+                <Description>
+                    <TextBox>
+                        <span>Specialty Food:</span>
+                        <h4></h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>Reviews:</span>
+                        <h4></h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Food:</span>
+                        <h4></h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Attendance:</span>
+                        <h4></h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Price:</span>
+                        <h4>⭐</h4>
+                    </TextBox>
+                    <TextBox>
+                        <span>Environment:</span>
+                        <h4> ⭐</h4>
+                    </TextBox>
+                </Description>
+            </Main>
         </Container>
         </>
     )
@@ -186,7 +212,7 @@ const Line = styled.div`
         margin-top: 15px;
     }
 `
-const Description = styled.div`
+const Main = styled.div`
     width: 100%; 
     display: flex; 
     align-items: center; 
@@ -210,5 +236,21 @@ const Description = styled.div`
             width: 30px;
             height: 30px;
         }
+    }
+`
+const Description = styled.div`
+    width: 90%; 
+    height: 100%;
+`
+const TextBox = styled.div`
+    text-align: center;
+    margin-right: 20px;
+
+    span {
+        font-weight: 500;
+    }
+
+    h4 { 
+        padding-top: 5px;
     }
 `
