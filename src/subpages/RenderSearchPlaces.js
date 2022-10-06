@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 export default function RenderSearchPlaces(placeData) { 
     return(
-        <Place>
+        <Place id={placeData.id}>
             <span>{placeData.name}<ion-icon name="checkmark-circle"></ion-icon></span>
             <span>{Number(placeData.score) !== 0 ? (`${Number(placeData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</span>
         </Place>
@@ -41,4 +41,4 @@ const Place = styled.li`
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
-`
+` 

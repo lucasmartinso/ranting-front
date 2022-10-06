@@ -13,7 +13,7 @@ export default function MainScreen() {
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [places, setPlaces] = useState([]);
-    const [openModal, setOpenModal] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
