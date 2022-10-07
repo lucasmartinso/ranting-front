@@ -14,13 +14,15 @@ export default function PlaceScreen() {
     const { token } = useContext(TokenContext);
     const [openModal, setOpenModal] = useState(false);
     const [place, setPlace] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(1);
-        console.log(promise[0]);
+        console.log(promise[0].ratings);
         setPlace(promise[0]);
+        setReviews(promise[0].ratings);
     },[]);
 
     return(
@@ -116,8 +118,19 @@ export default function PlaceScreen() {
 
             <Reviews>
                 <ul>
-                    <RenderReviews />
-                    <RenderReviews />
+                    {reviews.map(review => (
+                        <RenderReviews 
+                            userId = {review.userId}
+                            username = {review.username}
+                            name = {review.name}
+                            mainPhoto = {review.mainPhoto}
+                            food = {review.food}
+                            price = {review.price}
+                            attendance = {review.attendance}
+                            environment = {review.environment}
+                            comment = {review.comment}
+                        />
+                    ))}
                 </ul>
             </Reviews>
         </Container>
@@ -282,15 +295,15 @@ const Main = styled.div`
         margin-top: 20px;
         color: balck;;
         font-weight: 700;
-        font-size: 30px;
+        font-size: 60px;
         font-family: 'Playball', cursive;
         text-decoration: overline;
 
         ion-icon { 
             color: #3797F0;
-            margin-left: 8px;
-            width: 30px;
-            height: 30px;
+            margin-left: 12px;
+            width: 45px;
+            height: 45px;
         }
     }
 

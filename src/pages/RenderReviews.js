@@ -1,92 +1,87 @@
 import styled from "styled-components";
 
-export default function RenderReviews() { 
+export default function RenderReviews(reviewData) { 
+    const score = (reviewData.food + reviewData.price + reviewData.attendance + reviewData.environment)/4;
+
     return(
-        <Post>
-            <PictureAndLike>
-                <img src="abacaxi" alt="aba"/>
-                <p>30 likes</p>
-                <ion-icon name="chatbubble-ellipses-outline" id="comments"></ion-icon>
-                <p>30 comments</p>
-            </PictureAndLike>
-            <PostInfo>
-                <p>mckmkdmkc</p> 
-                <a>cdnjdncjncdndc</a>
-                <MainInfo>
-                    <MainInfoDescription>
-                        <h3>hahahaha</h3>
-                        <h4>oi</h4>
-                        <h5>bom dia</h5>
-                    </MainInfoDescription>
-                        <img src="tomate" alt="tomate"/>
+        <Review key={reviewData.id}>
+            <ProfileRating>
+            {reviewData.mainPhoto ? (
+                        <img src={reviewData.mainPhoto} alt="profile"/>
+                    ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
+                <p>@{reviewData.username}</p>
+                <p id="score">{score.toFixed(1)} ⭐</p>
+            </ProfileRating>
+            <ReviewInfo>
+                <UserComment comment={reviewData.comment}>
+                    <p>{reviewData.name}</p> 
+                    <span>{reviewData.comment}</span>
+                </UserComment>
+                <MainInfo comment={reviewData.comment}>
+                    <Ratings>
+                        <Rating>
+
+                        </Rating>
+                    </Ratings>
                 </MainInfo>
-            </PostInfo>
-        </Post>
+            </ReviewInfo>
+        </Review>
     )
 }
 
-const Post = styled.li`
+const Review = styled.li`
   width: 100%;
   height: 276px;
   display: flex;
   background-color: rgba(23, 23, 23, 1);
   padding: 19px 23px 20px 20px;
-  border-radius: 16px 16px 0px 0px;
+  border-radius: 16px 16px 16px 16px;
   margin-bottom: 18px;
 `;
-const PictureAndLike = styled.div`
-  width: 10%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const ProfileRating = styled.div`
+    width: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 20px;
-    object-fit: cover;
-  }
-
-  ion-icon {
-    width: 25px;
-    height: 25px;
-
-    &:hover {
-      cursor: pointer;
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        object-fit: cover;
     }
-  }
 
-    ion-icon#heart {
-        color: rgba(172, 0, 0, 1);
-    } 
-
-    ion-icon#heart-outline {
+    ion-icon {
+        width: 50px;
+        height: 50px;
         color: white;
     }
 
     p {
-        margin-top: 4px;
+        margin-top: 8px;
         margin-bottom: 15px;
-        font-size: 11px; 
+        font-size: 16px; 
         color: white;
     } 
 
-    ion-icon#comments {
-        color: white;
-    }
-
-    ion-icon#repost {
-        color: white;
+    p#score { 
+        font-size: 20px;
+        font-weight: bold;
     }
  `
-const PostInfo = styled.div`
+const ReviewInfo = styled.div`
     width: 90%;
     height: 100%; 
     display: flex; 
     flex-direction: column;
+    align-items: space-around;
     margin-left: 18px;
+ `
+const UserComment = styled.div`
+    width: 100%;
+    height: ${props => props.comment ? ("33%") : ("15%")};
 
     p { 
         font-size: 19px; 
@@ -94,58 +89,23 @@ const PostInfo = styled.div`
         margin-bottom: 8px;
     } 
 
-    a { 
+    span { 
         font-size: 19px; 
         color: rgba(183, 183, 183, 1); 
-        margin-bottom: 10px;
         line-height: 20px;
     }
- `
+`
 const MainInfo = styled.div`
     width: 100%; 
-    height: 90%; 
+    height: ${props => props.comment ? ("65%") : ("77%")}; 
     border: 1px solid rgba(77, 77, 77, 1);
     border-radius: 12px; 
-    display: flex;
+`
+const Ratings = styled.div`
 
-    img { 
-        width: 30%;
-        height: 100%;
-        border-radius: 0px 12px 13px 0px;
-        object-fit: cover;
-    }
+`
+const Rating = styled.div`
 
-    &:hover { 
-        cursor: pointer;
-    }
- `
-const MainInfoDescription = styled.div`
-  width: 85%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 24px 28px 23px 20px;
-
-  h3 {
-    font-size: 16px;
-    color: rgba(206, 206, 206, 1);
-    text-align: left;
-    margin-bottom: 8px;
-  }
-
-  h4 {
-    font-size: 16px;
-    color: rgba(155, 149, 149, 1);
-    text-align: left;
-    margin-bottom: 8px;
-  }
-
-  h5 {
-    font-size: 16px;
-    color: rgba(206, 206, 206, 1);
-    text-align: left;
-    margin-bottom: 8px;
-  }
-`;
+`
 
 

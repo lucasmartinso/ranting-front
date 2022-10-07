@@ -18,6 +18,7 @@ export default function SearchBox({setOpenModal}) {
             if(name.length>2) {
                 const promise = await axiosRequest.search(name);
                 setPlaces(promise);
+                if(promise.length === 0) setPlaces(null);
             }
         } catch (error) {
             console.log(error);
@@ -37,7 +38,7 @@ export default function SearchBox({setOpenModal}) {
                     <DebounceInput
                         type="text"
                         placeholder="Place name..."
-                        minLength={3}
+                        minLength={2}
                         debounceTimeout={400}
                         value={search}
                         onChange={(event) => searchPlace(event.target.value)}
@@ -46,7 +47,7 @@ export default function SearchBox({setOpenModal}) {
                 </Search>
             </Box>
             <Places>
-                {places.length !==0 ? (
+                {places ? (
                 <ul>
                 {places.map(place => (
                         <RenderSearchPlaces 
