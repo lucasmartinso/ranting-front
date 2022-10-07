@@ -7,6 +7,7 @@ import TokenContext from "../contexts/tokenContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
 import * as axiosRequest from "../repositories/AxiosRequests";
+import RenderReviews from "../pages/RenderReviews";
 
 export default function PlaceScreen() { 
     const { userData } = useContext(UserContext);
@@ -112,6 +113,13 @@ export default function PlaceScreen() {
                     </TextBox> 
                 </Rating>
             </Main>
+
+            <Reviews>
+                <ul>
+                    <RenderReviews />
+                    <RenderReviews />
+                </ul>
+            </Reviews>
         </Container>
         </>
     )
@@ -349,4 +357,9 @@ const TagName = styled.div`
         font-family: 'Playball', cursive;
         text-decoration: underline;
     }
+`
+const Reviews = styled.div`
+    width: 100%; 
+    height: 100%; 
+    margin-top: 60px;
 `
