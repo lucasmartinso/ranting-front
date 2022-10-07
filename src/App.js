@@ -21,7 +21,7 @@ export default function App() {
               <Route path="/sign-up" element={<SignUpScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/" element={<MainScreen />} />
-              <Route path="/place" element={<PlaceScreen />} />
+              <Route path="/places/:id" element={<PlaceScreen />} />
           </Routes>
       </BrowserRouter>
     </UserContext.Provider>

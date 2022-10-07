@@ -33,7 +33,7 @@ export default function SearchBox({setOpenModal}) {
                     <button onClick={() => setOpenModal(false)}>Cancel</button>
                     <span onClick={() => setOpenModal(false)}>X</span>
                 </Cancel>
-                <Search>
+                <Search places={places}>
                     <ion-icon name="search-sharp"></ion-icon>
                     <DebounceInput
                         type="text"
@@ -121,6 +121,7 @@ const Cancel = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 10px 15px 0px 20px;
+    margin-bottom: 20px;
 
     button { 
         width: 15%;

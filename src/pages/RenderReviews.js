@@ -20,7 +20,27 @@ export default function RenderReviews(reviewData) {
                 <MainInfo comment={reviewData.comment}>
                     <Ratings>
                         <Rating>
-
+                            <Grade>
+                                <span>Food: 🍔</span>
+                                <h4>{Number(reviewData.food).toFixed(1)} ⭐</h4>
+                            </Grade> 
+                            <Upright>.</Upright>
+                            <Grade>
+                                <span id="price">Price: 💸</span>
+                                <h4>{Number(reviewData.price).toFixed(1)} ⭐</h4>
+                            </Grade>
+                        </Rating>
+                        <Line></Line>
+                        <Rating>
+                            <Grade>
+                                <span>Attendance: 👨‍🍳</span>
+                                <h4>{Number(reviewData.attendance).toFixed(1)} ⭐</h4>
+                            </Grade> 
+                            <Upright>.</Upright>
+                            <Grade>
+                                <span>Environment: 🍽️​</span>
+                                <h4>{Number(reviewData.environment).toFixed(1)} ⭐</h4>
+                            </Grade>
                         </Rating>
                     </Ratings>
                 </MainInfo>
@@ -102,10 +122,58 @@ const MainInfo = styled.div`
     border-radius: 12px; 
 `
 const Ratings = styled.div`
-
+    width: 100%;
+    height: 100%;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
 `
 const Rating = styled.div`
+    width: 80%;
+    height: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
+    span { 
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    span#price { 
+        margin-left: 8px;
+    }
+`
+const Line = styled.div`
+    width: 99%; 
+    height: 1px;
+    border: 1px dashed #D4D4D4;
+`
+const Grade = styled.div`
+    text-align: center;
+    margin-right: 20px;
+    font-size: 25px;
+    border: none;
+
+    span {
+        font-weight: 500;
+    }
+
+    span#price { 
+        margin-left: 10px;
+    }
+
+    h4 { 
+        padding-top: 5px;
+        color: white;
+        font-size: 20px;
+    }
+`
+const Upright = styled.div`
+    width: 1px;
+    height: 90%;
+    border: 1px dashed #D4D4D4; 
 `
 
 

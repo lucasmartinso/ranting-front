@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
@@ -15,11 +15,12 @@ export default function PlaceScreen() {
     const [openModal, setOpenModal] = useState(false);
     const [place, setPlace] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const { id } = useParams();
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
     useEffect(async() => { 
-        const promise = await axiosRequest.getPlace(1);
+        const promise = await axiosRequest.getPlace(id);
         console.log(promise[0].ratings);
         setPlace(promise[0]);
         setReviews(promise[0].ratings);

@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function RenderRestaurants(restaurantData) { 
+    const navigate = useNavigate();
+
     return( 
-        <Place>
+        <Place onClick={() => navigate(`/places/${restaurantData.id}`)}>
             <Container2>
                 <Overall>
                     <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
