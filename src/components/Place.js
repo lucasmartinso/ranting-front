@@ -55,7 +55,7 @@ export default function PlaceScreen() {
 
 
             <Photo>
-                <img src="https://i0.wp.com/sarapateando.com.br/wp-content/uploads/2021/05/47b15ddd-6b2b-4926-a3b7-57bb9e08abda.jpg?fit=1280%2C960&ssl=1" alt="title"/>
+                <img src={place.mainPhoto} alt="title"/>
             </Photo>
 
             <Line>
@@ -64,38 +64,31 @@ export default function PlaceScreen() {
 
             <Main>
                 <h3>{place.name} <ion-icon name="checkmark-circle"></ion-icon></h3>    
+                <TagName><h3>Description:</h3></TagName>
+                <Rating>
+                    <TextBox>
+                        <span>Address:</span>
+                        <h4>{place.address}</h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>City:</span>
+                        <h4>{place.city}</h4>
+                    </TextBox>  
+                    <TextBox>
+                        <span>Description:</span>
+                        <h4>{place.description}</h4>
+                    </TextBox>  
+                    <TextBox>
+                        <span>Website:</span>
+                        <h4 id="website" onClick={() => window.open(place.website)}>{place.website}</h4>
+                    </TextBox> 
+                </Rating>
+                
+                <TagName><h3>Stats:</h3></TagName>
                 <Rating>
                     <TextBox>
                         <span id="score">Total Score:</span>
                         <h4 id="score">{Number(place.score).toFixed(1).replace(".",",")} ⭐</h4>
-                    </TextBox> 
-                    <TextBox>
-                        <span>Specialty Food:</span>
-                        <h4>{place.type}</h4>
-                    </TextBox>  
-                    <TextBox>
-                        <span>Food:</span>
-                        <h4>{Number(place.food).toFixed(1).replace(".",",")} ⭐</h4>
-                    </TextBox>  
-                    <TextBox>
-                        <span>Price:</span>
-                        <h4>{Number(place.price).toFixed(1).replace(".",",")} ⭐</h4>
-                    </TextBox> 
-                    <TextBox>
-                        <span>Attendance:</span>
-                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")} ⭐</h4>
-                    </TextBox> 
-                    <TextBox>
-                        <span>Environment:</span>
-                        <h4>{Number(place.environment).toFixed(1).replace(".",",")} ⭐</h4>
-                    </TextBox> 
-                </Rating>
-                
-                <h3>{place.name}</h3>
-                <Rating>
-                    <TextBox>
-                        <span>Total Score:</span>
-                        <h4>{Number(place.score).toFixed(1).replace(".",",")} ⭐</h4>
                     </TextBox> 
                     <TextBox>
                         <span>Specialty Food:</span>
@@ -292,6 +285,11 @@ const Main = styled.div`
             height: 30px;
         }
     }
+
+    h3#description {
+        display: flex;
+        justify-content: flex-start;
+    }
 `
 const Rating = styled.div`
     width: 90%; 
@@ -322,5 +320,33 @@ const TextBox = styled.div`
     h4#score { 
         font-weight: 700;
         font-size: 30px;
+    }
+
+    h4#website { 
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+`
+const TagName = styled.div`
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; 
+    padding-left: 40px;
+
+    h3 {
+        margin-top: 20px;
+        color: balck;;
+        font-weight: 700;
+        font-size: 30px;
+        font-family: 'Playball', cursive;
+        text-decoration: underline;
     }
 `
