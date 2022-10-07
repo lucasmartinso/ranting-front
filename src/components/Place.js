@@ -12,12 +12,14 @@ export default function PlaceScreen() {
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [openModal, setOpenModal] = useState(false);
+    const [place, setPlace] = useState([]);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(1);
-        console.log(promise);
+        console.log(promise[0]);
+        setPlace(promise[0]);
     },[]);
 
     return(
@@ -61,33 +63,61 @@ export default function PlaceScreen() {
             </Line>
 
             <Main>
-                <h3>Paris 6 <ion-icon name="checkmark-circle"></ion-icon></h3>
-                <Description>
+                <h3>{place.name} <ion-icon name="checkmark-circle"></ion-icon></h3>    
+                <Rating>
                     <TextBox>
-                        <span>Specialty Food:</span>
-                        <h4>1</h4>
+                        <span id="score">Total Score:</span>
+                        <h4 id="score">{Number(place.score).toFixed(1).replace(".",",")} ⭐</h4>
                     </TextBox> 
                     <TextBox>
-                        <span>Reviews:</span>
-                        <h4>1</h4>
-                    </TextBox>
+                        <span>Specialty Food:</span>
+                        <h4>{place.type}</h4>
+                    </TextBox>  
                     <TextBox>
                         <span>Food:</span>
-                        <h4>1</h4>
-                    </TextBox>
-                    <TextBox>
-                        <span>Attendance:</span>
-                        <h4>1</h4>
-                    </TextBox>
+                        <h4>{Number(place.food).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox>  
                     <TextBox>
                         <span>Price:</span>
-                        <h4>⭐</h4>
-                    </TextBox>
+                        <h4>{Number(place.price).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>Attendance:</span>
+                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
                     <TextBox>
                         <span>Environment:</span>
-                        <h4> ⭐</h4>
-                    </TextBox>
-                </Description>
+                        <h4>{Number(place.environment).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
+                </Rating>
+                
+                <h3>{place.name}</h3>
+                <Rating>
+                    <TextBox>
+                        <span>Total Score:</span>
+                        <h4>{Number(place.score).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>Specialty Food:</span>
+                        <h4>{place.type}</h4>
+                    </TextBox>  
+                    <TextBox>
+                        <span>Food:</span>
+                        <h4>{Number(place.food).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox>  
+                    <TextBox>
+                        <span>Price:</span>
+                        <h4>{Number(place.price).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>Attendance:</span>
+                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
+                    <TextBox>
+                        <span>Environment:</span>
+                        <h4>{Number(place.environment).toFixed(1).replace(".",",")} ⭐</h4>
+                    </TextBox> 
+                </Rating>
             </Main>
         </Container>
         </>
@@ -263,13 +293,18 @@ const Main = styled.div`
         }
     }
 `
-const Description = styled.div`
+const Rating = styled.div`
     width: 90%; 
     height: 100%;
+    font-family: 'Playball', cursive;
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0px;
 `
 const TextBox = styled.div`
     text-align: center;
     margin-right: 20px;
+    font-size: 25px;
 
     span {
         font-weight: 500;
@@ -277,5 +312,15 @@ const TextBox = styled.div`
 
     h4 { 
         padding-top: 5px;
+    }
+
+    span#score {
+        font-weight: 700;
+        font-size: 30px;
+    }
+
+    h4#score { 
+        font-weight: 700;
+        font-size: 30px;
     }
 `
