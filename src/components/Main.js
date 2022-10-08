@@ -8,12 +8,14 @@ import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as axiosRequests from "../repositories/AxiosRequests";
 import SearchBox from "../pages/SearchBox";
+import UserBox from "../pages/UserBox";
 
 export default function MainScreen() { 
     const { userData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
+    const [userModal, setUserModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
@@ -35,17 +37,22 @@ export default function MainScreen() {
                 setOpenModal = {setOpenModal}
             />
         ): ""}
+
+        {userModal ? (
+            <UserBox 
+                setUserModal = {setUserModal}
+            />
+        ): ""}
         <Container>
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
                 {token ? (
-                <UserProfile>
+                <UserProfile onClick={() => setUserModal(true)}>
                     <span>Olá, {user.name}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile"/>
                     ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
-                    
                 </UserProfile>
                 ): (
                     <Sign>
