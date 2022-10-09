@@ -29,3 +29,10 @@ export async function getPlace(id) {
     
     return promise.data;
 }
+
+export async function changePhoto(config,mainPhoto) { 
+    console.log(config);
+    const promise = await axios.put(`${URL}/user/photo`,mainPhoto,config);
+
+    return promise;
+}

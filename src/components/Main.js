@@ -18,6 +18,7 @@ export default function MainScreen() {
     const [userModal, setUserModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
+    console.log(user);
 
     useEffect(async () => {
         try {
@@ -52,7 +53,7 @@ export default function MainScreen() {
                     <span>Olá, {user.name}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile"/>
-                    ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
+                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
                 </UserProfile>
                 ): (
                     <Sign>
@@ -150,6 +151,15 @@ const UserProfile = styled.div`
         width: 40px;
         height: 40px;
         color : white;
+    }
+
+    &:hover { 
+        cursor: pointer;
+    }
+
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
 const Sign = styled.div`

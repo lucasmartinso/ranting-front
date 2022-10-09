@@ -1,9 +1,28 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
-//import * as axiosRequest from "../repositories/AxiosRequests"
+import * as axiosRequest from "../repositories/AxiosRequests"
+import TokenContext from "../contexts/tokenContext";
 
 export default function UserBox({setUserModal}) { 
     const [photo,setPhoto] = useState(null);
+    const { token } = useContext(TokenContext);
+
+    async function changePhoto() { 
+        
+        const config = {
+            Authorization: `Bearer ${token}`
+        }
+        console.log(config);
+
+        const mainPhoto = { mainPhoto: photo };
+        console.log(mainPhoto);
+
+        try {
+            await axiosRequest.changePhoto(config,mainPhoto)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return(
         <Background>
@@ -14,7 +33,6 @@ export default function UserBox({setUserModal}) {
                 <Welcome>
                     <span>Hello, <strong>Ronaldo</strong></span>
                 </Welcome>
-                <form>
                     <ChangePicture>
                         <span>If you change your profile photo send it into the box</span>
                         <input
@@ -26,10 +44,9 @@ export default function UserBox({setUserModal}) {
                         />
                     </ChangePicture>
                     <Buttons>
-                        <button>Save</button>
-                        <button>Cancel</button>
+                        <button id="save" onClick={changePhoto}>Save</button>
+                        <button id="cancel" onClick={() => setUserModal(false)}>Cancel</button>
                     </Buttons>
-                </form>
             </Box>
         </Background>
     )
@@ -117,8 +134,7 @@ const Welcome = styled.div`
 `
 const ChangePicture = styled.div`
     width: 90%;
-    height: 90%;
-    padding-left: 20px;
+    height: 35%;
 
     span { 
         font-size: 18px;
@@ -139,7 +155,7 @@ const Buttons = styled.div`
     margin-top: 5px;
     display: flex;
     justify-content: flex-end;
-    padding-right: 40px;
+    padding-right: 50px;
 
     button {
         width: 60px;
@@ -149,5 +165,30 @@ const Buttons = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+        font-size: 16px;
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.25);
+
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    button#cancel { 
+        background-color: #EC7172;
+        border: 1px solid #EC7172; 
+        color: white; 
+        font-weight: bold;
+    }
+
+    button#save { 
+        background-color: #1A587F;
+        border: 1px solid #1A587F; 
+        color: white; 
+        font-weight: bold;
     }
 `
