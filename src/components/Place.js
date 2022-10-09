@@ -8,20 +8,22 @@ import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
 import * as axiosRequest from "../repositories/AxiosRequests";
 import RenderReviews from "../pages/RenderReviews";
+import UserBox from "../pages/UserBox";
 
 export default function PlaceScreen() { 
-    const { userData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [openModal, setOpenModal] = useState(false);
     const [place, setPlace] = useState([]);
     const [reviews, setReviews] = useState([]);
     const { id } = useParams();
+    const [userModal, setUserModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
-        console.log(promise[0].ratings);
+        console.log(promise[0]);
         setPlace(promise[0]);
         setReviews(promise[0].ratings);
     },[]);
@@ -33,12 +35,20 @@ export default function PlaceScreen() {
                 setOpenModal = {setOpenModal}
             />
         ): ""}
+
+        {userModal ? (
+            <UserBox 
+                setUserModal = {setUserModal}
+                user = {user}
+                setUserData = {setUserData}
+            />
+        ): ""}
         <Container>
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
                 {token ? (
-                <UserProfile>
+                <UserProfile onClick={() => setUserModal(true)}>
                     <span>Olá, {user.name}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile"/>
@@ -200,6 +210,15 @@ const UserProfile = styled.div`
         width: 40px;
         height: 40px;
         color : white;
+    }
+
+    &:hover { 
+        cursor: pointer;
+    }
+
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
 const Sign = styled.div`

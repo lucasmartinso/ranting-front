@@ -17,7 +17,6 @@ export default function MainScreen() {
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const navigate = useNavigate();
-    console.log(userData);
     const user = JSON.parse(userData);
     console.log(user);
 
@@ -66,7 +65,13 @@ export default function MainScreen() {
                 )}
             </Title>
 
-            <Main>
+            { token ? (
+            <CreatePlace>
+                    <Box onClick={() => navigate("/create/place")}>Create an Place<ion-icon name="add-circle-sharp"></ion-icon></Box>
+            </CreatePlace>
+            ) : "" }
+
+            <Main token = {token}>
                 <ul>
                     {places.map(place => (
                         <RenderRestaurants 
@@ -200,10 +205,45 @@ const Sign = styled.div`
         color: black; 
     }
 `
+const CreatePlace = styled.div`
+    width: 90%;
+    height: 10%;
+    margin-top: 110px;
+    display: flex;
+`
+const Box = styled.button`
+    width: 30%;
+    height: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    background-color: #F5C127;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed black;
+    box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+
+    ion-icon { 
+        margin-left: 5px;
+        width: 30px;
+        height: 30px;
+        color: white;
+    }
+    
+    &:hover{ 
+        cursor: pointer; 
+    }
+    
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+`
 const Main = styled.div`
     width: 100%; 
     height: 100%; 
-    margin-top: 150px;
+    margin-top: ${props => props.token ? ("40px") : ("130px")};
 
     ul { 
         width: 100%; 
