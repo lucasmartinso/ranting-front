@@ -45,10 +45,10 @@ export default function UserBox({setUserModal,user,setUserData}) {
                     <span onClick={() => setUserModal(false)}>X</span>
                 </Cancel>
                 <Welcome>
-                    <span>Hello, <strong>Ronaldo</strong></span>
+                    <span>Hello, <strong>{user.name}</strong></span>
                 </Welcome>
                     <ChangePicture>
-                        <span>If you change your profile photo send it into the box</span>
+                        <span>If you want to change your profile photo send it into the box:</span>
                         <input
                             type="url"
                             placeholder="Url Photo"
@@ -81,7 +81,7 @@ const Background = styled.div`
 `
 const Box = styled.div`
     width: 60%; 
-    height: 300px;
+    height: 320px;
     background-color: white;
     border-radius: 12px;
     color: rgba(111, 111, 111, 1);
@@ -137,7 +137,7 @@ const Cancel = styled.div`
 `
 const Welcome = styled.div`
     width: 90%;
-    height: 25%;
+    height: 20%;
     display: flex; 
     justify-content: flex-start; 
 
@@ -151,11 +151,11 @@ const ChangePicture = styled.div`
     height: 35%;
 
     span { 
-        font-size: 18px;
+        font-size: 22px;
     }
 
     input { 
-        margin-top: 15px;
+        margin-top: 20px;
         width: 100%;
         height: 40px;
         font-size: 20px;
@@ -166,7 +166,7 @@ const ChangePicture = styled.div`
 `
 const Buttons = styled.div`
     width: 100%;
-    margin-top: 5px;
+    margin-top: 30px;
     display: flex;
     justify-content: flex-end;
     padding-right: 50px;

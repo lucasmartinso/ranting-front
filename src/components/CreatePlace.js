@@ -6,6 +6,7 @@ import * as AxiosRequest from "../repositories/AxiosRequests";
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import UserBox from "../pages/UserBox";
 
 export default function CreatePlaceScreen() { 
     const [name,setName] = useState("");
@@ -18,8 +19,9 @@ export default function CreatePlaceScreen() {
     const [clicked,setClicked] = useState(false);
     const [error,setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const { userData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
+    const [userModal, setUserModal] = useState("")
     const user = JSON.parse(userData);
     const navigate = useNavigate();
 
@@ -27,7 +29,12 @@ export default function CreatePlaceScreen() {
         event.preventDefault();
 
     const placeData = { 
-      name
+      name,
+      description,
+      mainPhoto, 
+      type,
+      city,
+      address
     }
 
     const config = {
@@ -36,8 +43,10 @@ export default function CreatePlaceScreen() {
 
     try {
       setClicked(true);
-      await AxiosRequest.signup(userData);
-      navigate("/login");
+      await AxiosRequest.createPlace(config,placeData);
+      navigate("/");
+      setClicked(false);
+      console.log("Foi");
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);
@@ -47,6 +56,15 @@ export default function CreatePlaceScreen() {
   }
 
   return(
+    <>
+    {userModal ? (
+      <UserBox 
+          setUserModal = {setUserModal}
+          user = {user}
+          setUserData = {setUserData}
+      />
+    ): ""}
+
     <Container>
 
       <Title>
@@ -55,8 +73,13 @@ export default function CreatePlaceScreen() {
 
      <ContainerApresentation>
         <Apresentation>
-            <span id="message"><strong>You can create an Place here: </strong></span>
-            <span>Olá, <strong id="user">{user.name}</strong></span>
+            <span>⭐⭐ <strong id="message">You can create an Place here:</strong></span>
+            <UserProfile onClick={() => setUserModal(true)}>
+                    <span>Olá, <strong>{user.name}</strong></span>
+                    {user.mainPhoto ? (
+                        <img src={user.mainPhoto} alt="profile"/>
+                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
+            </UserProfile>
         </Apresentation>
     </ContainerApresentation>
 
@@ -83,6 +106,20 @@ export default function CreatePlaceScreen() {
             onChange={(event) => setAddress(event.target.value)}
             required
         />
+        <input 
+            type="text"
+            placeholder="City (required)"
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+            required
+        />
+        <input 
+            type="text"
+            placeholder="Type (required)"
+            value={type}
+            onChange={(event) => setType(event.target.value)}
+            required
+        />
         <input
             type="url"
             placeholder="Website"
@@ -91,7 +128,7 @@ export default function CreatePlaceScreen() {
             required
         />
         <input 
-            type="url"
+            type="text"
             placeholder="Description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
@@ -100,7 +137,7 @@ export default function CreatePlaceScreen() {
         <button>
           {clicked ? (
             <ThreeDots color="white" height={80} width={100} />
-          ) : ("Register")}
+          ) : ("Create")}
         </button>
       </Main>
       </form>
@@ -113,11 +150,8 @@ export default function CreatePlaceScreen() {
           </button>
       </Error>
       ) : ""}
-
-      <Message onClick={() => navigate("/login")}>
-        <span>Already registred? Sign-in!</span>
-      </Message>
     </Container>
+    </>
   )
 }
 
@@ -152,6 +186,7 @@ const Apresentation = styled.div`
     height: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     span { 
         font-size: 22px;
@@ -162,9 +197,40 @@ const Apresentation = styled.div`
         }
     }
 
-    span#message { 
+    strong#message { 
         font-weight: 700;
         color: black;
+        font-size: 35px;
+        text-decoration: underline;
+        font-family: 'Playball', cursive;
+    }
+`
+const UserProfile = styled.div`
+    display: flex;
+    align-items: center;
+
+    img { 
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-left: 10px;
+    }
+
+    ion-icon { 
+        margin-left: 5px;
+        width: 40px;
+        height: 40px;
+        color : white;
+    }
+
+    &:hover { 
+        cursor: pointer;
+    }
+
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
 const Main = styled.div`

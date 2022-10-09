@@ -37,5 +37,5 @@ export async function changePhoto(config,mainPhoto) {
 }
 
 export async function createPlace(config,placeData) { 
-    await axios.post(`${URL}/places`,config,placeData);
+    await axios.post(`${URL}/places/create`,placeData,config);
 }
