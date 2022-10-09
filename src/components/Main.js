@@ -11,12 +11,13 @@ import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 
 export default function MainScreen() { 
-    const { userData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const navigate = useNavigate();
+    console.log(userData);
     const user = JSON.parse(userData);
     console.log(user);
 
@@ -42,6 +43,8 @@ export default function MainScreen() {
         {userModal ? (
             <UserBox 
                 setUserModal = {setUserModal}
+                user = {user}
+                setUserData = {setUserData}
             />
         ): ""}
         <Container>

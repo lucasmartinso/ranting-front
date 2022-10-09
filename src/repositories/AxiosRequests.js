@@ -31,8 +31,12 @@ export async function getPlace(id) {
 }
 
 export async function changePhoto(config,mainPhoto) { 
-    console.log(config);
     const promise = await axios.put(`${URL}/user/photo`,mainPhoto,config);
 
     return promise;
+}
+
+export async function createPlace(config,placeData) {
+    console.log(config); 
+    await axios.post(`${URL}/places`,config,placeData);
 }

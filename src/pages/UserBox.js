@@ -3,22 +3,36 @@ import styled from "styled-components";
 import * as axiosRequest from "../repositories/AxiosRequests"
 import TokenContext from "../contexts/tokenContext";
 
-export default function UserBox({setUserModal}) { 
+export default function UserBox({setUserModal,user,setUserData}) { 
     const [photo,setPhoto] = useState(null);
     const { token } = useContext(TokenContext);
 
     async function changePhoto() { 
         
         const config = {
-            Authorization: `Bearer ${token}`
-        }
-        console.log(config);
+            headers: { Authorization: `Bearer ${token}` },
+        };
 
         const mainPhoto = { mainPhoto: photo };
-        console.log(mainPhoto);
 
         try {
-            await axiosRequest.changePhoto(config,mainPhoto)
+            await axiosRequest.changePhoto(config,mainPhoto);
+
+            setUserData(JSON.stringify({
+                "id": user.id,
+                "name": user.name,
+                "username": user.username,
+                "mainPhoto": photo
+            }))
+
+            setUserModal(false);
+            setPhoto("");
+            localStorage.setItem("USER_DATA",JSON.stringify({
+                "id": user.id,
+                "name": user.name,
+                "username": user.username,
+                "mainPhoto": photo
+            }));
         } catch (error) {
             console.log(error);
         }
