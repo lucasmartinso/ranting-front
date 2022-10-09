@@ -7,6 +7,7 @@ import TokenContext from"./contexts/tokenContext";
 import UserContext from "./contexts/userContext"
 import MainScreen from "./components/Main";
 import PlaceScreen from "./components/Place";
+import CreatePlaceScreen from "./components/CreatePlace";
 
 export default function App() {
   const [token,setToken] = useState(localStorage.getItem("MY_TOKEN"));
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/" element={<MainScreen />} />
               <Route path="/places/:id" element={<PlaceScreen />} />
+              <Route path="/create/place" element={<CreatePlaceScreen />} />
           </Routes>
       </BrowserRouter>
     </UserContext.Provider>
