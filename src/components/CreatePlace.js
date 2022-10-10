@@ -315,28 +315,3 @@ const Error = styled.div`
    }
   }
 `
-const Message = styled.div`
-  width: 100%; 
-  height: 100%; 
-  display: flex; 
-  justify-content: center; 
-
-  span {
-    color: white; 
-    font-weight: bold;
-    font-size: 20px;
-    text-decoration: underline;
-    text-decoration-color: #359FE4;
-    margin-bottom: 70px;
-    margin-top: 30px;
-
-    &:hover{ 
-      cursor: pointer; 
-    }
-  
-    &:active {  
-      transform: scale(0.98);
-      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-  }
-`

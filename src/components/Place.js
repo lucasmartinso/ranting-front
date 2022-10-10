@@ -9,6 +9,7 @@ import SearchBox from "../pages/SearchBox";
 import * as axiosRequest from "../repositories/AxiosRequests";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
+import RatingBox from "../pages/RatingBox";
 
 export default function PlaceScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -18,14 +19,19 @@ export default function PlaceScreen() {
     const [reviews, setReviews] = useState([]);
     const { id } = useParams();
     const [userModal, setUserModal] = useState(false);
+    const [ratingModel,setRatingModel] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
-        console.log(promise[0]);
-        setPlace(promise[0]);
-        setReviews(promise[0].ratings);
+        if(promise[0] !== undefined) {
+            setPlace(promise[0]);
+            setReviews(promise[0].ratings);
+        } else { 
+            setPlace(promise);
+            console.log(promise)
+        }
     },[]);
 
     return(
@@ -43,6 +49,14 @@ export default function PlaceScreen() {
                 setUserData = {setUserData}
             />
         ): ""}
+
+        {ratingModel ? (
+            <RatingBox 
+                setRatingModel = {setRatingModel}
+                user = {user}
+            />
+        ): ""}
+
         <Container>
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
@@ -75,7 +89,7 @@ export default function PlaceScreen() {
             <Line>
                 <div>.</div>
             </Line>
-
+            
             <Main>
                 <h3>{place.name} <ion-icon name="checkmark-circle"></ion-icon></h3>    
                 <TagName><h3>Description:</h3></TagName>
@@ -98,6 +112,8 @@ export default function PlaceScreen() {
                     </TextBox> 
                 </Rating>
                 
+                {place.score !== "0"  ? (
+                <>
                 <TagName><h3>Stats:</h3></TagName>
                 <Rating>
                     <TextBox>
@@ -125,8 +141,17 @@ export default function PlaceScreen() {
                         <h4>{Number(place.environment).toFixed(1).replace(".",",")} ⭐</h4>
                     </TextBox> 
                 </Rating>
+                </>
+                 ) : ""}
             </Main>
+                
+            <Container2>
+                <Review>
+                    <Box onClick={() => setRatingModel(true)}>Review this Restaurant<ion-icon name="star"></ion-icon></Box>
+                </Review>
+            </Container2>
 
+            {place.score !== "0"  ? (
             <Reviews>
                 <ul>
                     {reviews.map(review => (
@@ -144,6 +169,11 @@ export default function PlaceScreen() {
                     ))}
                 </ul>
             </Reviews>
+            ) : (
+                <New>
+                    <span>⭐⭐ New ⭐⭐</span>
+                </New>
+            ) }
         </Container>
         </>
     )
@@ -395,4 +425,58 @@ const Reviews = styled.div`
     width: 100%; 
     height: 100%; 
     margin-top: 60px;
+`
+const New = styled.div`
+    width: 100%; 
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: white;
+
+    span { 
+        font-weight: bold;
+        font-size: 70px;
+    }
+`
+const Container2 = styled.div`
+    width: 100%; 
+    height: 300px;
+    display: flex; 
+    justify-content: center;
+`
+const Review = styled.div`
+    width: 90%; 
+    height: 100%;
+    display: flex;
+    align-items: center;
+`
+const Box = styled.button`
+    width: 30%;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: balck;
+    background-color: #F5C127;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed black;
+    box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+
+    ion-icon { 
+        margin-left: 5px;
+        width: 24px;
+        height: 24px;
+        color: black;
+    }
+    
+    &:hover{ 
+        cursor: pointer; 
+    }
+    
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
 `
