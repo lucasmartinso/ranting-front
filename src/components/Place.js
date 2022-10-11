@@ -54,6 +54,7 @@ export default function PlaceScreen() {
             <RatingBox 
                 setRatingModel = {setRatingModel}
                 user = {user}
+                id = {id}
             />
         ): ""}
 

@@ -3,7 +3,7 @@ import styled, { objToCss } from "styled-components";
 import * as axiosRequest from "../repositories/AxiosRequests"
 import TokenContext from "../contexts/tokenContext";
 
-export default function RatingBox({setRatingModel,user}) { 
+export default function RatingBox({setRatingModel,user,id}) { 
     const [food,setFood] = useState(null);
     const [attendance,setAttendance] = useState(null);
     const [environment,setEnvironment] = useState(null);
@@ -26,7 +26,9 @@ export default function RatingBox({setRatingModel,user}) {
         };
 
         try {
-
+            await axiosRequest.createReview(id,reviewData,config);
+            setRatingModel(false);
+            window.location.reload();
         } catch (error) {
             console.log(error);
         }

@@ -39,3 +39,7 @@ export async function changePhoto(config,mainPhoto) {
 export async function createPlace(config,placeData) { 
     await axios.post(`${URL}/places/create`,placeData,config);
 }
+
+export async function createReview(id,reviewData,config) {
+    await axios.post(`${URL}/rating/${id}`,reviewData,config);
+}
