@@ -8,6 +8,7 @@ export default function RatingBox({setRatingModel,user}) {
     const [attendance,setAttendance] = useState(null);
     const [environment,setEnvironment] = useState(null);
     const [price,setPrice] = useState(null);
+    const [comment,setComment] = useState(null);
     const { token } = useContext(TokenContext);
 
     async function sendRating() { 
@@ -20,7 +21,8 @@ export default function RatingBox({setRatingModel,user}) {
             food,
             environment,
             attendance,
-            price
+            price,
+            comment
         };
 
         try {
@@ -28,10 +30,6 @@ export default function RatingBox({setRatingModel,user}) {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    function foodReview(rating) {
-        setFood(rating);
     }
 
     return(
@@ -50,79 +48,225 @@ export default function RatingBox({setRatingModel,user}) {
                             {food ? (
                                food===5 ? (
                                 <>
-                                    <ion-icon name="star" id="starfirst"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setFood(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(3)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(4)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(5)}></ion-icon>
                                 </>
                                ) : (food===4 ? (
                                 <>
-                                <ion-icon name="star" id="starfirst"></ion-icon>
-                                <ion-icon name="star" id="star"></ion-icon>
-                                <ion-icon name="star" id="star"></ion-icon>
-                                <ion-icon name="star" id="star"></ion-icon>
-                                <ion-icon name="star-outline"></ion-icon>
+                                <ion-icon name="star" id="starfirst" onClick={() => setFood(1)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setFood(2)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setFood(3)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setFood(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setFood(5)}></ion-icon>
                             </>
                                ): (food===3 ? (
                                 <>
-                                    <ion-icon name="star" id="starfirst"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setFood(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(5)}></ion-icon>
                                 </>
                                ): (food===2 ? (
                                 <>
-                                    <ion-icon name="star" id="starfirst"></ion-icon>
-                                    <ion-icon name="star" id="star"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setFood(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setFood(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(5)}></ion-icon>
                                 </>
                                ): (
                                 <>
-                                    <ion-icon name="star" id="starfirst"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
-                                    <ion-icon name="star-outline"></ion-icon>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setFood(1)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setFood(5)}></ion-icon>
                                 </>
                                ))))
                             ) : (
                                 <>
-                                <ion-icon name="star-outline" id="first" onClick={() => foodReview(1)}></ion-icon>
-                                <ion-icon name="star-outline" onClick={() => foodReview(2)}></ion-icon>
-                                <ion-icon name="star-outline" onClick={() => foodReview(3)}></ion-icon>
-                                <ion-icon name="star-outline" onClick={() => foodReview(4)}></ion-icon>
-                                <ion-icon name="star-outline" onClick={() => foodReview(5)}></ion-icon>
+                                <ion-icon name="star-outline" id="first" onClick={() => setFood(1)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setFood(2)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setFood(3)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setFood(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setFood(5)}></ion-icon>
                                 </>
                             )}
                         </span>
                         <span>
                             Attendance 👨‍🍳:
-                            <ion-icon name="star-outline" id="first" onClick={() => setAttendance(1)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setAttendance(2)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setAttendance(3)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setAttendance(4)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setAttendance(5)}></ion-icon>
+                            {attendance ? (
+                               attendance===5 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setAttendance(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(3)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(4)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(5)}></ion-icon>
+                                </>
+                               ) : (attendance===4 ? (
+                                <>
+                                <ion-icon name="star" id="starfirst" onClick={() => setAttendance(1)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setAttendance(2)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setAttendance(3)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setAttendance(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setAttendance(5)}></ion-icon>
+                                </>
+                               ): (attendance===3 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setAttendance(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(5)}></ion-icon>
+                                </>
+                               ): (attendance===2 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setAttendance(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setAttendance(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(5)}></ion-icon>
+                                </>
+                               ): (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setAttendance(1)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setAttendance(5)}></ion-icon>
+                                </>
+                               ))))
+                            ) : (
+                                <>
+                                <ion-icon name="star-outline" id="first" onClick={() => setAttendance(1)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setAttendance(2)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setAttendance(3)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setAttendance(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setAttendance(5)}></ion-icon>
+                                </>
+                            )}
                         </span>
                         <span>
                             Price 💸:
-                            <ion-icon name="star-outline" id="first" onClick={() => setPrice(1)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setPrice(2)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setPrice(3)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setPrice(4)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setPrice(5)}></ion-icon>
+                            {price ? (
+                               price===5 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setPrice(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(3)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(4)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(5)}></ion-icon>
+                                </>
+                               ) : (price===4 ? (
+                                <>
+                                <ion-icon name="star" id="starfirst" onClick={() => setPrice(1)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setPrice(2)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setPrice(3)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setPrice(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setPrice(5)}></ion-icon>
+                                </>
+                               ): (price===3 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setPrice(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(5)}></ion-icon>
+                                </>
+                               ): (price===2 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setPrice(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setPrice(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(5)}></ion-icon>
+                                </>
+                               ): (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setPrice(1)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setPrice(5)}></ion-icon>
+                                </>
+                               ))))
+                            ) : (
+                                <>
+                                <ion-icon name="star-outline" id="first" onClick={() => setPrice(1)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setPrice(2)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setPrice(3)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setPrice(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setPrice(5)}></ion-icon>
+                                </>
+                            )}
                         </span>
                         <span>
                             Environment 🍽️:
-                            <ion-icon name="star-outline" id="first" onClick={() => setEnvironment(1)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setEnvironment(2)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setEnvironment(3)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setEnvironment(4)}></ion-icon>
-                            <ion-icon name="star-outline" onClick={() => setEnvironment(5)}></ion-icon>    
+                            {environment ? (
+                               environment===5 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setEnvironment(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(3)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(4)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(5)}></ion-icon>
+                                </>
+                               ) : (environment===4 ? (
+                                <>
+                                <ion-icon name="star" id="starfirst" onClick={() => setEnvironment(1)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setEnvironment(2)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setEnvironment(3)}></ion-icon>
+                                <ion-icon name="star" id="star" onClick={() => setEnvironment(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setEnvironment(5)}></ion-icon>
+                                </>
+                               ): (environment===3 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setEnvironment(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(2)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(5)}></ion-icon>
+                                </>
+                               ): (environment===2 ? (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setEnvironment(1)}></ion-icon>
+                                    <ion-icon name="star" id="star" onClick={() => setEnvironment(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(5)}></ion-icon>
+                                </>
+                               ): (
+                                <>
+                                    <ion-icon name="star" id="starfirst" onClick={() => setEnvironment(1)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(2)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(3)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(4)}></ion-icon>
+                                    <ion-icon name="star-outline" onClick={() => setEnvironment(5)}></ion-icon>
+                                </>
+                               ))))
+                            ) : (
+                                <>
+                                <ion-icon name="star-outline" id="first" onClick={() => setEnvironment(1)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setEnvironment(2)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setEnvironment(3)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setEnvironment(4)}></ion-icon>
+                                <ion-icon name="star-outline" onClick={() => setEnvironment(5)}></ion-icon>
+                                </>
+                            )}
                         </span>
+                        <span id="comment">If you want to make an observation or comment (optional):</span>
+                        <input
+                            type="text"
+                            placeholder="Click to comment..."
+                            value={comment}
+                            onChange={(event) => setComment(event.target.value)}
+                            required
+                        />
                     </Rating>
                     <Buttons>
                         <button id="save" onClick={sendRating}>Save</button>
@@ -148,7 +292,7 @@ const Background = styled.div`
 `
 const Box = styled.div`
     width: 60%; 
-    height: 470px;
+    height: 580px;
     background-color: white;
     border-radius: 12px;
     color: rgba(111, 111, 111, 1);
@@ -158,7 +302,7 @@ const Box = styled.div`
 `
 const Cancel = styled.div`
     width: 100%; 
-    height: 10%;
+    height: 6%;
     display: flex;
     justify-content: flex-end;
     padding: 10px 18px 0px 0px;
@@ -215,7 +359,7 @@ const Welcome = styled.div`
 `
 const Rating = styled.div`
     width: 90%;
-    height: 35%;
+    height: 40%;
     display: flex;
     flex-direction: column;
     margin-bottom: 125px;
@@ -230,6 +374,24 @@ const Rating = styled.div`
 
     span#header { 
         text-decoration: underline;
+    }
+
+    span#comment {
+        font-size: 17px;
+        margin-top: 40px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    input { 
+        width: 100%;
+        height: 100px;
+        padding-left: 15px;
+        font-size: 25px;
+        border-radius: 8px;
+        border: 1px dashed black;
     }
 
     ion-icon { 
@@ -262,8 +424,8 @@ const Rating = styled.div`
 `
 const Buttons = styled.div`
     width: 100%;
-    margin-top: 30px;
     display: flex;
+    margin-top: 75px;
     justify-content: flex-end;
     padding-right: 50px;
 

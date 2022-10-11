@@ -147,7 +147,7 @@ export default function PlaceScreen() {
                 
             <Container2>
                 <Review>
-                    <Box onClick={() => setRatingModel(true)}>Review this Restaurant<ion-icon name="star"></ion-icon></Box>
+                    <Box onClick={() => setRatingModel(true)}>Add an review<ion-icon name="star"></ion-icon></Box>
                 </Review>
             </Container2>
 
@@ -424,7 +424,6 @@ const TagName = styled.div`
 const Reviews = styled.div`
     width: 100%; 
     height: 100%; 
-    margin-top: 60px;
 `
 const New = styled.div`
     width: 100%; 
@@ -433,6 +432,7 @@ const New = styled.div`
     justify-content: center;
     align-items: flex-start;
     color: white;
+    margin-top: 30px;
 
     span { 
         font-weight: bold;
@@ -441,7 +441,7 @@ const New = styled.div`
 `
 const Container2 = styled.div`
     width: 100%; 
-    height: 300px;
+    height: 190px;
     display: flex; 
     justify-content: center;
 `
