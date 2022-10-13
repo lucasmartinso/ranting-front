@@ -52,7 +52,7 @@ export default function MainScreen() {
                 <img src={logo} alt="logo"/>
                 {token ? (
                 <UserProfile onClick={() => setUserModal(true)}>
-                    <span>Olá, {user.name}</span>
+                    <span>Hello, {user.name}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile"/>
                     ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}

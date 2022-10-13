@@ -10,6 +10,8 @@ export default function RatingBox({setRatingModel,user,id}) {
     const [price,setPrice] = useState(null);
     const [comment,setComment] = useState(null);
     const { token } = useContext(TokenContext);
+    const [error,setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     async function sendRating() { 
         
@@ -31,12 +33,14 @@ export default function RatingBox({setRatingModel,user,id}) {
             window.location.reload();
         } catch (error) {
             console.log(error);
+            setErrorMessage(error.response.data);
+            setError(true);
         }
     }
 
     return(
         <Background>
-            <Box>
+            <Box error={error}>
                 <Cancel>
                     <span onClick={() => setRatingModel(false)}>X</span>
                 </Cancel>
@@ -262,15 +266,27 @@ export default function RatingBox({setRatingModel,user,id}) {
                             )}
                         </span>
                         <span id="comment">If you want to make an observation or comment (optional):</span>
-                        <input
-                            type="text"
-                            placeholder="Click to comment..."
-                            value={comment}
-                            onChange={(event) => setComment(event.target.value)}
-                            required
-                        />
+                        <Comment>
+                            <input
+                                type="text"
+                                placeholder="Click to comment..."
+                                value={comment}
+                                onChange={(event) => setComment(event.target.value)}
+                                required
+                            />
+                        </Comment>
                     </Rating>
-                    <Buttons>
+
+                    {error ? (
+                        <Error>
+                            <button>
+                                <span>{errorMessage}</span>
+                                <span id="x" onClick={() => setError(false)}>X</span>
+                            </button>
+                        </Error>
+                        ) : ""}
+
+                    <Buttons error={error}>
                         <button id="save" onClick={sendRating}>Save</button>
                         <button id="cancel" onClick={() => setRatingModel(false)}>Cancel</button>
                     </Buttons>
@@ -294,7 +310,7 @@ const Background = styled.div`
 `
 const Box = styled.div`
     width: 60%; 
-    height: 580px;
+    height: ${props => props.error ? ("780px") : ("650px")};
     background-color: white;
     border-radius: 12px;
     color: rgba(111, 111, 111, 1);
@@ -387,15 +403,6 @@ const Rating = styled.div`
         margin-bottom: 15px;
     }
 
-    input { 
-        width: 100%;
-        height: 100px;
-        padding-left: 15px;
-        font-size: 25px;
-        border-radius: 8px;
-        border: 1px dashed black;
-    }
-
     ion-icon { 
         width: 30px; 
         height: 30px;
@@ -424,10 +431,62 @@ const Rating = styled.div`
         color: yellow;
     }
 `
+const Comment = styled.div`
+    width: 490px;
+    height: 100px;
+
+    input { 
+        width: 490px;
+        height: 100px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: justify;
+        padding: 5px 10px 5px 15px;
+        font-size: 25px;
+        border-radius: 8px;
+        border: 1px dashed black;
+    }
+`
+const Error = styled.div` 
+  width: 100%; 
+  height: 100px; 
+  display: flex; 
+  justify-content: center; 
+  margin-top: 60px;
+
+  button { 
+    width: 80%; 
+    height: 70px; 
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding: 0px 20px 0px 20px;
+    background-color: #FF7474;
+    color: rgba(255,255,255,1);
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid rgba(120, 177, 89, 0.25);
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    transition: 0.2s all;
+
+   span#x { 
+    &:hover { 
+      cursor: pointer;
+    }
+
+    &:active {  
+      transform: scale(0.98);
+      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+   }
+  }
+`
 const Buttons = styled.div`
     width: 100%;
     display: flex;
-    margin-top: 75px;
+    margin-top: ${props => props.error ? ("10px") : ("110px")};
     justify-content: flex-end;
     padding-right: 50px;
 

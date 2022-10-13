@@ -102,15 +102,19 @@ export default function PlaceScreen() {
                     <TextBox>
                         <span>City:</span>
                         <h4>{place.city}</h4>
-                    </TextBox>  
+                    </TextBox> 
+                    {place.description ? ( 
                     <TextBox>
                         <span>Description:</span>
                         <h4>{place.description}</h4>
-                    </TextBox>  
+                    </TextBox>
+                    ) : ""}  
+                    {place.website ? (
                     <TextBox>
                         <span>Website:</span>
                         <h4 id="website" onClick={() => window.open(place.website)}>{place.website}</h4>
                     </TextBox> 
+                    ) : ""}
                 </Rating>
                 
                 {place.score !== "0"  ? (

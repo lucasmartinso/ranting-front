@@ -9,7 +9,7 @@ export default function RenderReviews(reviewData) {
             {reviewData.mainPhoto ? (
                         <img src={reviewData.mainPhoto} alt="profile"/>
                     ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
-                <p>@{reviewData.username}</p>
+                <p><strong>@{reviewData.username}</strong></p>
                 <p id="score">{score.toFixed(1)} ⭐</p>
             </ProfileRating>
             <ReviewInfo>

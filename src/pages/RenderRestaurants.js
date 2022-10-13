@@ -12,7 +12,7 @@ export default function RenderRestaurants(restaurantData) {
                     <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</h3>
                 </Overall>
                 <Info>
-                    <img src={restaurantData.mainPhoto} alt="place"/>
+                    <img src={restaurantData.mainPhoto} alt={restaurantData.mainPhoto}/>
                 </Info>
             </Container2>
 
