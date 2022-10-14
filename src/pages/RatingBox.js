@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import styled, { objToCss } from "styled-components";
+import styled from "styled-components";
 import * as axiosRequest from "../repositories/AxiosRequests"
 import TokenContext from "../contexts/tokenContext";
 
