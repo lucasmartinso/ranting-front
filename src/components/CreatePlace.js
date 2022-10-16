@@ -87,7 +87,7 @@ export default function CreatePlaceScreen() {
     
     try {
         if(name.length>2) {
-            const promise = await AxiosRequest.search(name);
+            const promise = await AxiosRequest.cities(state.id,city);
             setCities(promise);
             if(promise.length === 0) setCities(null);
         }
