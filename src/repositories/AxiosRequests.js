@@ -53,5 +53,5 @@ export async function foodTypes() {
 export async function states() { 
     const promise = await axios.get(`${URL}/states`);
 
-    return promise;
+    return promise.data;
 }

@@ -8,7 +8,7 @@ import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import UserBox from "../pages/UserBox";
-import RenderTypes from "../pages/RenderTypes";
+import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
 
 export default function CreatePlaceScreen() { 
     const [name,setName] = useState("");
@@ -35,19 +35,11 @@ export default function CreatePlaceScreen() {
 
     useEffect(async () => {
       try {
-        const promise = await AxiosRequest.foodTypes();
-        console.log(promise);
-        setTypes(promise);
-      } catch (error) {
-        console.log(error);
-      }
-    },[]);
-
-    useEffect(async () => {
-      try {
-        const promise = await AxiosRequest.foodTypes();
-        console.log(promise);
-        setTypes(promise);
+        const promiseType = await AxiosRequest.foodTypes();
+        const promiseState = await AxiosRequest.states();
+        console.log(promiseState);
+        setTypes(promiseType);
+        setStates(promiseState);
       } catch (error) {
         console.log(error);
       }
@@ -149,10 +141,11 @@ export default function CreatePlaceScreen() {
         <Types>
           <ul>
             {types.map(typ => (
-              <RenderTypes 
+              <RenderInputsCreatePlace
                 id = {typ.id}
                 name = {typ.name}
-                setType = {setType}
+                changeState = {setType}
+                flag = "🍽️"
               />
             ))}
           </ul>
@@ -174,11 +167,11 @@ export default function CreatePlaceScreen() {
         </Line>
         <Types>
           <ul>
-            {types.map(typ => (
-              <RenderTypes 
-                id = {typ.id}
-                name = {typ.name}
-                setType = {setType}
+            {states.map(sta => (
+              <RenderInputsCreatePlace 
+                id = {sta.id}
+                name = {sta.name}
+                changeState = {setState}
               />
             ))}
           </ul>

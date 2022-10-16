@@ -1,11 +1,11 @@
 import styled from "styled-components"
 
-export default function RenderTypes({id,name,setType}) { 
+export default function RenderTypes({id,name,changeState,flag}) { 
     
     return( 
-        <Type id={id} onClick={() => setType(name)}>
+        <Type id={id} onClick={() => changeState(name)}>
             <span>{name}</span>
-            <span id="icon">🍽️</span>
+            <span id="icon">{flag}</span>
         </Type>
     )
 }
