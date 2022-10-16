@@ -16,6 +16,7 @@ export default function MainScreen() {
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
+    const [logout,setLogout] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
     console.log(user);
@@ -51,11 +52,16 @@ export default function MainScreen() {
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
                 {token ? (
-                <UserProfile onClick={() => setUserModal(true)}>
+                <UserProfile>
                     <span>Hello, {user.name}</span>
                     {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="profile"/>
+                        <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
                     ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
+                    {logout ? ( 
+                        <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
+                    ) : ( 
+                        <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
+                    )}
                 </UserProfile>
                 ): (
                     <Sign>
@@ -64,6 +70,19 @@ export default function MainScreen() {
                     </Sign>
                 )}
             </Title>
+            
+            {logout ? (
+                <Logout>
+                    <Line>
+                        <div>.</div>
+                    </Line>
+                    <span onClick={() => setUserModal(true)}>Change your photo</span>
+                    <Line>
+                        <div>.</div>
+                    </Line>
+                    <span id="logout">Logout</span>
+                </Logout>
+            ) : ""}
 
             { token ? (
             <CreatePlace>
@@ -151,7 +170,7 @@ const UserProfile = styled.div`
         height: 50px;
         object-fit: cover;
         border-radius: 50%;
-        margin-left: 5px;
+        margin-left: 8px;
     }
 
     ion-icon { 
@@ -205,11 +224,45 @@ const Sign = styled.div`
         color: black; 
     }
 `
+const Logout = styled.div`
+    width: 230px;
+    height: 60px;
+    background-color: white; 
+    margin-top: 100px;
+    position: fixed;
+    right: 0;
+    top: 0px;
+    border-radius: 0px 0px 0px 10px;
+    display: flex;
+    flex-direction : column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 5px 5px 5px;
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
+
+    span { 
+        font-weight: bold;
+        font-size: 16px;
+
+        &:hover{ 
+            cursor: pointer; 
+        }
+        
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    span#logout { 
+        color: red;
+    }
+`
 const CreatePlace = styled.div`
     width: 90%;
     height: 10%;
-    margin-top: 110px;
     display: flex;
+    margin-top: 130px;
 `
 const Box = styled.button`
     width: 30%;
@@ -251,5 +304,20 @@ const Main = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center; 
+    }
+`
+const Line = styled.div`
+    width: 100%; 
+    height: 1px;
+    display: flex; 
+    justify-content: center;
+    background-color: white;
+    padding-bottom: 10px;
+
+    div {
+        width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top:2px;
     }
 `
