@@ -17,6 +17,10 @@ export default function CreatePlaceScreen() {
     const [type, setType] = useState("");
     const [clickedType,setClickedType] = useState(false);
     const [city, setCity] = useState(""); 
+    const [cities, setCities] = useState([]);
+    const [state,setState] = useState("");
+    const [clickedState,setClickedState] = useState(false);
+    const [states, setStates] = useState([]);
     const [address, setAddress] = useState("");
     const [website, setWebsite] = useState("");
     const [clicked,setClicked] = useState(false);
@@ -28,6 +32,16 @@ export default function CreatePlaceScreen() {
     const [types,setTypes] = useState([]);
     const user = JSON.parse(userData);
     const navigate = useNavigate();
+
+    useEffect(async () => {
+      try {
+        const promise = await AxiosRequest.foodTypes();
+        console.log(promise);
+        setTypes(promise);
+      } catch (error) {
+        console.log(error);
+      }
+    },[]);
 
     useEffect(async () => {
       try {
@@ -60,7 +74,6 @@ export default function CreatePlaceScreen() {
       await AxiosRequest.createPlace(config,placeData);
       navigate("/");
       setClicked(false);
-      console.log("Foi");
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);
@@ -120,13 +133,6 @@ export default function CreatePlaceScreen() {
             onChange={(event) => setAddress(event.target.value)}
             required
         />
-        <input 
-            type="text"
-            placeholder="City (required)"
-            value={city}
-            onChange={(event) => setCity(event.target.value)}
-            required
-        />
         <Selector type={clickedType}>
           <span>Type (requeried)</span>
           {clickedType ? ( 
@@ -144,13 +150,41 @@ export default function CreatePlaceScreen() {
           <ul>
             {types.map(typ => (
               <RenderTypes 
+                id = {typ.id}
                 name = {typ.name}
+                setType = {setType}
               />
             ))}
           </ul>
         </Types>
         </>
         ): ""}
+        <Selector type={clickedState}>
+          <span>State (requeried)</span>
+          {clickedState ? ( 
+            <ion-icon name="chevron-up-outline" onClick={() => setClickedState(false)}></ion-icon>
+          ) : ( 
+            <ion-icon name="chevron-down-outline" onClick={() => setClickedState(true)}></ion-icon>
+          )}
+        </Selector>
+        {clickedState ? (
+        <>
+        <Line>
+          <div>.</div>
+        </Line>
+        <Types>
+          <ul>
+            {types.map(typ => (
+              <RenderTypes 
+                id = {typ.id}
+                name = {typ.name}
+                setType = {setType}
+              />
+            ))}
+          </ul>
+        </Types>
+        </>
+        ) : ""}
         <input
             type="url"
             placeholder="Website"

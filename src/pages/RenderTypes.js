@@ -1,8 +1,9 @@
 import styled from "styled-components"
 
-export default function RenderTypes({name}) { 
+export default function RenderTypes({id,name,setType}) { 
+    
     return( 
-        <Type>
+        <Type id={id} onClick={() => setType(name)}>
             <span>{name}</span>
             <span id="icon">🍽️</span>
         </Type>
