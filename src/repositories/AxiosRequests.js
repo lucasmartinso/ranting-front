@@ -43,3 +43,9 @@ export async function createPlace(config,placeData) {
 export async function createReview(id,reviewData,config) {
     await axios.post(`${URL}/rating/${id}`,reviewData,config);
 }
+
+export async function foodTypes() { 
+    const promise = await axios.get(`${URL}/types`);
+
+    return promise.data;
+}

@@ -13,6 +13,7 @@ export default function CreatePlaceScreen() {
     const [description, setDescription] = useState("");
     const [mainPhoto, setMainPhoto] = useState("");
     const [type, setType] = useState("");
+    const [clickedType,setClickedType] = useState(false);
     const [city, setCity] = useState(""); 
     const [address, setAddress] = useState("");
     const [website, setWebsite] = useState("");
@@ -24,6 +25,10 @@ export default function CreatePlaceScreen() {
     const [userModal, setUserModal] = useState("")
     const user = JSON.parse(userData);
     const navigate = useNavigate();
+
+    //async function foodTypes() {
+    //  await 
+    //}
 
     async function register(event) { 
         event.preventDefault();
@@ -113,13 +118,31 @@ export default function CreatePlaceScreen() {
             onChange={(event) => setCity(event.target.value)}
             required
         />
-        <input 
-            type="text"
-            placeholder="Type (required)"
-            value={type}
-            onChange={(event) => setType(event.target.value)}
-            required
-        />
+        <Selector type={clickedType}>
+          <span>Type (requeried)</span>
+          {clickedType ? ( 
+            <ion-icon name="chevron-up-outline" onClick={() => setClickedType(false)}></ion-icon>
+          ) : ( 
+            <ion-icon name="chevron-down-outline" onClick={() => setClickedType(true)}></ion-icon>
+          )}
+        </Selector>
+        {clickedType ? (
+        <>
+        <Line>
+          <div>.</div>
+        </Line>
+        <Types>
+          <ul>
+            <Type>
+              <span>Italian Food</span>
+            </Type>
+            <Type>
+              <span>Italian Food</span>
+            </Type>
+          </ul>
+        </Types>
+        </>
+        ): ""}
         <input
             type="url"
             placeholder="Website"
@@ -233,6 +256,47 @@ const UserProfile = styled.div`
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
+const Selector = styled.div`
+  width: 80%; 
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /*border: 2px solid rgba(120, 177, 89, 0.25);*/
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: ${props => props.type ? ("10px 10px 0px 0px"):("10px")};
+  padding: 0px 20px 0px 20px;
+  font-size: 20px;
+  color: grey;
+  margin-bottom: ${props => props.type ? ("0px") : ("25px")};
+  background-color: white;
+
+  ion-icon { 
+    background-color: red;
+  }
+`
+const Types = styled.div`
+  width: 80%;
+  background-color: white;
+  margin-bottom: 25px;
+  border-radius: 0px 0px 10px 10px;
+`
+const Type = styled.li`
+  width: 100%;
+  hieght: 30px;
+  display: flex;
+  align-items: center;
+  padding: 10px 0px 10px 20px;
+
+  &:hover { 
+    cursor: pointer;
+  }
+
+  &:active {  
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  }
+`
 const Main = styled.div`
   width: 100%; 
   height: 100%; 
@@ -314,4 +378,17 @@ const Error = styled.div`
     }
    }
   }
+`
+const Line = styled.div`
+    width: 80%; 
+    height: 2px;
+    display: flex; 
+    justify-content: center;
+    background-color: white;
+
+    div {
+        width: 95%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+    }
 `
