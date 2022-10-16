@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -7,6 +8,7 @@ import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import UserBox from "../pages/UserBox";
+import RenderTypes from "../pages/RenderTypes";
 
 export default function CreatePlaceScreen() { 
     const [name,setName] = useState("");
@@ -22,13 +24,20 @@ export default function CreatePlaceScreen() {
     const [errorMessage, setErrorMessage] = useState("");
     const { userData, setUserData } = useContext(UserContext);
     const { token } = useContext(TokenContext);
-    const [userModal, setUserModal] = useState("")
+    const [userModal, setUserModal] = useState("");
+    const [types,setTypes] = useState([]);
     const user = JSON.parse(userData);
     const navigate = useNavigate();
 
-    //async function foodTypes() {
-    //  await 
-    //}
+    useEffect(async () => {
+      try {
+        const promise = await AxiosRequest.foodTypes();
+        console.log(promise);
+        setTypes(promise);
+      } catch (error) {
+        console.log(error);
+      }
+    },[]);
 
     async function register(event) { 
         event.preventDefault();
@@ -133,12 +142,11 @@ export default function CreatePlaceScreen() {
         </Line>
         <Types>
           <ul>
-            <Type>
-              <span>Italian Food</span>
-            </Type>
-            <Type>
-              <span>Italian Food</span>
-            </Type>
+            {types.map(typ => (
+              <RenderTypes 
+                name = {typ.name}
+              />
+            ))}
           </ul>
         </Types>
         </>
@@ -280,22 +288,7 @@ const Types = styled.div`
   background-color: white;
   margin-bottom: 25px;
   border-radius: 0px 0px 10px 10px;
-`
-const Type = styled.li`
-  width: 100%;
-  hieght: 30px;
-  display: flex;
-  align-items: center;
-  padding: 10px 0px 10px 20px;
-
-  &:hover { 
-    cursor: pointer;
-  }
-
-  &:active {  
-    transform: scale(0.98);
-    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-  }
+  padding-bottom: 5px;
 `
 const Main = styled.div`
   width: 100%; 
