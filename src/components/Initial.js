@@ -7,7 +7,7 @@ export default function InitialScreen() {
     const navigate = useNavigate();
     
     setTimeout(() => {
-        navigate("/");
+        navigate("/main");
     },5000)
 
     return(

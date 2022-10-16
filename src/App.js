@@ -20,10 +20,10 @@ export default function App() {
       <GlobalStyle />
       <BrowserRouter>
           <Routes>
-              <Route path="/start" element={<InitialScreen />} />
+              <Route path="/" element={<InitialScreen />} />
               <Route path="/sign-up" element={<SignUpScreen />} />
               <Route path="/login" element={<LoginScreen />} />
-              <Route path="/" element={<MainScreen />} />
+              <Route path="/main" element={<MainScreen />} />
               <Route path="/places/:id" element={<PlaceScreen />} />
               <Route path="/create/place" element={<CreatePlaceScreen />} />
           </Routes>

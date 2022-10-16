@@ -35,7 +35,7 @@ export default function LoginScreen() {
       });
 
       localStorage.setItem("USER_DATA",userInfo);
-      navigate("/");
+      navigate("/main");
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);

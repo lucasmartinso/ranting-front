@@ -64,7 +64,7 @@ export default function PlaceScreen() {
                 <img src={logo} alt="logo"/>
                 {token ? (
                 <UserProfile onClick={() => setUserModal(true)}>
-                    <span>Olá, {user.name}</span>
+                    <span>Hello, {user.name}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile"/>
                     ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
@@ -152,7 +152,7 @@ export default function PlaceScreen() {
                 
             <Container2>
                 <Review>
-                    <Box onClick={() => setRatingModel(true)}>Add an review<ion-icon name="star"></ion-icon></Box>
+                    <Box onClick={() => setRatingModel(true)}>Make an Review<ion-icon name="star"></ion-icon></Box>
                 </Review>
             </Container2>
 
