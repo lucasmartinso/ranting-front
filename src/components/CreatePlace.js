@@ -30,6 +30,8 @@ export default function CreatePlaceScreen() {
     const { token } = useContext(TokenContext);
     const [userModal, setUserModal] = useState("");
     const [types,setTypes] = useState([]);
+    const [logout,setLogout] = useState(false);
+    const [openModal,setOpenModal] = useState(false);
     const user = JSON.parse(userData);
     const navigate = useNavigate();
 
@@ -85,22 +87,31 @@ export default function CreatePlaceScreen() {
     ): ""}
 
     <Container>
-
+    
+    <ContainerTitle>
       <Title>
+        <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
         <img src={logo} alt="logo"/>
+        {token ? (
+          <UserProfile>
+            <span>Hello, {user.name}</span>
+            {user.mainPhoto ? (
+              <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
+            ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
+            {logout ? ( 
+              <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
+            ) : ( 
+              <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
+            )}
+          </UserProfile>
+          ): (
+          <Sign>
+            <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
+            <button id="login" onClick={() => navigate("/login")}>Login</button>
+          </Sign>
+          )}
       </Title>
-
-     <ContainerApresentation>
-        <Apresentation>
-            <span>⭐⭐ <strong id="message">You can create an Place here:</strong></span>
-            <UserProfile onClick={() => setUserModal(true)}>
-                    <span>Olá, <strong>{user.name}</strong></span>
-                    {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="profile"/>
-                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
-            </UserProfile>
-        </Apresentation>
-    </ContainerApresentation>
+    </ContainerTitle>
 
       <form onSubmit={register}>
       <Main error={error}>
@@ -125,8 +136,9 @@ export default function CreatePlaceScreen() {
             onChange={(event) => setAddress(event.target.value)}
             required
         />
+
         <Selector type={clickedType}>
-          <span>Type (requeried)</span>
+          <span>{type ? (type):("Type (requeried)")}</span>
           {clickedType ? ( 
             <ion-icon name="chevron-up-outline" onClick={() => setClickedType(false)}></ion-icon>
           ) : ( 
@@ -135,9 +147,6 @@ export default function CreatePlaceScreen() {
         </Selector>
         {clickedType ? (
         <>
-        <Line>
-          <div>.</div>
-        </Line>
         <Types>
           <ul>
             {types.map(typ => (
@@ -146,14 +155,16 @@ export default function CreatePlaceScreen() {
                 name = {typ.name}
                 changeState = {setType}
                 flag = "🍽️"
+                modalInput = {setClickedType}
               />
             ))}
           </ul>
         </Types>
         </>
         ): ""}
+
         <Selector type={clickedState}>
-          <span>State (requeried)</span>
+          <span>{state ? (state) : ("State (requeried)")}</span>
           {clickedState ? ( 
             <ion-icon name="chevron-up-outline" onClick={() => setClickedState(false)}></ion-icon>
           ) : ( 
@@ -162,9 +173,6 @@ export default function CreatePlaceScreen() {
         </Selector>
         {clickedState ? (
         <>
-        <Line>
-          <div>.</div>
-        </Line>
         <Types>
           <ul>
             {states.map(sta => (
@@ -172,12 +180,15 @@ export default function CreatePlaceScreen() {
                 id = {sta.id}
                 name = {sta.name}
                 changeState = {setState}
+                modalInput = {setClickedState}
               />
             ))}
           </ul>
         </Types>
         </>
         ) : ""}
+
+        {state ? ("Bom diaa") : ("")}
         <input
             type="url"
             placeholder="Website"
@@ -219,60 +230,61 @@ const Container = styled.div`
   display: flex; 
   flex-direction: column;
 `
+const ContainerTitle = styled.div`
+  width: 100%;
+  height: 10%;
+  display: flex; 
+  justify-content: center;
+`
 const Title = styled.div`
-  width: 100%; 
-  height: 100%;
-  display: flex; 
-  justify-content: center;
-  margin-top: 40px;
-
-  img { 
-    width: 70x;
-    height: 90px;
-  }
-`
-const ContainerApresentation =styled.div`
-  width: 100%; 
-  height: 100%; 
-  display: flex; 
-  justify-content: center;
-  margin-bottom: 50px;
-  margin-top: 20px;
-`
-const Apresentation = styled.div`
-    width: 85%; 
-    height: 100%;
-    display: flex;
+    width: 100%; 
+    height: 10%;
+    display: flex; 
     justify-content: space-between;
     align-items: center;
+    padding-top: 30px;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    background-color: #359FE4;
 
-    span { 
-        font-size: 22px;
+    span {
+        display: flex; 
+        align-items: center;
         color: white;
+        font-weight: 500;
 
-        strong#user { 
-            text-decoration: underline;
+        ion-icon { 
+            width: 25px; 
+            height: 25px;
+            margin-right: 5px;
+        }
+
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
         }
     }
 
-    strong#message { 
-        font-weight: 700;
-        color: black;
-        font-size: 35px;
-        text-decoration: underline;
-        font-family: 'Playball', cursive;
+    img { 
+        width: 140px;
+        height: 70px;
+        border-radius: 0px 0px 10px 10px;
     }
 `
 const UserProfile = styled.div`
     display: flex;
-    align-items: center;
 
     img { 
         width: 50px;
         height: 50px;
         object-fit: cover;
         border-radius: 50%;
-        margin-left: 10px;
+        margin-left: 8px;
     }
 
     ion-icon { 
@@ -289,6 +301,75 @@ const UserProfile = styled.div`
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+`
+const Sign = styled.div`
+    display: flex;
+
+    button { 
+        width: 70px;
+        height: 40px;
+        margin-right: 10px;
+        border: 1px solid #359FE4;
+        border-radius: 15px;
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        font-weight: bold;
+        font-size: 16px;
+
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    button#login { 
+        background-color: black; 
+        color: white; 
+    } 
+
+    button#sign-up { 
+        background-color: white; 
+        color: black; 
+    }
+`
+const Logout = styled.div`
+    width: 230px;
+    height: 60px;
+    background-color: white; 
+    margin-top: 100px;
+    position: fixed;
+    right: 0;
+    top: 0px;
+    border-radius: 0px 0px 0px 10px;
+    display: flex;
+    flex-direction : column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 5px 5px 5px;
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
+
+    span { 
+        font-weight: bold;
+        font-size: 16px;
+
+        &:hover{ 
+            cursor: pointer; 
+        }
+        
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    span#logout { 
+        color: red;
     }
 `
 const Selector = styled.div`
@@ -320,7 +401,8 @@ const Types = styled.div`
 const Main = styled.div`
   width: 100%; 
   height: 100%; 
-  display: flex; 
+  display: flex;
+  margin-top: 130px; 
   align-items: center;
   flex-direction: column;
   margin-bottom: ${props => props.error ? ("25px") : ("35px")};
@@ -398,17 +480,4 @@ const Error = styled.div`
     }
    }
   }
-`
-const Line = styled.div`
-    width: 80%; 
-    height: 2px;
-    display: flex; 
-    justify-content: center;
-    background-color: white;
-
-    div {
-        width: 95%;
-        height: 1px;
-        border: 1px solid #D4D4D4;
-    }
 `

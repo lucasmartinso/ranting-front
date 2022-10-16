@@ -1,12 +1,22 @@
 import styled from "styled-components"
 
-export default function RenderTypes({id,name,changeState,flag}) { 
-    
+export default function RenderTypes({id,name,changeState,flag,modalInput}) { 
+    function changes() { 
+      changeState(name);
+      modalInput(false);
+    }  
+
+
     return( 
-        <Type id={id} onClick={() => changeState(name)}>
+      <>
+        <Line>
+          <div>.</div>
+        </Line>
+        <Type id={id} onClick={changes}>
             <span>{name}</span>
             <span id="icon">{flag}</span>
         </Type>
+      </>
     )
 }
 
@@ -35,4 +45,18 @@ const Type = styled.li`
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
   }
+`
+const Line = styled.div`
+    width: 100%; 
+    height: 2px;
+    display: flex; 
+    justify-content: center;
+    background-color: white;
+
+    div {
+        width: 95%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        color: white
+    }
 `
