@@ -2,7 +2,10 @@ import styled from "styled-components"
 
 export default function RenderTypes({id,name,changeState,flag,modalInput}) { 
     function changes() { 
-      changeState(name);
+      changeState({
+        id, 
+        name
+      });
       modalInput(false);
     }  
 

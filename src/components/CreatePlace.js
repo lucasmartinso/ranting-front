@@ -9,6 +9,9 @@ import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import UserBox from "../pages/UserBox";
 import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
+import SearchBox from "../pages/SearchBox";
+import { DebounceInput } from "react-debounce-input";
+import notFound from "../styles/images/NotFound.png"
 
 export default function CreatePlaceScreen() { 
     const [name,setName] = useState("");
@@ -34,6 +37,7 @@ export default function CreatePlaceScreen() {
     const [openModal,setOpenModal] = useState(false);
     const user = JSON.parse(userData);
     const navigate = useNavigate();
+    console.log(state);
 
     useEffect(async () => {
       try {
@@ -76,6 +80,23 @@ export default function CreatePlaceScreen() {
     }
   }
 
+  async function searchCity(event) {
+    setCity(event);
+    const name = event;
+    console.log(name);
+    
+    try {
+        if(name.length>2) {
+            const promise = await AxiosRequest.search(name);
+            setCities(promise);
+            if(promise.length === 0) setCities(null);
+        }
+    } catch (error) {
+        console.log(error);
+        setCities([]);
+    }
+}   
+
   return(
     <>
     {userModal ? (
@@ -86,32 +107,44 @@ export default function CreatePlaceScreen() {
       />
     ): ""}
 
+    {openModal ? (
+      <SearchBox 
+        setOpenModal = {setOpenModal}
+      />
+    ): ""}
+
     <Container>
     
-    <ContainerTitle>
-      <Title>
-        <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
-        <img src={logo} alt="logo"/>
-        {token ? (
-          <UserProfile>
-            <span>Hello, {user.name}</span>
-            {user.mainPhoto ? (
-              <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-            ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
-            {logout ? ( 
-              <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
-            ) : ( 
-              <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
-            )}
-          </UserProfile>
-          ): (
+    <Title>
+      <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
+      <img src={logo} alt="logo"/>
+      {token ? (
+        <UserProfile onClick={() => setUserModal(true)}>
+          <span>Hello, {user.name}</span>
+          {user.mainPhoto ? (
+            <img src={user.mainPhoto} alt="profile"/>
+            ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}             
+        </UserProfile>
+        ): (
           <Sign>
             <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
             <button id="login" onClick={() => navigate("/login")}>Login</button>
           </Sign>
           )}
-      </Title>
-    </ContainerTitle>
+    </Title>
+
+    {logout ? (
+      <Logout>
+        <Line>
+          <div>.</div>
+        </Line>
+          <span onClick={() => setUserModal(true)}>Change your photo</span>
+        <Line>
+          <div>.</div>
+        </Line>
+          <span id="logout">Logout</span>
+      </Logout>
+      ) : ""}
 
       <form onSubmit={register}>
       <Main error={error}>
@@ -138,7 +171,7 @@ export default function CreatePlaceScreen() {
         />
 
         <Selector type={clickedType}>
-          <span>{type ? (type):("Type (requeried)")}</span>
+          <span>{type ? (type.name):("Type (requeried)")}</span>
           {clickedType ? ( 
             <ion-icon name="chevron-up-outline" onClick={() => setClickedType(false)}></ion-icon>
           ) : ( 
@@ -164,7 +197,7 @@ export default function CreatePlaceScreen() {
         ): ""}
 
         <Selector type={clickedState}>
-          <span>{state ? (state) : ("State (requeried)")}</span>
+          <span>{state ? (state.name) : ("State (requeried)")}</span>
           {clickedState ? ( 
             <ion-icon name="chevron-up-outline" onClick={() => setClickedState(false)}></ion-icon>
           ) : ( 
@@ -188,7 +221,37 @@ export default function CreatePlaceScreen() {
         </>
         ) : ""}
 
-        {state ? ("Bom diaa") : ("")}
+        {state ? (
+          <>
+          <DebounceInput
+            id="search"
+            type="text"
+            placeholder="City"
+            minLength={0}
+            debounceTimeout={400}
+            value={city}
+            onChange={(event) => searchCity(event.target.value)}
+            required
+          />
+          <Places>
+            {cities ? (
+              <ul>
+              {cities.map(place => (
+                <RenderInputsCreatePlace 
+                  id = {place.id}
+                  name = {place.name}               
+                />
+              ))}
+              </ul>
+              ) : (
+                <NotFound>
+                  <img src={notFound} alt="Not Found"/>
+                </NotFound>
+              )}
+          </Places>
+          </>
+        ) : ("")}
+
         <input
             type="url"
             placeholder="Website"
@@ -230,23 +293,18 @@ const Container = styled.div`
   display: flex; 
   flex-direction: column;
 `
-const ContainerTitle = styled.div`
-  width: 100%;
-  height: 10%;
-  display: flex; 
-  justify-content: center;
-`
 const Title = styled.div`
     width: 100%; 
     height: 10%;
     display: flex; 
     justify-content: space-between;
     align-items: center;
-    padding-top: 30px;
+    padding: 20px 30px 0px 30px;
     position: fixed;
     top: 0;
     z-index: 1;
     background-color: #359FE4;
+    border-radius: 0px 0px 10px 10px;
 
     span {
         display: flex; 
@@ -284,7 +342,7 @@ const UserProfile = styled.div`
         height: 50px;
         object-fit: cover;
         border-radius: 50%;
-        margin-left: 8px;
+        margin-left: 5px;
     }
 
     ion-icon { 
@@ -422,6 +480,11 @@ const Main = styled.div`
     margin-bottom: 25px;
   }
 
+  input#search { 
+    margin-bottom: 0px;
+    border-radius: ${props => props.cities ? ("0px 20px"):("10px")}
+  }
+
   button { 
     width: 80%; 
     height: 70px; 
@@ -480,4 +543,36 @@ const Error = styled.div`
     }
    }
   }
+`
+const Line = styled.div`
+    width: 100%; 
+    height: 1px;
+    display: flex; 
+    justify-content: center;
+    background-color: white;
+    padding-bottom: 10px;
+
+    div {
+        width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top:2px;
+    }
+`
+const Places = styled.div`
+    width: 80%; 
+    background-color: white;
+    border-radius: 0px 0px 10px 10px;
+    color: rgba(111, 111, 111, 1);
+    display: flex; 
+    flex-direction: column;
+    margin-bottom: 25px;
+`
+const NotFound = styled.div`
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 `
