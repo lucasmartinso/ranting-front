@@ -14,54 +14,56 @@ import { DebounceInput } from "react-debounce-input";
 import notFound from "../styles/images/NotFound.png"
 
 export default function CreatePlaceScreen() { 
-    const [name,setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [mainPhoto, setMainPhoto] = useState("");
-    const [type, setType] = useState("");
-    const [clickedType,setClickedType] = useState(false);
-    const [city, setCity] = useState(""); 
-    const [cities, setCities] = useState([]);
-    const [state,setState] = useState("");
-    const [clickedState,setClickedState] = useState(false);
-    const [states, setStates] = useState([]);
-    const [address, setAddress] = useState("");
-    const [website, setWebsite] = useState("");
-    const [clicked,setClicked] = useState(false);
-    const [error,setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const { userData, setUserData } = useContext(UserContext);
-    const { token } = useContext(TokenContext);
-    const [userModal, setUserModal] = useState("");
-    const [types,setTypes] = useState([]);
-    const [logout,setLogout] = useState(false);
-    const [openModal,setOpenModal] = useState(false);
-    const user = JSON.parse(userData);
-    const navigate = useNavigate();
-    console.log(state);
+  const [name,setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [mainPhoto, setMainPhoto] = useState("");
+  const [type, setType] = useState("");
+  const [clickedType,setClickedType] = useState(false);
+  const [city, setCity] = useState({id: null, name: ""}); 
+  const [cities, setCities] = useState([]);
+  const [state,setState] = useState("");
+  const [clickedState,setClickedState] = useState(false);
+  const [states, setStates] = useState([]);
+  const [address, setAddress] = useState("");
+  const [website, setWebsite] = useState("");
+  const [clicked,setClicked] = useState(false);
+  const [error,setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { userData, setUserData } = useContext(UserContext);
+  const { token } = useContext(TokenContext);
+  const [userModal, setUserModal] = useState("");
+  const [types,setTypes] = useState([]);
+  const [logout,setLogout] = useState(false);
+  const [openModal,setOpenModal] = useState(false);
+  const user = JSON.parse(userData);
+  const navigate = useNavigate();
+  console.log(state);
 
-    useEffect(async () => {
-      try {
-        const promiseType = await AxiosRequest.foodTypes();
-        const promiseState = await AxiosRequest.states();
-        console.log(promiseState);
-        setTypes(promiseType);
-        setStates(promiseState);
-      } catch (error) {
-        console.log(error);
-      }
-    },[]);
+  useEffect(async () => {
+    try {
+      const promiseType = await AxiosRequest.foodTypes();
+      const promiseState = await AxiosRequest.states();
+      console.log(promiseState);
+      setTypes(promiseType);
+      setStates(promiseState);
+    } catch (error) {
+      console.log(error);
+    }
+  },[]);
 
-    async function register(event) { 
-        event.preventDefault();
+  async function register(event) { 
+    event.preventDefault();
 
     const placeData = { 
       name,
       description,
       mainPhoto, 
-      type,
-      city,
+      type: type.name,
+      city : city.name,
       address
     }
+
+    console.log(placeData);
 
     const config = {
       headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +72,7 @@ export default function CreatePlaceScreen() {
     try {
       setClicked(true);
       await AxiosRequest.createPlace(config,placeData);
-      navigate("/");
+      navigate("/main");
       setClicked(false);
     } catch (error) {
       console.log(error);
@@ -81,21 +83,19 @@ export default function CreatePlaceScreen() {
   }
 
   async function searchCity(event) {
-    setCity(event);
+    setCity({id: null,name: event});
     const name = event;
     console.log(name);
     
     try {
-        if(name.length>2) {
-            const promise = await AxiosRequest.cities(state.id,city);
-            setCities(promise);
-            if(promise.length === 0) setCities(null);
-        }
+      const promise = await AxiosRequest.cities(state.id,name);
+      setCities(promise);
+      if(promise.length === 0) setCities(null);
     } catch (error) {
-        console.log(error);
-        setCities([]);
+      console.log(error);
+      setCities([]);
     }
-}   
+  }   
 
   return(
     <>
@@ -146,32 +146,35 @@ export default function CreatePlaceScreen() {
       </Logout>
       ) : ""}
 
-      <form onSubmit={register}>
+    <CreatePlace>
+      <span>Create a Place 🍽️</span>
+    </CreatePlace>
+
+    <ContainerCategory>
+      <Categorys>
+        <span><strong>Place Info:</strong> 📌</span>
+      </Categorys>
+    </ContainerCategory>
+
+    <form onSubmit={register}>
       <Main error={error}>
         <input
             type="text"
-            placeholder="Name (required)"
+            placeholder="Name"
             value={name}
             onChange={(event) => setName(event.target.value)}
             required
         />
         <input
             type="url"
-            placeholder="Url Place Photo (required)"
+            placeholder="Url Place Photo"
             value={mainPhoto}
             onChange={(event) => setMainPhoto(event.target.value)}
             required
         />
-         <input
-            type="text"
-            placeholder="Address (required)"
-            value={address}
-            onChange={(event) => setAddress(event.target.value)}
-            required
-        />
 
         <Selector type={clickedType}>
-          <span>{type ? (type.name):("Type (requeried)")}</span>
+          <span>{type ? (type.name):("Type")}</span>
           {clickedType ? ( 
             <ion-icon name="chevron-up-outline" onClick={() => setClickedType(false)}></ion-icon>
           ) : ( 
@@ -195,6 +198,20 @@ export default function CreatePlaceScreen() {
         </Types>
         </>
         ): ""}
+
+        <ContainerCategory>
+          <Categorys>
+            <span><strong>Localization:</strong> 🌍​</span>
+          </Categorys>
+        </ContainerCategory>
+
+        <input
+            type="text"
+            placeholder="Address"
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
+            required
+        />
 
         <Selector type={clickedState}>
           <span>{state ? (state.name) : ("State (requeried)")}</span>
@@ -227,9 +244,9 @@ export default function CreatePlaceScreen() {
             id="search"
             type="text"
             placeholder="City"
-            minLength={0}
+            minLength={1}
             debounceTimeout={400}
-            value={city}
+            value={city.name}
             onChange={(event) => searchCity(event.target.value)}
             required
           />
@@ -239,7 +256,10 @@ export default function CreatePlaceScreen() {
               {cities.map(place => (
                 <RenderInputsCreatePlace 
                   id = {place.id}
-                  name = {place.name}               
+                  name = {place.name} 
+                  changeState = {setCity}
+                  modalInput = {setClickedState} 
+                  chosed = {setCities}             
                 />
               ))}
               </ul>
@@ -252,13 +272,12 @@ export default function CreatePlaceScreen() {
           </>
         ) : ("")}
 
-        <input
-            type="url"
-            placeholder="Website"
-            value={website}
-            onChange={(event) => setWebsite(event.target.value)}
-            required
-        />
+        <ContainerCategory>
+          <Categorys>
+            <span><strong>Aditional Info:</strong> 💬​</span>
+          </Categorys>
+        </ContainerCategory>
+
         <input 
             type="text"
             placeholder="Description"
@@ -266,22 +285,28 @@ export default function CreatePlaceScreen() {
             onChange={(event) => setDescription(event.target.value)}
             required
         />
+        <input
+            type="url"
+            placeholder="Website"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+        />
         <button>
           {clicked ? (
             <ThreeDots color="white" height={80} width={100} />
           ) : ("Create")}
         </button>
       </Main>
-      </form>
+    </form>
       
-      {error ? (
+    {error ? (
       <Error>
           <button>
             <span>{errorMessage}</span>
             <span id="x" onClick={() => setError(false)}>X</span>
           </button>
       </Error>
-      ) : ""}
+    ) : ""}
     </Container>
     </>
   )
@@ -430,6 +455,40 @@ const Logout = styled.div`
         color: red;
     }
 `
+const CreatePlace = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 140px;
+
+  span { 
+    color: white;
+    font-family: 'Playball', cursive;
+    font-size: 80px;
+  }
+`
+const ContainerCategory = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+
+  span {
+    margin-top: 20px;
+    color: white;
+    font-weight: 700;
+    font-size: 40px;
+    font-family: 'Fuzzy Bubbles', cursive;
+  }
+
+  strong {
+    text-decoration: underline;
+  }
+`
+const Categorys = styled.div`
+  width: 80%;
+  margin-top: 40px;
+`
 const Selector = styled.div`
   width: 80%; 
   height: 70px;
@@ -446,7 +505,14 @@ const Selector = styled.div`
   background-color: white;
 
   ion-icon { 
-    background-color: red;
+    &:hover{ 
+      cursor: pointer; 
+    }
+  
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
   }
 `
 const Types = styled.div`
@@ -460,7 +526,6 @@ const Main = styled.div`
   width: 100%; 
   height: 100%; 
   display: flex;
-  margin-top: 130px; 
   align-items: center;
   flex-direction: column;
   margin-bottom: ${props => props.error ? ("25px") : ("35px")};
@@ -515,6 +580,7 @@ const Error = styled.div`
   height: 100%; 
   display: flex; 
   justify-content: center; 
+  margin-bottom: 50px;
 
   button { 
     width: 80%; 

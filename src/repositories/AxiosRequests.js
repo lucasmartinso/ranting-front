@@ -57,7 +57,8 @@ export async function states() {
 }
 
 export async function cities(id,city) {
-    const promise = await axios.post(`${URL}/cities/${id}`,city);
+    console.log(id);
+    const promise = await axios.post(`${URL}/cities/${id}`,null, {params: {city}});
 
-    return promise;
+    return promise.data;
 }

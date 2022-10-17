@@ -230,7 +230,7 @@ const Logout = styled.div`
     background-color: white; 
     margin-top: 100px;
     position: fixed;
-    right: 0;
+    right: 5%;
     top: 0px;
     border-radius: 0px 0px 0px 10px;
     display: flex;

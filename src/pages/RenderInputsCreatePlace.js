@@ -1,12 +1,13 @@
 import styled from "styled-components"
 
-export default function RenderTypes({id,name,changeState,flag,modalInput}) { 
+export default function RenderTypes({id,name,changeState,flag,modalInput,chosed}) { 
     function changes() { 
       changeState({
         id, 
         name
       });
       modalInput(false);
+      if(chosed) chosed([]);
     }  
 
 
