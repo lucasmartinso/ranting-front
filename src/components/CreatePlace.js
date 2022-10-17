@@ -307,6 +307,11 @@ export default function CreatePlaceScreen() {
           </button>
       </Error>
     ) : ""}
+
+      <LineCopright>
+        <div>.</div>
+        <h4>Copyright © Rating 2022</h4>
+      </LineCopright>
     </Container>
     </>
   )
@@ -641,4 +646,25 @@ const NotFound = styled.div`
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+`
+const LineCopright = styled.div`
+    width: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    background-color: #359FE4;
+    padding-bottom: 10px;
+    background-color: white;
+    margin-top: 50px;
+
+    div {
+        width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top: 5px;
+    }
+
+    h4 { 
+        margin: 15px 0px 10px 0px;
+    }
 `

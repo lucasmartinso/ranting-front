@@ -60,7 +60,7 @@ export default function MainScreen() {
                     <span>Hello, {token ? (user.name) : ("")}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
+                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)} id="photo"></ion-icon> )}
                     {logout ? ( 
                         <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
                     ) : ( 
@@ -114,6 +114,11 @@ export default function MainScreen() {
                     ))}
                 </ul>
             </Main>
+
+            <LineCopright>
+                <div>.</div>
+                <h4>Copyright © Rating 2022</h4>
+            </LineCopright>
         </Container>
         </>
     )
@@ -168,6 +173,7 @@ const Title = styled.div`
 `
 const UserProfile = styled.div`
     display: flex;
+    align-items: center;
 
     img { 
         width: 50px;
@@ -178,10 +184,16 @@ const UserProfile = styled.div`
     }
 
     ion-icon { 
-        margin-left: 5px;
+        margin-left: 10px;
+        width: 30px;
+        height: 30px;
+        color : white;
+    }
+
+    ion-icon#photo { 
         width: 40px;
         height: 40px;
-        color : white;
+        margin-left: 5px;
     }
 
     &:hover { 
@@ -324,5 +336,26 @@ const Line = styled.div`
         border: 1px solid #D4D4D4;
         margin-top:2px;
         color: white;
+    }
+`
+const LineCopright = styled.div`
+    width: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    background-color: #359FE4;
+    padding-bottom: 10px;
+    background-color: white;
+    margin-top: 50px;
+
+    div {
+        width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top: 5px;
+    }
+
+    h4 { 
+        margin: 15px 0px 10px 0px;
     }
 `
