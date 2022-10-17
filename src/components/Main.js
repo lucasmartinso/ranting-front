@@ -12,14 +12,14 @@ import UserBox from "../pages/UserBox";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
-    const { token } = useContext(TokenContext);
+    const { token, setToken } = useContext(TokenContext);
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const [logout,setLogout] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
-    console.log(user);
+    console.log(token);
 
     useEffect(async () => {
         try {
@@ -30,7 +30,11 @@ export default function MainScreen() {
         }
     },[]);
 
-    console.log(places);
+    function exit() { 
+        setToken(null);
+        localStorage.setItem("MY_TOKEN",null);
+        setLogout(false);
+    }
 
     return(
         <>
@@ -53,7 +57,7 @@ export default function MainScreen() {
                 <img src={logo} alt="logo"/>
                 {token ? (
                 <UserProfile>
-                    <span>Hello, {user.name}</span>
+                    <span>Hello, {token ? (user.name) : ("")}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
                     ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
@@ -80,7 +84,7 @@ export default function MainScreen() {
                     <Line>
                         <div>.</div>
                     </Line>
-                    <span id="logout">Logout</span>
+                    <span id="logout" onClick={exit}>Logout</span>
                 </Logout>
             ) : ""}
 
@@ -319,5 +323,6 @@ const Line = styled.div`
         height: 1px;
         border: 1px solid #D4D4D4;
         margin-top:2px;
+        color: white;
     }
 `

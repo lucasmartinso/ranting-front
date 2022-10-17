@@ -149,15 +149,17 @@ export default function PlaceScreen() {
                 </>
                  ) : ""}
             </Main>
-                
+
+            {token ? (    
             <Container2>
                 <Review>
                     <Box onClick={() => setRatingModel(true)}>Make an Review<ion-icon name="star"></ion-icon></Box>
                 </Review>
             </Container2>
+            ) : ""}
 
             {place.score !== "0"  ? (
-            <Reviews>
+            <Reviews token={token}>
                 <ul>
                     {reviews.map(review => (
                         <RenderReviews 
@@ -181,6 +183,7 @@ export default function PlaceScreen() {
             ) }
             <LineCopright>
                 <div>.</div>
+                <h4>©</h4>
             </LineCopright>
         </Container>
         </>
@@ -432,6 +435,7 @@ const TagName = styled.div`
 const Reviews = styled.div`
     width: 100%; 
     height: 100%; 
+    margin-top: ${props => props.token ? ("0px") : ("70px")};
 `
 const New = styled.div`
     width: 100%; 
@@ -500,6 +504,6 @@ const LineCopright = styled.div`
         width: 90%;
         height: 1px;
         border: 1px solid #D4D4D4;
-        margin-top: 15px;
+        margin-top: 5px;
     }
 `

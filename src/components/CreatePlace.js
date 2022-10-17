@@ -30,7 +30,7 @@ export default function CreatePlaceScreen() {
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { userData, setUserData } = useContext(UserContext);
-  const { token } = useContext(TokenContext);
+  const { token, setToken } = useContext(TokenContext);
   const [userModal, setUserModal] = useState("");
   const [types,setTypes] = useState([]);
   const [logout,setLogout] = useState(false);

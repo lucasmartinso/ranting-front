@@ -7,7 +7,7 @@ export default function RenderRestaurants(restaurantData) {
     return( 
         <Place onClick={() => navigate(`/places/${restaurantData.id}`)}>
             <Container2>
-                <Overall>
+                <Overall score={restaurantData.score}>
                     <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
                     <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</h3>
                 </Overall>
@@ -85,7 +85,7 @@ const Overall = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 23px;
+    font-size: ${props => props.score !=="0" ? ("23px") : ("20px")};
     font-weight: bold;
     margin-top: 20px;
     margin-right: 10px;
