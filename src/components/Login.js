@@ -51,29 +51,34 @@ export default function LoginScreen() {
         <img src={logo} alt="logo"/>
       </Title>
 
-      <form onSubmit={register}>
-      <Main error={error}>
-         <input
-            type="text"
-            placeholder="Username or email"
-            value={usernameEmail}
-            onChange={(event) => setUsernameEmail(event.target.value)}
-            required
-        />
-        <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-        />
-        <button>
-          {clicked ? (
-            <ThreeDots color="white" height={80} width={100} />
-          ) : ("Login")}
-        </button>
-      </Main>
-      </form>
+      <SignInContainer>
+        <form onSubmit={register}>
+        <Main error={error}>
+          
+            <input
+              type="text"
+              placeholder="Username or Email"
+              value={usernameEmail}
+              onChange={(event) => setUsernameEmail(event.target.value)}
+              required
+          />
+          <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+          />
+          <button>
+            {clicked ? (
+              <ThreeDots color="white" height={80} width={100} />
+            ) : ("LOGIN")}
+          </button>
+        </Main>
+        </form>
+
+        <Upright>.</Upright>
+      </SignInContainer>
       
       {error ? (
       <Error>
@@ -84,8 +89,8 @@ export default function LoginScreen() {
       </Error>
       ) : ""}
 
-      <Message onClick={() => navigate("/sign-up")}>
-        <span>First time? Sign-up!</span>
+      <Message>
+        <span onClick={() => navigate("/sign-up")}>First time? Sign-up!</span>
       </Message>
     </Container>
   )
@@ -94,7 +99,12 @@ export default function LoginScreen() {
 const Container = styled.div`
   width: 100%; 
   height: 100%; 
-  display: flex; 
+  position: fixed; 
+  top: 0; 
+  left: 0;
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
   flex-direction: column;
 `
 const Title = styled.div`
@@ -109,13 +119,22 @@ const Title = styled.div`
     height: 300px;
   }
 `
+const SignInContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+`
 const Main = styled.div`
-  width: 100%; 
+  width: 400px; 
   height: 100%; 
   display: flex; 
   align-items: center;
   flex-direction: column;
+  background-color: white;
   margin-bottom: ${props => props.error ? ("25px") : ("35px")};
+  border-radius: 12px;
+  padding-top: 30px;
 
   input { 
     width: 80%; 
@@ -133,18 +152,18 @@ const Main = styled.div`
   }
 
   button { 
-    width: 80%; 
-    height: 70px; 
+    width: 50%; 
+    height: 50px; 
     display: flex;
     align-items: center; 
     justify-content: center;
     background-color: #000000;
     color: rgba(255,255,255,1);
-    font-size: 30px;
+    font-size: 22px;
     font-weight: bold;
     border: 2px solid rgba(120, 177, 89, 0.25);
-    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
     transition: 0.2s all;
 
     &:hover { 
@@ -156,6 +175,12 @@ const Main = styled.div`
       box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
   }
+`
+const Upright = styled.div`
+    width: 1px;
+    height: 100%;
+    border: 1px solid #D4D4D4; 
+    margin-left: 30px;
 `
 const Error = styled.div` 
   width: 100%; 
@@ -203,8 +228,7 @@ const Message = styled.div`
     font-size: 20px;
     text-decoration: underline;
     text-decoration-color: #359FE4;
-    margin-bottom: 70px;
-    margin-top: 30px;
+    margin: 30px 0px 230px 0px;
 
     &:hover{ 
       cursor: pointer; 
