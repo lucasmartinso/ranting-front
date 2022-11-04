@@ -7,6 +7,7 @@ import * as AxiosRequest from "../repositories/AxiosRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import redirectToGithub from "../services/OAuth/gitHub";
+import qs from 'query-string';
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -14,6 +15,7 @@ export default function LoginScreen() {
   const [clicked,setClicked] = useState(false);
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [gitClick, setGitClick] = useState(false);
   const navigate = useNavigate();
 
   async function register(event) { 
@@ -46,6 +48,11 @@ export default function LoginScreen() {
       setError(true);
     }
   }
+
+  async function gitHub() { 
+    setGitClick(true);
+    if(gitClick) redirectToGithub();
+  } 
 
   return(
     <Container>
@@ -86,7 +93,7 @@ export default function LoginScreen() {
         <Upright>.</Upright>
 
         <OAuthBox>
-          <ButtonAuth back="black" text="white" icon="white" onClick={redirectToGithub()}>
+          <ButtonAuth back="black" text="white" icon="white" onClick={() => gitHub(true)}>
             <ion-icon name="logo-github"></ion-icon>
             <span>Login with GitHub</span>
           </ButtonAuth>
