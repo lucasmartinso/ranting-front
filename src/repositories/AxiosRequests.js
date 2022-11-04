@@ -1,9 +1,8 @@
 import axios from "axios";
-import dotenv from "dotenv";
+import api from '../services/Api';
 
-dotenv.config();
-
-const URL = process.env.BACK_END_URL;
+const URL = process.env.BACK_END_URL || 'http://localhost:5000';
+console.log(process.env.REACT_APP_API_BASE_URL);
 
 export async function signup(userData) { 
     await axios.post(`${URL}/sign-up`,userData);
@@ -54,13 +53,12 @@ export async function foodTypes() {
 }
 
 export async function states() { 
-    const promise = await axios.get(`${URL}/states`);
+    const promise = await api.get(`/states`);
 
     return promise.data;
 }
 
 export async function cities(id,city) {
-    console.log(id);
     const promise = await axios.post(`${URL}/cities/${id}`,null, {params: {city}});
 
     return promise.data;
