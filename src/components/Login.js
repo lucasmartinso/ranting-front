@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import * as AxiosRequest from "../repositories/AxiosRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
+import redirectToGithub from "../services/OAuth/gitHub";
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -85,7 +86,7 @@ export default function LoginScreen() {
         <Upright>.</Upright>
 
         <OAuthBox>
-          <ButtonAuth back="black" text="white" icon="white">
+          <ButtonAuth back="black" text="white" icon="white" onClick={redirectToGithub()}>
             <ion-icon name="logo-github"></ion-icon>
             <span>Login with GitHub</span>
           </ButtonAuth>
