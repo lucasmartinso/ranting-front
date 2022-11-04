@@ -3,7 +3,8 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as AxiosRequest from "../repositories/AxiosRequests"
+import * as AxiosRequest from "../repositories/AxiosRequests";
+import google from "../styles/images/google-icon.png";
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -78,6 +79,23 @@ export default function LoginScreen() {
         </form>
 
         <Upright>.</Upright>
+
+        <OAuthBox>
+          <ButtonAuth back="black" text="white" icon="white">
+            <ion-icon name="logo-github"></ion-icon>
+            <span>Login with GitHub</span>
+          </ButtonAuth>
+
+          <ButtonAuth back="white" text="black" icon="black">
+            <img src={google} alt='google'/>
+            <span>Login with Google</span>
+          </ButtonAuth>
+
+          <ButtonAuth back="#314A86" text="white" icon="white">
+            <ion-icon name="logo-facebook"></ion-icon>
+            <span>Login with Facebook</span>
+          </ButtonAuth>
+        </OAuthBox>
       </SignInContainer>
       
       {error ? (
@@ -180,7 +198,54 @@ const Upright = styled.div`
     width: 1px;
     height: 100%;
     border: 1px solid #D4D4D4; 
-    margin-left: 30px;
+    margin: 0px 30px;
+`
+const OAuthBox = styled.div`
+  width: 400px;
+  height: 100%;
+  background-color: white;
+  padding-top: 40px;
+  border-radius: 12px;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+`
+const ButtonAuth = styled.div`
+  width: 85%;
+  height: 60px;
+  background-color: ${props => props.back ? (`${props.back}`) : ('red')};
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);
+
+  ion-icon { 
+    color: ${props => props.icon ? (`${props.icon}`) : ('red')};
+    width: 30px;
+    height: 30px;
+  }
+
+  span { 
+    color: ${props => props.text ? (`${props.text}`) : ('red')};
+    margin-left: 20px;
+    font-weight: bold;
+  }
+
+  img { 
+    width: 40px;
+    height: 30px;
+  }
+
+  &:hover { 
+    cursor: pointer;
+  }
+
+  &:active {  
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  }
 `
 const Error = styled.div` 
   width: 100%; 
