@@ -1,6 +1,9 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
-const URL = "http://localhost:5000"
+dotenv.config();
+
+const URL = process.env.BACK_END_URL;
 
 export async function signup(userData) { 
     await axios.post(`${URL}/sign-up`,userData);

@@ -5,6 +5,7 @@ import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
 import * as AxiosRequest from "../repositories/AxiosRequests";
 import google from "../styles/images/google-icon.png";
+import salad from '../styles/images/salad.gif';
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -55,20 +56,23 @@ export default function LoginScreen() {
       <SignInContainer>
         <form onSubmit={register}>
         <Main error={error}>
+          <IteractiveImages>
+            <img src={salad} alt={salad} />
+          </IteractiveImages>
           
-            <input
-              type="text"
-              placeholder="Username or Email"
-              value={usernameEmail}
-              onChange={(event) => setUsernameEmail(event.target.value)}
-              required
+          <input
+            type="text"
+            placeholder="Username or Email"
+            value={usernameEmail}
+            onChange={(event) => setUsernameEmail(event.target.value)}
+            required
           />
           <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
           />
           <button>
             {clicked ? (
@@ -95,6 +99,12 @@ export default function LoginScreen() {
             <ion-icon name="logo-facebook"></ion-icon>
             <span>Login with Facebook</span>
           </ButtonAuth>
+
+          <ButtonAuth back="#2B9BF0" text="white" icon="white">
+            <ion-icon name="logo-twitter"></ion-icon>
+            <span>Login with Twiter</span>
+          </ButtonAuth>
+
         </OAuthBox>
       </SignInContainer>
       
@@ -194,6 +204,22 @@ const Main = styled.div`
     }
   }
 `
+const IteractiveImages = styled.div`
+  width: 100px; 
+  height: 100px; 
+  border-radius: 50%; 
+  border: 2px solid black;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin-bottom: 20px;
+
+  img { 
+    width: 96px; 
+    height: 96px; 
+    border-radius: 50%; 
+  }
+`
 const Upright = styled.div`
     width: 1px;
     height: 100%;
@@ -218,7 +244,7 @@ const ButtonAuth = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 34px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);
 
   ion-icon { 
@@ -252,6 +278,7 @@ const Error = styled.div`
   height: 100%; 
   display: flex; 
   justify-content: center; 
+  margin-top: 30px;
 
   button { 
     width: 80%; 
