@@ -9,6 +9,7 @@ import RenderRestaurants from "../pages/RenderRestaurants";
 import * as axiosRequests from "../repositories/AxiosRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
+import search from '../styles/images/search.gif';
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -89,11 +90,14 @@ export default function MainScreen() {
             ) : ""}
 
             { token ? (
-            <CreatePlace>
-                    <Box onClick={() => navigate("/create/place")}>Create an Place<ion-icon name="add-circle-sharp"></ion-icon></Box>
+            <CreatePlace onClick={() => navigate("/create/place")}>
+                <Circle>
+                    <ion-icon name="add">
+                </ion-icon></Circle>
             </CreatePlace>
             ) : "" }
 
+            {places.length > 0 ? (
             <Main token = {token}>
                 <ul>
                     {places.map(place => (
@@ -114,6 +118,13 @@ export default function MainScreen() {
                     ))}
                 </ul>
             </Main>
+            ) : (
+                <NotFound>
+                    <img src={search} alt='not_found' />
+                    <p id='bold'>No Restaurant Was Found</p>
+                    <p>Make a new search or register a new restaurant</p>
+                </NotFound>
+            )}
 
             <LineCopright>
                 <div>.</div>
@@ -275,35 +286,33 @@ const Logout = styled.div`
     }
 `
 const CreatePlace = styled.div`
-    width: 90%;
-    height: 10%;
+    width: 20%;
+    height: 5%;
     display: flex;
+    justify-content: flex-end;
     margin-top: 130px;
+    position: fixed; 
+    bottom: 100px;
+    right: 30px;
 `
-const Box = styled.button`
-    width: 30%;
+const Circle = styled.div`
+    width: 50px;
     height: 50px;
-    font-size: 22px;
-    font-weight: bold;
-    color: white;
-    background-color: #F5C127;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px dashed black;
-    box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 50%;
+    background-color: #D74761;
 
     ion-icon { 
-        margin-left: 5px;
-        width: 30px;
-        height: 30px;
         color: white;
+        font-size: 30px;
     }
-    
-    &:hover{ 
-        cursor: pointer; 
+
+    &:hover { 
+        cursor: pointer;
     }
-    
+
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
@@ -338,6 +347,33 @@ const Line = styled.div`
         color: white;
     }
 `
+const NotFound = styled.div`
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    margin-top: 250px;
+    flex-direction: column;
+
+    img { 
+        width: 500px;
+        height: 300px;
+        margin-bottom: 15px;
+        object-fit: cover;
+    }
+
+    p { 
+        color: white;
+        margin-bottom: 10px;
+        font-size: 18px;
+    } 
+
+    p#bold { 
+        font-weight: bold;
+        font-size: 30px;
+    }
+`
 const LineCopright = styled.div`
     width: 100%; 
     display: flex; 
@@ -347,6 +383,9 @@ const LineCopright = styled.div`
     padding-bottom: 10px;
     background-color: white;
     margin-top: 50px;
+    position: fixed; 
+    bottom: 0;
+    left: 0;
 
     div {
         width: 90%;
