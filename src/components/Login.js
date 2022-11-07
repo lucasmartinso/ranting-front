@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import * as AxiosRequest from "../repositories/AxiosRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
-import redirectToGithub from "../services/OAuth/gitHub";
-import qs from 'query-string';
+import redirectToGithub, { userGitInfo } from "../services/OAuth/gitHub";
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -15,7 +14,8 @@ export default function LoginScreen() {
   const [clicked,setClicked] = useState(false);
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [gitClick, setGitClick] = useState(false);
+  let [gitClick, setGitClick] = useState(0);
+  const [gitUser, setGitUser] = useState([]);
   const navigate = useNavigate();
 
   async function register(event) { 
@@ -49,9 +49,19 @@ export default function LoginScreen() {
     }
   }
 
-  async function gitHub() { 
-    setGitClick(true);
-    if(gitClick) redirectToGithub();
+  async function gitHub() {
+    setGitClick(() => ++gitClick);
+    if(gitClick>0) {
+
+      try {
+        redirectToGithub();
+        const user = userGitInfo();
+        setGitUser(user);
+        console.log("Deu bom");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   } 
 
   return(

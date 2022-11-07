@@ -1,7 +1,5 @@
 import api from '../services/Api';
 
-console.log(process.env.REDIRECT_URL)
-
 export async function signup(userData) { 
     await api.post(`/sign-up`,userData);
 }
