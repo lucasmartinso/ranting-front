@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as axiosRequest from "../repositories/AxiosRequests"
+import * as usersRequests from "../repositories/usersRequests"
 import TokenContext from "../contexts/tokenContext";
 
 export default function UserBox({setUserModal,user,setUserData}) { 
@@ -16,7 +16,7 @@ export default function UserBox({setUserModal,user,setUserData}) {
         const mainPhoto = { mainPhoto: photo };
 
         try {
-            await axiosRequest.changePhoto(config,mainPhoto);
+            await usersRequests.changePhoto(config,mainPhoto);
 
             setUserData(JSON.stringify({
                 "id": user.id,

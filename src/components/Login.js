@@ -3,7 +3,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as AxiosRequest from "../repositories/AxiosRequests";
+import * as usersRequests from "../repositories/usersRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import redirectToGithub, { userGitInfo } from "../services/OAuth/gitHub";
@@ -29,7 +29,7 @@ export default function LoginScreen() {
     try {
       setClicked(true);
       setPassword("");  
-      const promise = await AxiosRequest.login(userData);
+      const promise = await usersRequests.login(userData);
       localStorage.setItem("MY_TOKEN",promise.token);
       
       const userInfo = JSON.stringify({

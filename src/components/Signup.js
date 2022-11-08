@@ -3,7 +3,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as AxiosRequest from "../repositories/AxiosRequests"
+import * as usersRequests from "../repositories/usersRequests"
 
 export default function SignUpScreen() { 
   const [name,setName] = useState("");
@@ -31,7 +31,7 @@ export default function SignUpScreen() {
       setClicked(true);
       setConfirmPassword("");
       setPassword("");  
-      await AxiosRequest.signup(userData);
+      await usersRequests.signup(userData);
       navigate("/login");
     } catch (error) {
       console.log(error);

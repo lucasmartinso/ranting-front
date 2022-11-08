@@ -1,15 +1,5 @@
 import api from '../services/Api';
 
-export async function signup(userData) { 
-    await api.post(`/sign-up`,userData);
-}
-
-export async function login(userData) { 
-    const promise = await api.post(`/login`,userData);
-    
-    return promise.data;
-}
-
 export async function getPlaces() {
     const promise = await api.get(`/places`)
 
@@ -26,12 +16,6 @@ export async function getPlace(id) {
     const promise = await api.get(`/places/${id}`);
     
     return promise.data;
-}
-
-export async function changePhoto(config,mainPhoto) { 
-    const promise = await api.put(`/user/photo`,mainPhoto,config);
-
-    return promise;
 }
 
 export async function createPlace(config,placeData) { 
