@@ -287,7 +287,7 @@ export default function RatingBox({setRatingModel,user,id}) {
                         ) : ""}
 
                     <Buttons error={error}>
-                        <button id="save" onClick={sendRating}>Save</button>
+                        <button id="save" onClick={sendRating}>Publish</button>
                         <button id="cancel" onClick={() => setRatingModel(false)}>Cancel</button>
                     </Buttons>
             </Box>
@@ -519,6 +519,7 @@ const Buttons = styled.div`
     }
 
     button#save { 
+        width: 70px;
         background-color: #1A587F;
         border: 1px solid #1A587F; 
         color: white; 

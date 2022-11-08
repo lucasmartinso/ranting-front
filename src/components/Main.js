@@ -321,7 +321,7 @@ const Circle = styled.div`
 const Main = styled.div`
     width: 100%; 
     height: 100%; 
-    margin-top: ${props => props.token ? ("40px") : ("130px")};
+    margin: 130px 0px 80px 0px;
 
     ul { 
         width: 100%; 

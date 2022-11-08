@@ -173,7 +173,7 @@ export default function PlaceScreen() {
             {token ? (    
             <Container2>
                 <Review>
-                    <Box onClick={() => setRatingModel(true)}>Make an Review<ion-icon name="star"></ion-icon></Box>
+                    <Box onClick={() => setRatingModel(true)}>Make a Review</Box>
                 </Review>
             </Container2>
             ) : ""}
@@ -519,24 +519,17 @@ const Review = styled.div`
     align-items: center;
 `
 const Box = styled.button`
-    width: 30%;
+    width: 26%;
     height: 50px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: balck;
-    background-color: #F5C127;
+    color: white;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px dashed black;
+    border-radius: 12px;
     box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
-
-    ion-icon { 
-        margin-left: 5px;
-        width: 24px;
-        height: 24px;
-        color: black;
-    }
     
     &:hover{ 
         cursor: pointer; 
