@@ -7,6 +7,7 @@ import TokenContext from "../contexts/tokenContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as axiosRequests from "../repositories/AxiosRequests";
+import * as usersRequests from "../repositories/usersRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import search from '../styles/images/search.gif';
@@ -20,12 +21,18 @@ export default function MainScreen() {
     const [logout,setLogout] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
-    console.log(token);
+    const [auth, setAuth] = useState(false);
+    const authTime = 1000 * 60;
+    const config = {
+        headers: { Authorization: `Bearer ${token}` },
+    };
 
     useEffect(async () => {
         try {
             const promise = await axiosRequests.getPlaces();
             setPlaces(promise);
+            await usersRequests.auth(config);
+            setAuth(true);
         } catch (error) {
             console.log(error);
         }
@@ -35,7 +42,17 @@ export default function MainScreen() {
         setToken(null);
         localStorage.setItem("MY_TOKEN",null);
         setLogout(false);
+        setAuth(false);
     }
+
+    setInterval( async () => {
+        try {
+            await usersRequests.auth(config);
+            setAuth(true);
+        } catch (error) {
+            setAuth(false);
+        }
+    }, authTime)
 
     return(
         <>
@@ -56,9 +73,9 @@ export default function MainScreen() {
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
-                {token ? (
+                {auth ? (
                 <UserProfile>
-                    <span>Hello, {token ? (user.name) : ("")}</span>
+                    <span>Hello, {auth ? (user.name) : ("")}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
                     ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)} id="photo"></ion-icon> )}
