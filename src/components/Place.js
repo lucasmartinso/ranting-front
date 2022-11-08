@@ -532,16 +532,21 @@ const Box = styled.button`
     height: 50px;
     font-size: 20px;
     font-weight: bold;
-    color: white;
-    background-color: black;
+    color: black;
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 12px;
+    border: 3px solid black;
+    border-radius: 30px;
     box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+    transition: background color 2s;
     
-    &:hover{ 
+    &:hover, 
+    &:focus{ 
         cursor: pointer; 
+        background: black;
+        color: white;
     }
     
     &:active {  

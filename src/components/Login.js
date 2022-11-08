@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import * as usersRequests from "../repositories/usersRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
+import closed from '../styles/images/closed.gif';
 import redirectToGithub, { userGitInfo } from "../services/OAuth/gitHub";
 
 export default function LoginScreen() { 
@@ -16,6 +17,7 @@ export default function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState("");
   let [gitClick, setGitClick] = useState(0);
   const [gitUser, setGitUser] = useState([]);
+  const [changeImage, setChangeImage] = useState(false)
   const navigate = useNavigate();
 
   async function register(event) { 
@@ -76,7 +78,11 @@ export default function LoginScreen() {
         <form onSubmit={register}>
         <Main error={error}>
           <IteractiveImages>
-            <img src={salad} alt={salad} />
+            {changeImage ? (
+              <img src={closed} alt={closed} id='closed'/>
+            ) : (
+              <img src={salad} alt={salad} />
+            )}
           </IteractiveImages>
           
           <input
@@ -84,6 +90,7 @@ export default function LoginScreen() {
             placeholder="Username or Email"
             value={usernameEmail}
             onChange={(event) => setUsernameEmail(event.target.value)}
+            onClick={() => setChangeImage(false)}
             required
           />
           <input
@@ -91,6 +98,7 @@ export default function LoginScreen() {
             placeholder="Password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            onClick={() => setChangeImage(true)}
             required
           />
           <button>
@@ -232,11 +240,23 @@ const IteractiveImages = styled.div`
   justify-content: center; 
   align-items: center;
   margin-bottom: 20px;
+  transition: background 2s;
 
   img { 
     width: 96px; 
     height: 96px; 
     border-radius: 50%; 
+  }
+
+  img#closed { 
+    width: 96px; 
+    height: 96px; 
+    border-radius: 50%; 
+  }
+
+  &:hover, 
+  &:focus{  
+    background: black;
   }
 `
 const Upright = styled.div`
