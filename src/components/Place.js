@@ -4,16 +4,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import AuthContext from "../contexts/authContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
 import * as axiosRequest from "../repositories/AxiosRequests";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
+import { authTest, authTime, configVar } from "../services/auth";
 
 export default function PlaceScreen() { 
     const { userData, setUserData } = useContext(UserContext);
     const { token, setToken } = useContext(TokenContext);
+    const { auth, setAuth } = useContext(AuthContext);
     const [openModal, setOpenModal] = useState(false);
     const [place, setPlace] = useState([]);
     const [reviews, setReviews] = useState([]);
@@ -23,6 +26,7 @@ export default function PlaceScreen() {
     const [ratingModel,setRatingModel] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
+    const config = configVar();
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
@@ -39,7 +43,12 @@ export default function PlaceScreen() {
         setToken(null);
         localStorage.setItem("MY_TOKEN",null);
         setLogout(false);
+        setAuth(false);
     }
+
+    setInterval( async () => {
+        authTest(config);
+    }, authTime);
 
     return(
         <>
@@ -69,7 +78,7 @@ export default function PlaceScreen() {
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
-                {token ? (
+                {auth ? (
                 <UserProfile>
                     <span>Hello, {user.name}</span>
                     {user.mainPhoto ? (

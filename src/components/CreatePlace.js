@@ -7,13 +7,18 @@ import * as AxiosRequest from "../repositories/AxiosRequests";
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import AuthContext from "../contexts/authContext";
 import UserBox from "../pages/UserBox";
 import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
 import SearchBox from "../pages/SearchBox";
 import { DebounceInput } from "react-debounce-input";
-import notFound from "../styles/images/NotFound.png"
+import notFound from "../styles/images/NotFound.png";
+import { authTest, authTime, configVar } from "../services/auth";
 
 export default function CreatePlaceScreen() { 
+  const { userData, setUserData } = useContext(UserContext);
+  const { token, setToken } = useContext(TokenContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [name,setName] = useState("");
   const [description, setDescription] = useState("");
   const [mainPhoto, setMainPhoto] = useState("");
@@ -29,27 +34,36 @@ export default function CreatePlaceScreen() {
   const [clicked,setClicked] = useState(false);
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { userData, setUserData } = useContext(UserContext);
-  const { token, setToken } = useContext(TokenContext);
   const [userModal, setUserModal] = useState("");
   const [types,setTypes] = useState([]);
   const [logout,setLogout] = useState(false);
   const [openModal,setOpenModal] = useState(false);
   const user = JSON.parse(userData);
   const navigate = useNavigate();
-  console.log(state);
+  const config = configVar();
 
   useEffect(async () => {
     try {
       const promiseType = await AxiosRequest.foodTypes();
       const promiseState = await AxiosRequest.states();
-      console.log(promiseState);
       setTypes(promiseType);
       setStates(promiseState);
     } catch (error) {
       console.log(error);
     }
   },[]);
+
+  function exit() { 
+    setToken(null);
+    localStorage.setItem("MY_TOKEN",null);
+    setLogout(false);
+    setAuth(false);
+    navigate('/main');
+  }
+
+  setInterval( async () => {
+      authTest(config);
+  }, authTime)
 
   async function register(event) { 
     event.preventDefault();
@@ -85,7 +99,6 @@ export default function CreatePlaceScreen() {
   async function searchCity(event) {
     setCity({id: null,name: event});
     const name = event;
-    console.log(name);
     
     try {
       const promise = await AxiosRequest.cities(state.id,name);
@@ -118,33 +131,38 @@ export default function CreatePlaceScreen() {
     <Title>
       <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
       <img src={logo} alt="logo"/>
-      {token ? (
-        <UserProfile onClick={() => setUserModal(true)}>
+      {auth ? (
+        <UserProfile>
           <span>Hello, {user.name}</span>
           {user.mainPhoto ? (
-            <img src={user.mainPhoto} alt="profile"/>
-            ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}             
-        </UserProfile>
-        ): (
-          <Sign>
-            <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-            <button id="login" onClick={() => navigate("/login")}>Login</button>
-          </Sign>
+            <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
+            ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
+          {logout ? ( 
+            <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
+          ) : ( 
+            <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
           )}
+        </UserProfile>
+      ): (
+        <Sign>
+          <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
+          <button id="login" onClick={() => navigate("/login")}>Login</button>
+        </Sign>
+      )}
     </Title>
 
     {logout ? (
       <Logout>
         <Line>
-          <div>.</div>
+          <div id="logout">.</div>
         </Line>
-          <span onClick={() => setUserModal(true)}>Change your photo</span>
+        <span onClick={() => setUserModal(true)}>Change your photo</span>
         <Line>
-          <div>.</div>
+          <div id="logout">.</div>
         </Line>
-          <span id="logout">Logout</span>
+        <span id="logout" onClick={exit}>Logout</span>
       </Logout>
-      ) : ""}
+    ) : ""}
 
     <CreatePlace>
       <span>Create a Place 🍽️</span>

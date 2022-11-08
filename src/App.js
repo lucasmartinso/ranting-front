@@ -5,18 +5,22 @@ import GlobalStyle from "./styles/globalStyles";
 import LoginScreen from "./components/Login";
 import TokenContext from"./contexts/tokenContext";
 import UserContext from "./contexts/userContext"
+import AuthContext from "./contexts/authContext";
 import MainScreen from "./components/Main";
 import PlaceScreen from "./components/Place";
 import CreatePlaceScreen from "./components/CreatePlace";
 import InitialScreen from "./components/Initial";
 
+
 export default function App() {
-  const [token,setToken] = useState(localStorage.getItem("MY_TOKEN"));
+  const [token, setToken] = useState(localStorage.getItem("MY_TOKEN"));
   const [userData, setUserData] = useState(localStorage.getItem("USER_DATA"));
+  const [auth, setAuth] = useState(false);
 
   return (
     <TokenContext.Provider value={{token,setToken}}>
     <UserContext.Provider value={{userData,setUserData}}>
+    <AuthContext.Provider value={{auth,setAuth}}>
       <GlobalStyle />
       <BrowserRouter>
           <Routes>
@@ -28,6 +32,7 @@ export default function App() {
               <Route path="/create/place" element={<CreatePlaceScreen />} />
           </Routes>
       </BrowserRouter>
+    </AuthContext.Provider>
     </UserContext.Provider>
     </TokenContext.Provider>
   );

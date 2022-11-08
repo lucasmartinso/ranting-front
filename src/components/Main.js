@@ -4,6 +4,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import AuthContext from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as axiosRequests from "../repositories/AxiosRequests";
@@ -11,22 +12,19 @@ import * as usersRequests from "../repositories/usersRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import search from '../styles/images/search.gif';
-import { authTest } from "../services/auth";
+import { authTest, authTime, configVar } from "../services/auth";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
     const { token, setToken } = useContext(TokenContext);
+    const { auth, setAuth } = useContext(AuthContext);
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const [logout,setLogout] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
-    const [auth, setAuth] = useState(false);
-    const authTime = 1000 * 60;
-    const config = {
-        headers: { Authorization: `Bearer ${token}` },
-    };
+    const config = configVar();
 
     useEffect(async () => {
         try {
@@ -47,8 +45,8 @@ export default function MainScreen() {
     }
 
     setInterval( async () => {
-        authTest(config,setAuth);
-    }, authTime)
+        authTest(config);
+    }, authTime);
 
     return(
         <>
