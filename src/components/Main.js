@@ -11,6 +11,7 @@ import * as usersRequests from "../repositories/usersRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import search from '../styles/images/search.gif';
+import { authTest } from "../services/auth";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -46,12 +47,7 @@ export default function MainScreen() {
     }
 
     setInterval( async () => {
-        try {
-            await usersRequests.auth(config);
-            setAuth(true);
-        } catch (error) {
-            setAuth(false);
-        }
+        authTest(config,setAuth);
     }, authTime)
 
     return(
@@ -106,7 +102,7 @@ export default function MainScreen() {
                 </Logout>
             ) : ""}
 
-            { token ? (
+            { auth ? (
             <CreatePlace onClick={() => navigate("/create/place")}>
                 <Circle>
                     <ion-icon name="add">

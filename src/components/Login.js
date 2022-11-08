@@ -41,6 +41,7 @@ export default function LoginScreen() {
 
       localStorage.setItem("USER_DATA",userInfo);
       navigate("/main");
+      window.location.reload();
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);
