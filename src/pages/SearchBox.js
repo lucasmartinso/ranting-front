@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
-import * as axiosRequest from "../services/AxiosRequests"
+import * as placesApi from "../services/placesApi"
 import RenderSearchPlaces from "../subpages/RenderSearchPlaces";
 import notFound from "../styles/images/NotFound.png"
 
@@ -16,7 +16,7 @@ export default function SearchBox({setOpenModal}) {
         
         try {
             if(name.length>2) {
-                const promise = await axiosRequest.search(name);
+                const promise = await placesApi.search(name);
                 setPlaces(promise);
                 if(promise.length === 0) setPlaces(null);
             }

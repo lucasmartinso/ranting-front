@@ -7,8 +7,8 @@ import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
-import * as axiosRequest from "../services/AxiosRequests";
-import * as usersRequests from "../services/usersRequests";
+import * as placesApi from "../services/placesApi";
+import * as usersApi from "../services/usersApi";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
@@ -30,7 +30,7 @@ export default function PlaceScreen() {
     const config = configVar();
 
     useEffect(async() => { 
-        const promise = await axiosRequest.getPlace(id);
+        const promise = await placesApi.getPlace(id);
         if(promise[0] !== undefined) {
             setPlace(promise[0]);
             setReviews(promise[0].ratings);
@@ -40,7 +40,7 @@ export default function PlaceScreen() {
         }
 
         try {
-            await usersRequests.auth(config);
+            await usersApi.auth(config);
             setAuth(true);
         } catch (error) {
             setAuth(false)

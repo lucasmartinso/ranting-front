@@ -3,7 +3,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as usersRequests from "../services/usersRequests";
+import * as usersApi from "../services/usersApi";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import closed from '../styles/images/closed.gif';
@@ -35,7 +35,7 @@ export default function LoginScreen() {
     try {
       setClicked(true);
       setPassword("");  
-      const promise = await usersRequests.login(userData);
+      const promise = await usersApi.login(userData);
       localStorage.setItem("MY_TOKEN",promise.token);
       
       const userInfo = JSON.stringify({

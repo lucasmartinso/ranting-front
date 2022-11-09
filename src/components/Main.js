@@ -8,7 +8,7 @@ import AuthContext from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as ratingApi from "../services/ratingApi";
-import * as usersRequests from "../services/usersRequests";
+import * as usersApi from "../services/usersApi";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import search from '../styles/images/search.gif';
@@ -30,7 +30,7 @@ export default function MainScreen() {
         try {
             const promise = await ratingApi.getPlaces();
             setPlaces(promise);
-            await usersRequests.auth(config);
+            await usersApi.auth(config);
             setAuth(true);
         } catch (error) {
             console.log(error);

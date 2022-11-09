@@ -4,7 +4,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as locationsApi from "../services/locationsApi";
-import * as usersRequests from "../services/usersRequests";
+import * as usersRequests from "../services/usersApi";
 import * as  filtersAPi from "../services/filtersApi";
 import * as  placesApi from "../services/placesApi";
 import logo from "../styles/images/Ranting.png"

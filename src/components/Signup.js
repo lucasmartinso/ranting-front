@@ -3,7 +3,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as usersRequests from "../services/usersRequests"
+import * as usersApi from "../services/usersApi"
 
 export default function SignUpScreen() { 
   const [name,setName] = useState("");
@@ -31,7 +31,7 @@ export default function SignUpScreen() {
       setClicked(true);
       setConfirmPassword("");
       setPassword("");  
-      await usersRequests.signup(userData);
+      await usersApi.signup(userData);
       navigate("/login");
     } catch (error) {
       console.log(error);
