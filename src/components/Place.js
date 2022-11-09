@@ -28,6 +28,8 @@ export default function PlaceScreen() {
     const user = JSON.parse(userData);
     const config = configVar();
 
+    console.log(auth);
+
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
         if(promise[0] !== undefined) {

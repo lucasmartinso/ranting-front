@@ -1,7 +1,9 @@
 import api from '../services/Api';
 
 export async function gitHub(code) { 
-    const { data } = await api.post(`/login/github`, { code });
+    const promise = await api.post(`/login/github`,null, {params: {code} });
+    console.log('FOIIIIIII');
+    
 
-    return data;
+    return promise.data;
 }

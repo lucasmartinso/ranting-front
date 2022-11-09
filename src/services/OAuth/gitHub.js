@@ -21,10 +21,9 @@ export default function redirectToGithub() {
 
 export async function userGitInfo() { 
     const { code } = qs.parseUrl(window.location.href).query;
-    if (code) {
+    if(code) {
         try {
-          const user = gitHub(code);
-          console.log(user);
+          const user = await gitHub(code);
           return user;
         } catch (err) {
           console.log('err', err);

@@ -16,9 +16,13 @@ export default function LoginScreen() {
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   let [gitClick, setGitClick] = useState(0);
-  const [gitUser, setGitUser] = useState([]);
+  const [gitUser, setGitUser] = useState({});
   const [changeImage, setChangeImage] = useState(false)
   const navigate = useNavigate();
+
+  setInterval(() => {
+    console.log(gitUser);
+  }, 5000)
 
   async function register(event) { 
     event.preventDefault();
@@ -58,9 +62,8 @@ export default function LoginScreen() {
 
       try {
         redirectToGithub();
-        const user = userGitInfo();
+        const user = await userGitInfo();
         setGitUser(user);
-        console.log("Deu bom");
       } catch (error) {
         console.log(error);
       }
