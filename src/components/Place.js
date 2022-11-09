@@ -7,12 +7,12 @@ import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
-import * as axiosRequest from "../repositories/AxiosRequests";
-import * as usersRequests from "../repositories/usersRequests";
+import * as axiosRequest from "../services/AxiosRequests";
+import * as usersRequests from "../services/usersRequests";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
-import { authTest, authTime, configVar } from "../services/auth";
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function PlaceScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -31,14 +31,19 @@ export default function PlaceScreen() {
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
-        await usersRequests.auth(config);
-        setAuth(true);
         if(promise[0] !== undefined) {
             setPlace(promise[0]);
             setReviews(promise[0].ratings);
         } else { 
             setPlace(promise);
             console.log(promise);
+        }
+
+        try {
+            await usersRequests.auth(config);
+            setAuth(true);
+        } catch (error) {
+            setAuth(false)
         }
     },[]);
 
@@ -181,14 +186,12 @@ export default function PlaceScreen() {
                 </>
                  ) : ""}
             </Main>
-
-            {token ? (    
+  
             <Container2>
                 <Review>
                     <Box onClick={() => setRatingModel(true)}>Make a Review</Box>
                 </Review>
             </Container2>
-            ) : ""}
 
             {place.score !== "0"  ? (
             <Reviews token={token}>

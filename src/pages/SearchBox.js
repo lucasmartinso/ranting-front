@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
-import * as axiosRequest from "../repositories/AxiosRequests"
+import * as axiosRequest from "../services/AxiosRequests"
 import RenderSearchPlaces from "../subpages/RenderSearchPlaces";
 import notFound from "../styles/images/NotFound.png"
 

@@ -1,10 +1,4 @@
-import api from '../services/Api';
-
-export async function getPlaces() {
-    const promise = await api.get(`/places`)
-
-    return promise.data;
-}
+import api from '../hooks/Api';
 
 export async function search(name) {
     const promise = await api.post(`/places/search`, null, {params: {name}});
@@ -20,10 +14,6 @@ export async function getPlace(id) {
 
 export async function createPlace(config,placeData) { 
     await api.post(`/places/create`,placeData,config);
-}
-
-export async function createReview(id,reviewData,config) {
-    await api.post(`/rating/${id}`,reviewData,config);
 }
 
 export async function foodTypes() { 

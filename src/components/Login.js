@@ -3,12 +3,12 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as usersRequests from "../repositories/usersRequests";
+import * as usersRequests from "../services/usersRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import closed from '../styles/images/closed.gif';
 import AuthContext from '../contexts/authContext';
-import redirectToGithub, { userGitInfo } from "../services/OAuth/gitHub";
+import redirectToGithub, { userGitInfo } from "../hooks/OAuth/gitHub";
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");

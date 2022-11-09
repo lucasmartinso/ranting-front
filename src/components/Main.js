@@ -7,12 +7,12 @@ import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
-import * as axiosRequests from "../repositories/AxiosRequests";
-import * as usersRequests from "../repositories/usersRequests";
+import * as ratingApi from "../services/ratingApi";
+import * as usersRequests from "../services/usersRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import search from '../styles/images/search.gif';
-import { authTest, authTime, configVar } from "../services/auth";
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -28,7 +28,7 @@ export default function MainScreen() {
 
     useEffect(async () => {
         try {
-            const promise = await axiosRequests.getPlaces();
+            const promise = await ratingApi.getPlaces();
             setPlaces(promise);
             await usersRequests.auth(config);
             setAuth(true);

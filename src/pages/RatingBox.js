@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as axiosRequest from "../repositories/AxiosRequests"
+import * as ratingApi from "../services/ratingApi"
 import TokenContext from "../contexts/tokenContext";
 
 export default function RatingBox({setRatingModel,user,id}) { 
@@ -28,7 +28,7 @@ export default function RatingBox({setRatingModel,user,id}) {
         };
 
         try {
-            await axiosRequest.createReview(id,reviewData,config);
+            await ratingApi.createReview(id,reviewData,config);
             setRatingModel(false);
             window.location.reload();
         } catch (error) {

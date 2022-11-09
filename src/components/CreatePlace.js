@@ -3,8 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as AxiosRequest from "../repositories/AxiosRequests";
-import * as usersRequests from "../repositories/usersRequests";
+import * as AxiosRequest from "../services/AxiosRequests";
+import * as usersRequests from "../services/usersRequests";
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
@@ -14,7 +14,7 @@ import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
 import SearchBox from "../pages/SearchBox";
 import { DebounceInput } from "react-debounce-input";
 import notFound from "../styles/images/NotFound.png";
-import { authTest, authTime, configVar } from "../services/auth";
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function CreatePlaceScreen() { 
   const { userData, setUserData } = useContext(UserContext);

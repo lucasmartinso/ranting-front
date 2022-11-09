@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as usersRequests from "../repositories/usersRequests"
+import * as usersRequests from "../services/usersRequests"
 import TokenContext from "../contexts/tokenContext";
 
 export default function UserBox({setUserModal,user,setUserData}) { 

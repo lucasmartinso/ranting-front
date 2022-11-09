@@ -3,7 +3,7 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as usersRequests from "../repositories/usersRequests"
+import * as usersRequests from "../services/usersRequests"
 
 export default function SignUpScreen() { 
   const [name,setName] = useState("");

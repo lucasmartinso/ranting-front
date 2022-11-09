@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import * as usersRequests from "../repositories/usersRequests";
+import * as usersRequests from "../services/usersRequests";
 import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
 import { useContext } from "react";
