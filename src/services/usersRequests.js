@@ -1,4 +1,4 @@
-import api from '../hooks/Api';
+import api from './api';
 
 export async function signup(userData) { 
     await api.post(`/sign-up`,userData);

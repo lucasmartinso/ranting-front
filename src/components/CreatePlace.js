@@ -3,8 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as AxiosRequest from "../services/AxiosRequests";
+import * as locationsApi from "../services/locationsApi";
 import * as usersRequests from "../services/usersRequests";
+import * as  filtersAPi from "../services/filtersApi";
+import * as  placesApi from "../services/placesApi";
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
@@ -47,8 +49,8 @@ export default function CreatePlaceScreen() {
     try {
       await usersRequests.auth(config);
       setAuth(true);
-      const promiseType = await AxiosRequest.foodTypes();
-      const promiseState = await AxiosRequest.states();
+      const promiseType = await filtersAPi.foodTypes();
+      const promiseState = await locationsApi.states();
       setTypes(promiseType);
       setStates(promiseState);
     } catch (error) {
@@ -88,7 +90,7 @@ export default function CreatePlaceScreen() {
 
     try {
       setClicked(true);
-      await AxiosRequest.createPlace(config,placeData);
+      await placesApi.createPlace(config,placeData);
       navigate("/main");
       setClicked(false);
     } catch (error) {
@@ -104,7 +106,7 @@ export default function CreatePlaceScreen() {
     const name = event;
     
     try {
-      const promise = await AxiosRequest.cities(state.id,name);
+      const promise = await locationsApi.cities(state.id,name);
       setCities(promise);
       if(promise.length === 0) setCities(null);
     } catch (error) {
