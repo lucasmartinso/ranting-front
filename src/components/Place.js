@@ -8,6 +8,7 @@ import AuthContext from "../contexts/authContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
 import * as axiosRequest from "../repositories/AxiosRequests";
+import * as usersRequests from "../repositories/usersRequests";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
@@ -28,16 +29,16 @@ export default function PlaceScreen() {
     const user = JSON.parse(userData);
     const config = configVar();
 
-    console.log(auth);
-
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
+        await usersRequests.auth(config);
+        setAuth(true);
         if(promise[0] !== undefined) {
             setPlace(promise[0]);
             setReviews(promise[0].ratings);
         } else { 
             setPlace(promise);
-            console.log(promise)
+            console.log(promise);
         }
     },[]);
 

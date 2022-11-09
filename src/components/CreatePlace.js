@@ -4,6 +4,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as AxiosRequest from "../repositories/AxiosRequests";
+import * as usersRequests from "../repositories/usersRequests";
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
@@ -44,6 +45,8 @@ export default function CreatePlaceScreen() {
 
   useEffect(async () => {
     try {
+      await usersRequests.auth(config);
+      setAuth(true);
       const promiseType = await AxiosRequest.foodTypes();
       const promiseState = await AxiosRequest.states();
       setTypes(promiseType);
@@ -384,20 +387,27 @@ const Title = styled.div`
 `
 const UserProfile = styled.div`
     display: flex;
+    align-items: center;
 
     img { 
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-left: 5px;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-left: 5px;
     }
 
     ion-icon { 
-        margin-left: 5px;
+      margin-left: 5px;
+      width: 30px;
+      height: 30px;
+      color: white;
+    }
+
+    ion-icon#photo { 
         width: 40px;
         height: 40px;
-        color : white;
+        margin-left: 5px;
     }
 
     &:hover { 

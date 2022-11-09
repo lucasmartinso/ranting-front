@@ -20,13 +20,16 @@ export default function redirectToGithub() {
 }
 
 export async function userGitInfo() { 
-    const { code } = qs.parseUrl(window.location.href).query;
-    if(code) {
-        try {
-          const user = await gitHub(code);
-          return user;
-        } catch (err) {
-          console.log('err', err);
+    window.onload = async () => {
+      const { code } = qs.parseUrl(window.location.href).query;
+      if(code) {
+          try {
+            const user = await gitHub(code);
+            console.log('FOIIIIIII');
+            return user;
+          } catch (err) {
+            console.log(err);
+          }
         }
-      }
+    }
 }

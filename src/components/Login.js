@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
@@ -7,6 +7,7 @@ import * as usersRequests from "../repositories/usersRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import closed from '../styles/images/closed.gif';
+import AuthContext from '../contexts/authContext';
 import redirectToGithub, { userGitInfo } from "../services/OAuth/gitHub";
 
 export default function LoginScreen() { 
@@ -17,12 +18,11 @@ export default function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState("");
   let [gitClick, setGitClick] = useState(0);
   const [gitUser, setGitUser] = useState({});
-  const [changeImage, setChangeImage] = useState(false)
+  const [changeImage, setChangeImage] = useState(false);
+  const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  setInterval(() => {
-    console.log(gitUser);
-  }, 5000)
+  console.log(gitUser);
 
   async function register(event) { 
     event.preventDefault();
@@ -46,6 +46,7 @@ export default function LoginScreen() {
       });
 
       localStorage.setItem("USER_DATA",userInfo);
+      setAuth(true);
       navigate("/main");
       window.location.reload();
     } catch (error) {
