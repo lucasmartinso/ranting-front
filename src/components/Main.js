@@ -4,33 +4,49 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import AuthContext from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
-import * as axiosRequests from "../repositories/AxiosRequests";
+import * as ratingApi from "../services/ratingApi";
+import * as usersRequests from "../services/usersRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
+import search from '../styles/images/search.gif';
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
-    const { token } = useContext(TokenContext);
+    const { token, setToken } = useContext(TokenContext);
+    const { auth, setAuth } = useContext(AuthContext);
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const [logout,setLogout] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
-    console.log(user);
+    const config = configVar();
 
     useEffect(async () => {
         try {
-            const promise = await axiosRequests.getPlaces();
+            const promise = await ratingApi.getPlaces();
             setPlaces(promise);
+            await usersRequests.auth(config);
+            setAuth(true);
         } catch (error) {
             console.log(error);
         }
     },[]);
 
-    console.log(places);
+    function exit() { 
+        setToken(null);
+        localStorage.setItem("MY_TOKEN",null);
+        setLogout(false);
+        setAuth(false);
+    }
+
+    setInterval( async () => {
+        authTest(config);
+    }, authTime);
 
     return(
         <>
@@ -51,12 +67,12 @@ export default function MainScreen() {
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
-                {token ? (
+                {auth ? (
                 <UserProfile>
-                    <span>Hello, {user.name}</span>
+                    <span>Hello, {auth ? (user.name) : ("")}</span>
                     {user.mainPhoto ? (
                         <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)}></ion-icon> )}
+                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)} id="photo"></ion-icon> )}
                     {logout ? ( 
                         <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
                     ) : ( 
@@ -80,16 +96,19 @@ export default function MainScreen() {
                     <Line>
                         <div>.</div>
                     </Line>
-                    <span id="logout">Logout</span>
+                    <span id="logout" onClick={exit}>Logout</span>
                 </Logout>
             ) : ""}
 
-            { token ? (
-            <CreatePlace>
-                    <Box onClick={() => navigate("/create/place")}>Create an Place<ion-icon name="add-circle-sharp"></ion-icon></Box>
+            { auth ? (
+            <CreatePlace onClick={() => navigate("/create/place")}>
+                <Circle>
+                    <ion-icon name="add">
+                </ion-icon></Circle>
             </CreatePlace>
             ) : "" }
 
+            {places.length > 0 ? (
             <Main token = {token}>
                 <ul>
                     {places.map(place => (
@@ -110,6 +129,18 @@ export default function MainScreen() {
                     ))}
                 </ul>
             </Main>
+            ) : (
+                <NotFound>
+                    <img src={search} alt='not_found' />
+                    <p id='bold'>No Restaurant Was Found</p>
+                    <p>Make a new search or register a new restaurant</p>
+                </NotFound>
+            )}
+
+            <LineCopright>
+                <div>.</div>
+                <h4>Copyright © Rating 2022</h4>
+            </LineCopright>
         </Container>
         </>
     )
@@ -164,6 +195,7 @@ const Title = styled.div`
 `
 const UserProfile = styled.div`
     display: flex;
+    align-items: center;
 
     img { 
         width: 50px;
@@ -174,10 +206,16 @@ const UserProfile = styled.div`
     }
 
     ion-icon { 
-        margin-left: 5px;
+        margin-left: 10px;
+        width: 30px;
+        height: 30px;
+        color : white;
+    }
+
+    ion-icon#photo { 
         width: 40px;
         height: 40px;
-        color : white;
+        margin-left: 5px;
     }
 
     &:hover { 
@@ -259,35 +297,33 @@ const Logout = styled.div`
     }
 `
 const CreatePlace = styled.div`
-    width: 90%;
-    height: 10%;
+    width: 20%;
+    height: 5%;
     display: flex;
+    justify-content: flex-end;
     margin-top: 130px;
+    position: fixed; 
+    bottom: 100px;
+    right: 30px;
 `
-const Box = styled.button`
-    width: 30%;
+const Circle = styled.div`
+    width: 50px;
     height: 50px;
-    font-size: 22px;
-    font-weight: bold;
-    color: white;
-    background-color: #F5C127;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px dashed black;
-    box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 50%;
+    background-color: #D74761;
 
     ion-icon { 
-        margin-left: 5px;
-        width: 30px;
-        height: 30px;
         color: white;
+        font-size: 30px;
     }
-    
-    &:hover{ 
-        cursor: pointer; 
+
+    &:hover { 
+        cursor: pointer;
     }
-    
+
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
@@ -296,7 +332,7 @@ const Box = styled.button`
 const Main = styled.div`
     width: 100%; 
     height: 100%; 
-    margin-top: ${props => props.token ? ("40px") : ("130px")};
+    margin: 130px 0px 80px 0px;
 
     ul { 
         width: 100%; 
@@ -319,5 +355,57 @@ const Line = styled.div`
         height: 1px;
         border: 1px solid #D4D4D4;
         margin-top:2px;
+        color: white;
+    }
+`
+const NotFound = styled.div`
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    margin-top: 250px;
+    flex-direction: column;
+
+    img { 
+        width: 500px;
+        height: 300px;
+        margin-bottom: 15px;
+        object-fit: cover;
+    }
+
+    p { 
+        color: white;
+        margin-bottom: 10px;
+        font-size: 18px;
+    } 
+
+    p#bold { 
+        font-weight: bold;
+        font-size: 30px;
+    }
+`
+const LineCopright = styled.div`
+    width: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    background-color: #359FE4;
+    padding-bottom: 10px;
+    background-color: white;
+    margin-top: 50px;
+    position: fixed; 
+    bottom: 0;
+    left: 0;
+
+    div {
+        width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top: 5px;
+    }
+
+    h4 { 
+        margin: 15px 0px 10px 0px;
     }
 `

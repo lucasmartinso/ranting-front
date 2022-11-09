@@ -3,17 +3,23 @@ import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as AxiosRequest from "../repositories/AxiosRequests";
+import * as AxiosRequest from "../services/AxiosRequests";
+import * as usersRequests from "../services/usersRequests";
 import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import AuthContext from "../contexts/authContext";
 import UserBox from "../pages/UserBox";
 import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
 import SearchBox from "../pages/SearchBox";
 import { DebounceInput } from "react-debounce-input";
-import notFound from "../styles/images/NotFound.png"
+import notFound from "../styles/images/NotFound.png";
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function CreatePlaceScreen() { 
+  const { userData, setUserData } = useContext(UserContext);
+  const { token, setToken } = useContext(TokenContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [name,setName] = useState("");
   const [description, setDescription] = useState("");
   const [mainPhoto, setMainPhoto] = useState("");
@@ -29,27 +35,38 @@ export default function CreatePlaceScreen() {
   const [clicked,setClicked] = useState(false);
   const [error,setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { userData, setUserData } = useContext(UserContext);
-  const { token } = useContext(TokenContext);
   const [userModal, setUserModal] = useState("");
   const [types,setTypes] = useState([]);
   const [logout,setLogout] = useState(false);
   const [openModal,setOpenModal] = useState(false);
   const user = JSON.parse(userData);
   const navigate = useNavigate();
-  console.log(state);
+  const config = configVar();
 
   useEffect(async () => {
     try {
+      await usersRequests.auth(config);
+      setAuth(true);
       const promiseType = await AxiosRequest.foodTypes();
       const promiseState = await AxiosRequest.states();
-      console.log(promiseState);
       setTypes(promiseType);
       setStates(promiseState);
     } catch (error) {
       console.log(error);
     }
   },[]);
+
+  function exit() { 
+    setToken(null);
+    localStorage.setItem("MY_TOKEN",null);
+    setLogout(false);
+    setAuth(false);
+    navigate('/main');
+  }
+
+  setInterval( async () => {
+      authTest(config);
+  }, authTime)
 
   async function register(event) { 
     event.preventDefault();
@@ -85,7 +102,6 @@ export default function CreatePlaceScreen() {
   async function searchCity(event) {
     setCity({id: null,name: event});
     const name = event;
-    console.log(name);
     
     try {
       const promise = await AxiosRequest.cities(state.id,name);
@@ -118,33 +134,38 @@ export default function CreatePlaceScreen() {
     <Title>
       <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
       <img src={logo} alt="logo"/>
-      {token ? (
-        <UserProfile onClick={() => setUserModal(true)}>
+      {auth ? (
+        <UserProfile>
           <span>Hello, {user.name}</span>
           {user.mainPhoto ? (
-            <img src={user.mainPhoto} alt="profile"/>
-            ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}             
-        </UserProfile>
-        ): (
-          <Sign>
-            <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-            <button id="login" onClick={() => navigate("/login")}>Login</button>
-          </Sign>
+            <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
+            ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
+          {logout ? ( 
+            <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
+          ) : ( 
+            <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
           )}
+        </UserProfile>
+      ): (
+        <Sign>
+          <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
+          <button id="login" onClick={() => navigate("/login")}>Login</button>
+        </Sign>
+      )}
     </Title>
 
     {logout ? (
       <Logout>
         <Line>
-          <div>.</div>
+          <div id="logout">.</div>
         </Line>
-          <span onClick={() => setUserModal(true)}>Change your photo</span>
+        <span onClick={() => setUserModal(true)}>Change your photo</span>
         <Line>
-          <div>.</div>
+          <div id="logout">.</div>
         </Line>
-          <span id="logout">Logout</span>
+        <span id="logout" onClick={exit}>Logout</span>
       </Logout>
-      ) : ""}
+    ) : ""}
 
     <CreatePlace>
       <span>Create a Place 🍽️</span>
@@ -307,6 +328,11 @@ export default function CreatePlaceScreen() {
           </button>
       </Error>
     ) : ""}
+
+      <LineCopright>
+        <div>.</div>
+        <h4>Copyright © Rating 2022</h4>
+      </LineCopright>
     </Container>
     </>
   )
@@ -361,20 +387,27 @@ const Title = styled.div`
 `
 const UserProfile = styled.div`
     display: flex;
+    align-items: center;
 
     img { 
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-left: 5px;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-left: 5px;
     }
 
     ion-icon { 
-        margin-left: 5px;
+      margin-left: 5px;
+      width: 30px;
+      height: 30px;
+      color: white;
+    }
+
+    ion-icon#photo { 
         width: 40px;
         height: 40px;
-        color : white;
+        margin-left: 5px;
     }
 
     &:hover { 
@@ -641,4 +674,25 @@ const NotFound = styled.div`
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+`
+const LineCopright = styled.div`
+    width: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    background-color: #359FE4;
+    padding-bottom: 10px;
+    background-color: white;
+    margin-top: 50px;
+
+    div {
+        width: 90%;
+        height: 1px;
+        border: 1px solid #D4D4D4;
+        margin-top: 5px;
+    }
+
+    h4 { 
+        margin: 15px 0px 10px 0px;
+    }
 `

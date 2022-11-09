@@ -4,24 +4,30 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
+import AuthContext from "../contexts/authContext";
 import logo from "../styles/images/Ranting.png";
 import SearchBox from "../pages/SearchBox";
-import * as axiosRequest from "../repositories/AxiosRequests";
+import * as axiosRequest from "../services/AxiosRequests";
+import * as usersRequests from "../services/usersRequests";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function PlaceScreen() { 
     const { userData, setUserData } = useContext(UserContext);
-    const { token } = useContext(TokenContext);
+    const { token, setToken } = useContext(TokenContext);
+    const { auth, setAuth } = useContext(AuthContext);
     const [openModal, setOpenModal] = useState(false);
     const [place, setPlace] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [logout, setLogout] = useState(false);
     const { id } = useParams();
     const [userModal, setUserModal] = useState(false);
     const [ratingModel,setRatingModel] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
+    const config = configVar();
 
     useEffect(async() => { 
         const promise = await axiosRequest.getPlace(id);
@@ -30,9 +36,27 @@ export default function PlaceScreen() {
             setReviews(promise[0].ratings);
         } else { 
             setPlace(promise);
-            console.log(promise)
+            console.log(promise);
+        }
+
+        try {
+            await usersRequests.auth(config);
+            setAuth(true);
+        } catch (error) {
+            setAuth(false)
         }
     },[]);
+
+    function exit() { 
+        setToken(null);
+        localStorage.setItem("MY_TOKEN",null);
+        setLogout(false);
+        setAuth(false);
+    }
+
+    setInterval( async () => {
+        authTest(config);
+    }, authTime);
 
     return(
         <>
@@ -62,13 +86,17 @@ export default function PlaceScreen() {
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
                 <img src={logo} alt="logo"/>
-                {token ? (
-                <UserProfile onClick={() => setUserModal(true)}>
+                {auth ? (
+                <UserProfile>
                     <span>Hello, {user.name}</span>
                     {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="profile"/>
-                    ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
-                    
+                        <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
+                    ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
+                    {logout ? ( 
+                        <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
+                    ) : ( 
+                        <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
+                    )}
                 </UserProfile>
                 ): (
                     <Sign>
@@ -78,9 +106,18 @@ export default function PlaceScreen() {
                 )}
             </Title>
 
-            <Line1>
-                <div>.</div>
-            </Line1>
+            {logout ? (
+                <Logout>
+                    <Line>
+                        <div id="logout">.</div>
+                    </Line>
+                    <span onClick={() => setUserModal(true)}>Change your photo</span>
+                    <Line>
+                        <div id="logout">.</div>
+                    </Line>
+                    <span id="logout" onClick={exit}>Logout</span>
+                </Logout>
+            ) : ""}
 
 
             <Photo>
@@ -149,15 +186,15 @@ export default function PlaceScreen() {
                 </>
                  ) : ""}
             </Main>
-                
+  
             <Container2>
                 <Review>
-                    <Box onClick={() => setRatingModel(true)}>Make an Review<ion-icon name="star"></ion-icon></Box>
+                    <Box onClick={() => setRatingModel(true)}>Make a Review</Box>
                 </Review>
             </Container2>
 
             {place.score !== "0"  ? (
-            <Reviews>
+            <Reviews token={token}>
                 <ul>
                     {reviews.map(review => (
                         <RenderReviews 
@@ -181,6 +218,7 @@ export default function PlaceScreen() {
             ) }
             <LineCopright>
                 <div>.</div>
+                <h4>Copyright © Rating 2022</h4>
             </LineCopright>
         </Container>
         </>
@@ -234,6 +272,7 @@ const Title = styled.div`
 `
 const UserProfile = styled.div`
     display: flex;
+    align-items: center;
 
     img { 
         width: 50px;
@@ -245,9 +284,15 @@ const UserProfile = styled.div`
 
     ion-icon { 
         margin-left: 5px;
+        width: 30px;
+        height: 30px;
+        color : white;
+    }
+
+    ion-icon#photo { 
         width: 40px;
         height: 40px;
-        color : white;
+        margin-left: 5px;
     }
 
     &:hover { 
@@ -294,6 +339,42 @@ const Sign = styled.div`
         color: black; 
     }
 `
+const Logout = styled.div`
+    width: 230px;
+    height: 80px;
+    background-color: white; 
+    margin-top: 100px;
+    position: fixed;
+    right: 0;
+    top: 0px;
+    border-radius: 0px 0px 0px 10px;
+    display: flex;
+    flex-direction : column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 5px 5px 5px;
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+
+    span { 
+        font-weight: bold;
+        font-size: 16px;
+
+        &:hover{ 
+            cursor: pointer; 
+        }
+        
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    span#logout { 
+        color: red;
+        margin-bottom: 3px;
+    }
+`
 const Photo = styled.div`
     width: 100%; 
     height: 100%;
@@ -301,6 +382,7 @@ const Photo = styled.div`
     align-items: center;
     flex-direction: column;
     background-color: rgba(150, 150, 150, 1);
+    margin-top: 88px;
 
     img { 
         width: 100%;
@@ -323,20 +405,11 @@ const Line = styled.div`
         height: 1px;
         border: 1px solid #D4D4D4;
         margin-top: 15px;
+        color: white;
     }
-`
-const Line1 = styled.div`
-    width: 100%; 
-    height: 28px;
-    display: flex; 
-    justify-content: center;
-    margin-top: 78px;
 
-    div {
-        width: 98%;
-        height: 1px;
-        border: 1px solid #D4D4D4;
-        margin-top: 15px;
+    div#logout { 
+        margin-top: 7px;
     }
 `
 const Main = styled.div`
@@ -432,6 +505,7 @@ const TagName = styled.div`
 const Reviews = styled.div`
     width: 100%; 
     height: 100%; 
+    margin-top: ${props => props.token ? ("0px") : ("70px")};
 `
 const New = styled.div`
     width: 100%; 
@@ -460,27 +534,25 @@ const Review = styled.div`
     align-items: center;
 `
 const Box = styled.button`
-    width: 30%;
+    width: 26%;
     height: 50px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: balck;
-    background-color: #F5C127;
+    color: black;
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px dashed black;
+    border: 3px solid black;
+    border-radius: 30px;
     box-shadow: 1.5px 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
-
-    ion-icon { 
-        margin-left: 5px;
-        width: 24px;
-        height: 24px;
-        color: black;
-    }
+    transition: background color 2s;
     
-    &:hover{ 
+    &:hover, 
+    &:focus{ 
         cursor: pointer; 
+        background: black;
+        color: white;
     }
     
     &:active {  
@@ -490,16 +562,22 @@ const Box = styled.button`
 `
 const LineCopright = styled.div`
     width: 100%; 
-    height: 30px;
     display: flex; 
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     background-color: #359FE4;
     padding-bottom: 10px;
+    background-color: white;
+    margin-top: 50px;
 
     div {
         width: 90%;
         height: 1px;
         border: 1px solid #D4D4D4;
-        margin-top: 15px;
+        margin-top: 5px;
+    }
+
+    h4 { 
+        margin: 15px 0px 10px 0px;
     }
 `

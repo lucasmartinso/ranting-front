@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as axiosRequest from "../repositories/AxiosRequests"
+import * as ratingApi from "../services/ratingApi"
 import TokenContext from "../contexts/tokenContext";
 
 export default function RatingBox({setRatingModel,user,id}) { 
@@ -28,7 +28,7 @@ export default function RatingBox({setRatingModel,user,id}) {
         };
 
         try {
-            await axiosRequest.createReview(id,reviewData,config);
+            await ratingApi.createReview(id,reviewData,config);
             setRatingModel(false);
             window.location.reload();
         } catch (error) {
@@ -287,7 +287,7 @@ export default function RatingBox({setRatingModel,user,id}) {
                         ) : ""}
 
                     <Buttons error={error}>
-                        <button id="save" onClick={sendRating}>Save</button>
+                        <button id="save" onClick={sendRating}>Publish</button>
                         <button id="cancel" onClick={() => setRatingModel(false)}>Cancel</button>
                     </Buttons>
             </Box>
@@ -519,6 +519,7 @@ const Buttons = styled.div`
     }
 
     button#save { 
+        width: 70px;
         background-color: #1A587F;
         border: 1px solid #1A587F; 
         color: white; 
