@@ -9,7 +9,7 @@ export default function RenderRestaurants(restaurantData) {
             <Container2>
                 <Overall score={restaurantData.score}>
                     <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
-                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</h3>
+                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")}⭐`) : ("⭐ NEW ⭐")}</h3>
                 </Overall>
                 <Info>
                     <img src={restaurantData.mainPhoto} alt={restaurantData.mainPhoto}/>
@@ -19,28 +19,28 @@ export default function RenderRestaurants(restaurantData) {
             {Number(restaurantData.score) !== 0 ? (
                 <Ranting>
                     <TextBox>
-                        <span>Specialty Food:</span>
-                        <h4>{restaurantData.typefood}</h4>
+                        <span id="hidden">Specialty Food:</span>
+                        <h4 id="hidden">{restaurantData.typefood}</h4>
                     </TextBox> 
                     <TextBox>
-                        <span>Reviews:</span>
-                        <h4>{restaurantData.ratings}</h4>
+                        <span id="hidden">Reviews:</span>
+                        <h4 id="hidden">{restaurantData.ratings}</h4>
                     </TextBox>
                     <TextBox>
                         <span>Food:</span>
-                        <h4> {Number(restaurantData.food).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.food).toFixed(1)}⭐</h4>
                     </TextBox>
                     <TextBox>
                         <span>Attendance:</span>
-                        <h4> {Number(restaurantData.attendance).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.attendance).toFixed(1)}⭐</h4>
                     </TextBox>
                     <TextBox>
                         <span>Price:</span>
-                        <h4> {Number(restaurantData.price).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.price).toFixed(1)}⭐</h4>
                     </TextBox>
                     <TextBox>
                         <span>Environment:</span>
-                        <h4> {Number(restaurantData.environment).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.environment).toFixed(1)}⭐</h4>
                     </TextBox>
                 </Ranting>  
             ): (<NoRanting>
@@ -157,5 +157,15 @@ const TextBox = styled.li`
 
     h4 { 
         padding-top: 5px;
+    }
+
+    @media (max-width: 800px) { 
+        span#hidden { 
+            display: none;
+        }
+
+        h4#hidden { 
+            display: none;
+        }
     }
 `
