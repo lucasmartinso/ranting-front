@@ -116,22 +116,23 @@ export default function LoginScreen() {
         <Upright>.</Upright>
 
         <OAuthBox>
-          <ButtonAuth back="black" text="white" icon="white" onClick={() => gitHub(true)}>
+          <ButtonAuth back="black" text="white" icon="white" onClick={() => gitHub(true)} working={true}>
             <ion-icon name="logo-github"></ion-icon>
             <span>Login with GitHub</span>
           </ButtonAuth>
 
-          <ButtonAuth back="white" text="black" icon="black">
+          <ButtonAuth back="white" text="black" icon="black" working={false}>
             <img src={google} alt='google'/>
+            <ion-icon name="logo-google" id="google"></ion-icon>
             <span>Login with Google</span>
           </ButtonAuth>
 
-          <ButtonAuth back="#314A86" text="white" icon="white">
+          <ButtonAuth back="#314A86" text="white" icon="white" working={false}>
             <ion-icon name="logo-facebook"></ion-icon>
             <span>Login with Facebook</span>
           </ButtonAuth>
 
-          <ButtonAuth back="#2B9BF0" text="white" icon="white">
+          <ButtonAuth back="#2B9BF0" text="white" icon="white" working={false}>
             <ion-icon name="logo-twitter"></ion-icon>
             <span>Login with Twiter</span>
           </ButtonAuth>
@@ -289,11 +290,16 @@ const ButtonAuth = styled.div`
   align-items: center;
   margin-bottom: 34px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);
+  transition: background color 2s;
 
   ion-icon { 
     color: ${props => props.icon ? (`${props.icon}`) : ('red')};
     width: 30px;
     height: 30px;
+  }
+
+  ion-icon#google { 
+    display: none;
   }
 
   span { 
@@ -307,9 +313,31 @@ const ButtonAuth = styled.div`
     height: 30px;
   }
 
-  &:hover { 
-    cursor: pointer;
-  }
+  ${props => !props.working ? (`
+    &:hover,   
+    &:focus{ 
+      cursor: not-allowed; 
+      background-color: rgba(0, 0, 0, 0.58);
+      span { 
+        color: black;
+      }
+      ion-icon#google { 
+        display: inline;
+      }
+      ion-icon { 
+        display: inline;
+        color: black;
+      }
+      img {
+        display: none;
+      } 
+    }
+  `): (`
+    &:hover { 
+      cursor: pointer;
+    }
+  `)}
+  
 
   &:active {  
     transform: scale(0.98);

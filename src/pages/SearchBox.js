@@ -22,7 +22,7 @@ export default function SearchBox({setOpenModal}) {
             }
         } catch (error) {
             console.log(error);
-            setPlaces([]);
+            setPlaces(null);
         }
     }   
 
