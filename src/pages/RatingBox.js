@@ -267,7 +267,7 @@ export default function RatingBox({setRatingModel,user,id}) {
                         </span>
                         <span id="comment">If you want to make an observation or comment (optional):</span>
                         <Comment>
-                            <input
+                            <textarea
                                 type="text"
                                 placeholder="Click to comment..."
                                 value={comment}
@@ -309,7 +309,7 @@ const Background = styled.div`
     z-index: 2;
 `
 const Box = styled.div`
-    width: 60%; 
+    width: 600px; 
     height: ${props => props.error ? ("780px") : ("650px")};
     background-color: white;
     border-radius: 12px;
@@ -317,6 +317,14 @@ const Box = styled.div`
     display: flex; 
     align-items: center;
     flex-direction: column;
+
+    @media (max-width: 800px) { 
+        width: 60%;
+    }
+
+    @media (max-width: 800px) { 
+        width: 80%;
+    }
 `
 const Cancel = styled.div`
     width: 100%; 
@@ -435,17 +443,23 @@ const Comment = styled.div`
     width: 490px;
     height: 100px;
 
-    input { 
+    textarea { 
         width: 490px;
         height: 100px;
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
         text-align: justify;
-        padding: 5px 10px 5px 15px;
+        padding: 8px 10px 5px 15px;
         font-size: 25px;
         border-radius: 8px;
         border: 1px dashed black;
+    }
+
+    @media (max-width: 1000px) { 
+        textarea { 
+            width: 480px;
+        }
     }
 `
 const Error = styled.div` 
