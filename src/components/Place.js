@@ -114,7 +114,7 @@ export default function PlaceScreen() {
                     <Line>
                         <div id="logout">.</div>
                     </Line>
-                    <span onClick={() => setUserModal(true)}>Change your photo</span>
+                    <span onClick={() => setUserModal(true)}>Change your photo 📸​</span>
                     <Line>
                         <div id="logout">.</div>
                     </Line>
@@ -530,6 +530,12 @@ const Reviews = styled.div`
     width: 100%; 
     height: 100%; 
     margin-top: ${props => props.token ? ("0px") : ("70px")};
+
+    ul { 
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+    }
 `
 const New = styled.div`
     width: 100%; 

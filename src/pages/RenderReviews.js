@@ -50,13 +50,21 @@ export default function RenderReviews(reviewData) {
 }
 
 const Review = styled.li`
-  width: 100%;
+  width: 1000px;
   height: 276px;
   display: flex;
   background-color: rgba(23, 23, 23, 1);
   padding: 19px 23px 20px 20px;
   border-radius: 16px 16px 16px 16px;
   margin-bottom: 18px;
+
+  @media (max-width: 1100px) {
+    width: 90%;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 const ProfileRating = styled.div`
     width: 10%;
