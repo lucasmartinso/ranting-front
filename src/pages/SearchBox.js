@@ -50,13 +50,13 @@ export default function SearchBox({setOpenModal}) {
                 {places ? (
                 <ul>
                 {places.map(place => (
-                        <RenderSearchPlaces 
-                            id = {place.id}
-                            name = {place.name}
-                            score = {place.score}    
-                            mainPhoto = {place.mainPhoto} 
-                            verify = {place.verify}               
-                        />
+                    <RenderSearchPlaces 
+                        id = {place.id}
+                        name = {place.name}
+                        score = {place.score}    
+                        mainPhoto = {place.mainPhoto} 
+                        verify = {place.verify}               
+                    />
                     ))}
                 </ul>
                 ) : (

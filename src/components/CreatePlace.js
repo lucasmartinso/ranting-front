@@ -134,7 +134,10 @@ export default function CreatePlaceScreen() {
     <Container>
     
     <Title>
-      <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
+      <ExitAndSearch>
+        <ion-icon name="home" id="home" onClick={() => navigate('/main')}></ion-icon>
+        <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
+      </ExitAndSearch>
       <img src={logo} alt="logo"/>
       {auth ? (
         <UserProfile>
@@ -331,10 +334,11 @@ export default function CreatePlaceScreen() {
       </Error>
     ) : ""}
 
-      <LineCopright>
-        <div>.</div>
-        <h4>Copyright © Rating 2022</h4>
-      </LineCopright>
+    <LineCopright>
+      <div>.</div>
+      <h4>Copyright © Rating 2022</h4>
+    </LineCopright>
+    
     </Container>
     </>
   )
@@ -347,45 +351,75 @@ const Container = styled.div`
   flex-direction: column;
 `
 const Title = styled.div`
-    width: 100%; 
-    height: 10%;
+  width: 100%; 
+  height: 10%;
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px 0px 30px;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  background-color: #359FE4;
+  border-radius: 0px 0px 10px 10px;
+
+  span {
     display: flex; 
-    justify-content: space-between;
     align-items: center;
-    padding: 20px 30px 0px 30px;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    background-color: #359FE4;
-    border-radius: 0px 0px 10px 10px;
+    color: white;
+    font-weight: 500;
 
-    span {
-        display: flex; 
-        align-items: center;
-        color: white;
-        font-weight: 500;
-
-        ion-icon { 
-            width: 25px; 
-            height: 25px;
-            margin-right: 5px;
-        }
-
-        &:hover { 
-            cursor: pointer;
-        }
+    &:hover { 
+      cursor: pointer;
+    }
     
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
+    &:active {  
+      transform: scale(0.98);
+      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
+  }
+  
+  ion-icon { 
+    width: 25px; 
+    height: 25px;
+    margin-right: 5px;
 
-    img { 
-        width: 140px;
-        height: 70px;
-        border-radius: 0px 0px 10px 10px;
+    &:hover { 
+      cursor: pointer;
     }
+    
+    &:active {  
+      transform: scale(0.98);
+      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+  }
+
+  img { 
+    width: 140px;
+    height: 70px;
+    border-radius: 0px 0px 10px 10px;
+  }
+`
+const ExitAndSearch = styled.div`
+  width: 140px;
+  height: 100%; 
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+
+  ion-icon#home { 
+    width: 30px; 
+    height: 30px;
+    color: rgba(0, 0, 0, 0.58);
+    transition: color 1s;
+
+    &:hover, 
+    &:focus{ 
+        cursor: pointer; 
+        color: white;
+    }
+  }
+}
 `
 const UserProfile = styled.div`
     display: flex;

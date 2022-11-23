@@ -84,7 +84,10 @@ export default function PlaceScreen() {
 
         <Container>
             <Title>
-                <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
+                <ExitAndSearch>
+                    <ion-icon name="home" id="home" onClick={() => navigate('/main')}></ion-icon>
+                    <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
+                </ExitAndSearch>
                 <img src={logo} alt="logo"/>
                 {auth ? (
                 <UserProfile>
@@ -269,6 +272,27 @@ const Title = styled.div`
         height: 70px;
         border-radius: 0px 0px 10px 10px;
     }
+`
+const ExitAndSearch = styled.div`
+  width: 140px;
+  height: 100%; 
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+
+  ion-icon#home { 
+    width: 30px; 
+    height: 30px;
+    color: rgba(0, 0, 0, 0.58);
+    transition: color 1s;
+
+    &:hover, 
+    &:focus{ 
+        cursor: pointer; 
+        color: white;
+    }
+  }
+}
 `
 const UserProfile = styled.div`
     display: flex;
