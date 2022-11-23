@@ -115,6 +115,10 @@ export default function LoginScreen() {
 
         <Upright>.</Upright>
 
+        <Line>
+          <div>.</div>
+        </Line>
+
         <OAuthBox>
           <ButtonAuth back="black" text="white" icon="white" onClick={() => gitHub(true)} working={true}>
             <ion-icon name="logo-github"></ion-icon>
@@ -166,6 +170,11 @@ const Container = styled.div`
   align-items: center; 
   justify-content: center; 
   flex-direction: column;
+
+  @media (max-width: 800px) {
+    position: absolute;
+  }
+  
 `
 const Title = styled.div`
   width: 100%; 
@@ -178,12 +187,25 @@ const Title = styled.div`
     width: 500px;
     height: 300px;
   }
+
+  @media (max-width: 800px) {
+    margin-top: 330px;
+    margin-bottom: 200px;
+  }
 `
 const SignInContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    height: 50%;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 250px;
+  }
 `
 const Main = styled.div`
   width: 400px; 
@@ -269,6 +291,33 @@ const Upright = styled.div`
     height: 100%;
     border: 1px solid #D4D4D4; 
     margin: 0px 30px;
+
+    @media (max-width: 800px) {
+      display: none;
+    }
+`
+const Line = styled.div`
+  display: none; 
+
+  @media (max-width: 800px) {
+    width: 100%; 
+    height: 30px;
+    display: flex; 
+    justify-content: center;
+    margin: 20px 0px;
+
+    div {
+      width: 70%;
+      height: 1px;
+      border: 1px solid #D4D4D4;
+      margin-top: 15px;
+      color: #359FE4;
+    }
+
+    div#logout { 
+    margin-top: 7px;
+    }
+  }
 `
 const OAuthBox = styled.div`
   width: 400px;
@@ -400,6 +449,12 @@ const Message = styled.div`
     &:active {  
       transform: scale(0.98);
       box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+  }
+
+  @media (max-width: 800px) {
+    span { 
+      margin: 0px 0px 40px 0px;
     }
   }
 `
