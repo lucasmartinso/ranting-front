@@ -151,7 +151,7 @@ export default function PlaceScreen() {
                     ) : ""}  
                     {place.website ? (
                     <TextBox>
-                        <span>Website:</span>
+                        <span id="website">Website:</span>
                         <h4 id="website" onClick={() => window.open(place.website)}>{place.website}</h4>
                     </TextBox> 
                     ) : ""}
@@ -163,27 +163,27 @@ export default function PlaceScreen() {
                 <Rating>
                     <TextBox>
                         <span id="score">Total Score:</span>
-                        <h4 id="score">{Number(place.score).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4 id="score">{Number(place.score).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                     <TextBox>
-                        <span>Specialty Food:</span>
-                        <h4>{place.type}</h4>
+                        <span id="type">Specialty Food:</span>
+                        <h4 id="type">{place.type}</h4>
                     </TextBox>  
                     <TextBox>
                         <span>Food:</span>
-                        <h4>{Number(place.food).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.food).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox>  
                     <TextBox>
                         <span>Price:</span>
-                        <h4>{Number(place.price).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.price).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                     <TextBox>
                         <span>Attendance:</span>
-                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                     <TextBox>
                         <span>Environment:</span>
-                        <h4>{Number(place.environment).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.environment).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                 </Rating>
                 </>
@@ -488,12 +488,8 @@ const TextBox = styled.div`
         padding-top: 5px;
     }
 
-    span#score {
-        font-weight: 700;
-        font-size: 30px;
-    }
-
-    h4#score { 
+    span#score,
+    h4#score {
         font-weight: 700;
         font-size: 30px;
     }
@@ -507,6 +503,17 @@ const TextBox = styled.div`
             transform: scale(0.98);
             box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
         }
+    }
+
+    @media (max-width: 750px) { 
+        span#website,
+        h4#website,
+        span#type,
+        h4#type { 
+            display: none;
+        }
+
+        font-size: 19px;
     }
 `
 const TagName = styled.div`
