@@ -9,7 +9,7 @@ export default function RenderRestaurants(restaurantData) {
             <Container2>
                 <Overall score={restaurantData.score}>
                     <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
-                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")}⭐`) : ("⭐ NEW ⭐")}</h3>
+                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")}⭐`) : ("⭐NEW⭐")}</h3>
                 </Overall>
                 <Info>
                     <img src={restaurantData.mainPhoto} alt={restaurantData.mainPhoto}/>
@@ -57,7 +57,7 @@ export default function RenderRestaurants(restaurantData) {
 }
 
 const Place = styled.li`
-    width: 90%;
+    width: 1100px;
     height: 350px;
     background-color: white;
     border-radius: 12px;
@@ -72,6 +72,10 @@ const Place = styled.li`
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 1200px) { 
+        width: 90%;
     }
 `
 const Container2 = styled.div`
@@ -95,6 +99,7 @@ const Overall = styled.div`
         margin-bottom: 20px;
         text-decoration: overline;
         display: flex;
+        text-overflow: ellipsis;
 
         ion-icon { 
             color: #3797F0;
