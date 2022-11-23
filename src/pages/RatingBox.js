@@ -456,9 +456,21 @@ const Comment = styled.div`
         border: 1px dashed black;
     }
 
-    @media (max-width: 1000px) { 
+    @media (max-width: 700px) { 
         textarea { 
-            width: 480px;
+            width: 450px;
+        }
+    }
+
+    @media (max-width: 650px) { 
+        textarea { 
+            width: 400px;
+        }
+    }
+
+    @media (max-width: 550px) { 
+        textarea { 
+            width: 350px;
         }
     }
 `
@@ -538,5 +550,9 @@ const Buttons = styled.div`
         border: 1px solid #1A587F; 
         color: white; 
         font-weight: bold;
+    }
+
+    @media (max-width: 700px) { 
+        padding-right: 25px;
     }
 `
