@@ -558,10 +558,18 @@ const Container2 = styled.div`
     justify-content: center;
 `
 const Review = styled.div`
-    width: 90%; 
+    width: 70%; 
     height: 100%;
     display: flex;
     align-items: center;
+
+    @media (max-width: 1100px) { 
+        width: 90%;
+    }
+
+    @media (max-width: 600px) { 
+        margin-left: 30px;
+    }
 `
 const Box = styled.button`
     width: 26%;
@@ -588,6 +596,10 @@ const Box = styled.button`
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 750px) { 
+        width: 50%;
     }
 `
 const LineCopright = styled.div`
