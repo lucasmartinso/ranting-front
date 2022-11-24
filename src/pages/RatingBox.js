@@ -272,6 +272,7 @@ export default function RatingBox({setRatingModel,user,id}) {
                                 placeholder="Click to comment..."
                                 value={comment}
                                 onChange={(event) => setComment(event.target.value)}
+                                maxLength={100}
                                 required
                             />
                         </Comment>

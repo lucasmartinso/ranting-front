@@ -83,7 +83,7 @@ const Background = styled.div`
     z-index: 2;
 `
 const Box = styled.div`
-    width: 60%; 
+    width: 800px;
     height: 100px;
     background-color: white;
     border-radius: 10px 10px 0px 0px;
@@ -91,6 +91,14 @@ const Box = styled.div`
     display: flex; 
     align-items: center;
     flex-direction: column;
+
+    @media (max-width: 1200px) { 
+        width: 60%;
+    }
+
+    @media (max-width: 650px) { 
+        width: 80%;
+    }
 `
 const Search = styled.div`
     width: 100%;
@@ -113,6 +121,12 @@ const Search = styled.div`
         display: flex;
         justify-content: center;
         border: none;
+    }
+
+    @media (max-width: 800px) { 
+        ion-icon { 
+            margin-left: 20px;
+        }
     }
 `
 const Cancel = styled.div`
@@ -160,15 +174,29 @@ const Cancel = styled.div`
             box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
         }
     }
+
+    @media (max-width: 950px) { 
+        button { 
+            width: 22%;
+        }
+    }
 `
 const Places = styled.div`
-    width: 60%; 
+    width: 800px; 
     background-color: white;
     border-radius: 0px 0px 10px 10px;
     color: rgba(111, 111, 111, 1);
     display: flex; 
     flex-direction: column;
     padding-top: 20px;
+
+    @media (max-width: 1200px) { 
+        width: 60%;
+    }
+
+    @media (max-width: 650px) { 
+        width: 80%;
+    }
 `
 const NotFound = styled.div`
     width: 100%; 
