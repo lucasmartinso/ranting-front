@@ -80,7 +80,7 @@ const Background = styled.div`
     z-index: 2;
 `
 const Box = styled.div`
-    width: 60%; 
+    width: 700px;
     height: 320px;
     background-color: white;
     border-radius: 12px;
@@ -88,6 +88,14 @@ const Box = styled.div`
     display: flex; 
     align-items: center;
     flex-direction: column;
+
+    @media (max-width: 1200px) { 
+        width: 60%;
+    }
+
+    @media (max-width: 700px) { 
+        width: 80%;
+    }
 `
 const Cancel = styled.div`
     width: 100%; 
@@ -204,5 +212,9 @@ const Buttons = styled.div`
         border: 1px solid #1A587F; 
         color: white; 
         font-weight: bold;
+    }
+
+    @media (max-width: 1000px) { 
+        padding-right: 25px;
     }
 `

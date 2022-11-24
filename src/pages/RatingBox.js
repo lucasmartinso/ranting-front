@@ -320,10 +320,6 @@ const Box = styled.div`
     flex-direction: column;
 
     @media (max-width: 800px) { 
-        width: 60%;
-    }
-
-    @media (max-width: 800px) { 
         width: 80%;
     }
 `
