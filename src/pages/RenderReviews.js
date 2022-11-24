@@ -4,13 +4,14 @@ export default function RenderReviews(reviewData) {
     const score = (reviewData.food + reviewData.price + reviewData.attendance + reviewData.environment)/4;
 
     return(
-        <Review key={reviewData.id}>
+        <Review key={reviewData.id} score={score}>
             <ProfileRating>
             {reviewData.mainPhoto ? (
                         <img src={reviewData.mainPhoto} alt="profile"/>
                     ): ( <ion-icon name="person-circle-sharp"></ion-icon> )}
                 <p><strong>@{reviewData.username}</strong></p>
                 <p id="score">{score.toFixed(1)} ⭐</p>
+                <p id="score">{score===5 ? ("😍") : score>4.5 ? ("🤩") : score>=4 ? ("😄") : score>=3 ? ("🙄") : ("😓")}</p>
             </ProfileRating>
             <ReviewInfo>
                 <UserComment comment={reviewData.comment}>
