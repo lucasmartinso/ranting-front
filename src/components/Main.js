@@ -108,6 +108,13 @@ export default function MainScreen() {
             </CreatePlace>
             ) : "" }
 
+            <FilterContainer>
+                <FilterBox>
+                    <ion-icon name="filter"></ion-icon>
+                    <span>Filters</span>
+                </FilterBox>
+            </FilterContainer>
+
             {places.length > 0 ? (
             <Main token = {token}>
                 <ul>
@@ -332,7 +339,7 @@ const Circle = styled.div`
 const Main = styled.div`
     width: 100%; 
     height: 100%; 
-    margin: 130px 0px 80px 0px;
+    margin: 0px 0px 80px 0px;
 
     ul { 
         width: 100%; 
@@ -340,6 +347,62 @@ const Main = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center; 
+    }
+`
+const FilterContainer = styled.div`
+    width: 60%; 
+    display: flex; 
+    justify-content: flex-start;
+    margin: 120px 0px 30px 0px;
+
+    @media (max-width: 1800px) {
+        width: 70%;
+    }
+
+    @media (max-width: 1600px) {
+        width: 80%;
+    }
+
+    @media (max-width: 1300px) {
+        width: 90%;
+    }
+`
+const FilterBox = styled.div`
+    width: 150px;
+    height: 30px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    background-color: red;
+    color: white;
+    border-radius: 12px;
+    font-weight: bold;
+    transition: background 2s, color 1s;
+    
+    ion-icon { 
+        margin-right: 12px;
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover, 
+    &:focus{ 
+        cursor: pointer; 
+        background: white;
+        color: black;
+    }
+    
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 750px) { 
+        width: 25%;
+    }
+
+    @media (max-width: 600px) { 
+        width: 30%;
     }
 `
 const Line = styled.div`
