@@ -106,6 +106,7 @@ export default function MainScreen() {
                     <p>Dont found place ?</p>
                     <p>Create it!</p>
                 </CreatePlaceMessage>
+                <ion-icon name="triangle" id="triangle"></ion-icon>
                 <Circle>
                     <ion-icon name="add"></ion-icon>
                 </Circle>
@@ -312,14 +313,36 @@ const CreatePlace = styled.div`
     height: 5%;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     margin-top: 130px;
     position: fixed; 
     bottom: 100px;
     right: 30px;
+
+    ion-icon#triangle { 
+        width: 25px;
+        height: 25px;
+        transform: rotate(90deg);
+        color: red;
+    }
+    
+    @media (max-width: 800px) {
+        width: 45%;
+    }
+
+    &:hover { 
+        cursor: pointer;
+    }
+
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
 `
 const CreatePlaceMessage = styled.div`
+    display: none;
     width: 150px;
-    height: 50px;
+    height: 55px;
     background-color: red;
     border-radius: 12px; 
     text-align: left;
@@ -332,7 +355,12 @@ const CreatePlaceMessage = styled.div`
         color: white;
         font-weight: bold;
         font-size: 13px;
-        margin-top: 5px;
+        margin: 5px 0px 0px 0px;
+    }
+
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
 const Circle = styled.div`
@@ -347,15 +375,6 @@ const Circle = styled.div`
     ion-icon { 
         color: white;
         font-size: 30px;
-    }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
 const Main = styled.div`
