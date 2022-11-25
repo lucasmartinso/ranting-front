@@ -9,7 +9,7 @@ import { useContext, useEffect } from "react";
 import * as usersRequests from "../services/usersApi";
 import { authTest, authTime, configVar } from "../hooks/auth";
 
-export default function MainTitle({ setOpenModal, setUserModal, setLogout, logout }) { 
+export default function MainTitle({ setOpenModal, setUserModal, setLogout, logout, screen }) { 
     const { userData } = useContext(UserContext);
     const { setToken } = useContext(TokenContext);
     const { auth, setAuth } = useContext(AuthContext);
@@ -36,7 +36,7 @@ export default function MainTitle({ setOpenModal, setUserModal, setLogout, logou
         localStorage.setItem("MY_TOKEN",null);
         setLogout(false);
         setAuth(false);
-        navigate('/main');
+        if(screen==="create") navigate('/main');
     }
 
     return(
@@ -238,6 +238,7 @@ const Logout = styled.div`
     justify-content: space-between;
     padding: 0px 5px 5px 5px;
     box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
+    z-index: 2;
 
     span { 
         font-weight: bold;
@@ -255,6 +256,7 @@ const Logout = styled.div`
 
     span#logout { 
         color: red;
+        margin-bottom: 3px;
     }
 `
 const Line = styled.div`
@@ -264,6 +266,7 @@ const Line = styled.div`
     justify-content: center;
     background-color: white;
     padding-bottom: 10px;
+    color: white;
 
     div {
         width: 90%;

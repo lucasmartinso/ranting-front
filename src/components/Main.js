@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
-import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
-import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
@@ -11,13 +9,13 @@ import * as ratingApi from "../services/ratingApi";
 import * as usersApi from "../services/usersApi";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
-import FiltersBox from "../pages/FiltersBox"
+import FiltersBox from "../pages/FiltersBox";
+import Title from "../common-components/Title";
 import search from '../styles/images/search.gif';
 import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
-    const { token, setToken } = useContext(TokenContext);
     const { auth, setAuth } = useContext(AuthContext);
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
@@ -38,13 +36,6 @@ export default function MainScreen() {
             console.log(error);
         }
     },[]);
-
-    function exit() { 
-        setToken(null);
-        localStorage.setItem("MY_TOKEN",null);
-        setLogout(false);
-        setAuth(false);
-    }
 
     setInterval( async () => {
         authTest(config);
@@ -73,41 +64,15 @@ export default function MainScreen() {
         ) 
         : ""}
         <Container>
-            <Title>
-                <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
-                <img src={logo} alt="logo"/>
-                {auth ? (
-                <UserProfile>
-                    <span>Hello, {auth ? (user.name) : ("")}</span>
-                    {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)} id="photo"></ion-icon> )}
-                    {logout ? ( 
-                        <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
-                    ) : ( 
-                        <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
-                    )}
-                </UserProfile>
-                ): (
-                    <Sign>
-                        <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-                        <button id="login" onClick={() => navigate("/login")}>Login</button>
-                    </Sign>
-                )}
-            </Title>
             
-            {logout ? (
-                <Logout>
-                    <Line>
-                        <div>.</div>
-                    </Line>
-                    <span onClick={() => setUserModal(true)}>Change your photo</span>
-                    <Line>
-                        <div>.</div>
-                    </Line>
-                    <span id="logout" onClick={exit}>Logout</span>
-                </Logout>
-            ) : ""}
+            <Title 
+                setOpenModal= {setOpenModal}
+                setUserModal= {setUserModal}
+                setLogout= {setLogout}
+                logout= {logout}
+                screen= "main"
+            />
+            
 
             { auth ? (
             <CreatePlace onClick={() => navigate("/create/place")}>
@@ -130,7 +95,7 @@ export default function MainScreen() {
             </FilterContainer>
 
             {places.length > 0 ? (
-            <Main token = {token}>
+            <Main>
                 <ul>
                     {places.map(place => (
                         <RenderRestaurants 
@@ -173,149 +138,6 @@ const Container = styled.div`
   display: flex; 
   flex-direction: column;
   align-items: center;
-`
-const Title = styled.div`
-    width: 90%; 
-    height: 10%;
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 30px;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    background-color: #359FE4;
-
-    span {
-        display: flex; 
-        align-items: center;
-        color: white;
-        font-weight: 500;
-
-        ion-icon { 
-            width: 25px; 
-            height: 25px;
-            margin-right: 5px;
-        }
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    img { 
-        width: 140px;
-        height: 70px;
-        border-radius: 0px 0px 10px 10px;
-    }
-`
-const UserProfile = styled.div`
-    display: flex;
-    align-items: center;
-
-    img { 
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-left: 8px;
-    }
-
-    ion-icon { 
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        color : white;
-    }
-
-    ion-icon#photo { 
-        width: 40px;
-        height: 40px;
-        margin-left: 5px;
-    }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-`
-const Sign = styled.div`
-    display: flex;
-
-    button { 
-        width: 70px;
-        height: 40px;
-        margin-right: 10px;
-        border: 1px solid #359FE4;
-        border-radius: 15px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    button#login { 
-        background-color: black; 
-        color: white; 
-    } 
-
-    button#sign-up { 
-        background-color: white; 
-        color: black; 
-    }
-`
-const Logout = styled.div`
-    width: 230px;
-    height: 60px;
-    background-color: white; 
-    margin-top: 100px;
-    position: fixed;
-    right: 5%;
-    top: 0px;
-    border-radius: 0px 0px 0px 10px;
-    display: flex;
-    flex-direction : column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0px 5px 5px 5px;
-    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
-
-    span { 
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover{ 
-            cursor: pointer; 
-        }
-        
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    span#logout { 
-        color: red;
-    }
 `
 const CreatePlace = styled.div`
     width: 30%;
@@ -446,22 +268,6 @@ const FilterBox = styled.div`
 
     @media (max-width: 600px) { 
         width: 30%;
-    }
-`
-const Line = styled.div`
-    width: 100%; 
-    height: 1px;
-    display: flex; 
-    justify-content: center;
-    background-color: white;
-    padding-bottom: 10px;
-
-    div {
-        width: 90%;
-        height: 1px;
-        border: 1px solid #D4D4D4;
-        margin-top:2px;
-        color: white;
     }
 `
 const NotFound = styled.div`

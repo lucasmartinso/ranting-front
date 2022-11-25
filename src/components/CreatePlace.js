@@ -126,6 +126,7 @@ export default function CreatePlaceScreen() {
       setUserModal= {setUserModal}
       setLogout= {setLogout}
       logout= {logout}
+      screen= "create"
     />
 
     <CreatePlace>
