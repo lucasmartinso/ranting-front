@@ -317,6 +317,12 @@ const CreatePlace = styled.div`
     font-family: 'Playball', cursive;
     font-size: 80px;
   }
+
+  @media (max-width: 600px) { 
+    span { 
+      font-size: 63px;
+    }
+  }
 `
 const ContainerCategory = styled.div`
   width: 100%;
