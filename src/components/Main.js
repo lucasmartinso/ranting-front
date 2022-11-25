@@ -102,9 +102,13 @@ export default function MainScreen() {
 
             { auth ? (
             <CreatePlace onClick={() => navigate("/create/place")}>
+                <CreatePlaceMessage>
+                    <p>Dont found place ?</p>
+                    <p>Create it!</p>
+                </CreatePlaceMessage>
                 <Circle>
-                    <ion-icon name="add">
-                </ion-icon></Circle>
+                    <ion-icon name="add"></ion-icon>
+                </Circle>
             </CreatePlace>
             ) : "" }
 
@@ -304,7 +308,7 @@ const Logout = styled.div`
     }
 `
 const CreatePlace = styled.div`
-    width: 20%;
+    width: 30%;
     height: 5%;
     display: flex;
     justify-content: flex-end;
@@ -313,6 +317,24 @@ const CreatePlace = styled.div`
     bottom: 100px;
     right: 30px;
 `
+const CreatePlaceMessage = styled.div`
+    width: 150px;
+    height: 50px;
+    background-color: red;
+    border-radius: 12px; 
+    text-align: left;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+
+    p { 
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+`
 const Circle = styled.div`
     width: 50px;
     height: 50px;
@@ -320,7 +342,7 @@ const Circle = styled.div`
     justify-content: center; 
     align-items: center; 
     border-radius: 50%;
-    background-color: #D74761;
+    background-color: red;
 
     ion-icon { 
         color: white;
