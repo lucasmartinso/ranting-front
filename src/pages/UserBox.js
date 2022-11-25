@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as usersRequests from "../services/usersApi"
+import * as usersRequests from "../services/usersApi";
 import TokenContext from "../contexts/tokenContext";
+import { Background } from "../common-components/Boxes";
 
 export default function UserBox({setUserModal,user,setUserData}) { 
     const [photo,setPhoto] = useState(null);
@@ -66,19 +67,6 @@ export default function UserBox({setUserModal,user,setUserData}) {
     )
 }
 
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    background-color: rgba(111, 111, 111, 0.9);
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: fixed;
-    left: 0; 
-    top: 0;
-    z-index: 2;
-`
 const Box = styled.div`
     width: 700px;
     height: 320px;

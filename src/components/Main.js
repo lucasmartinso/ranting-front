@@ -11,6 +11,7 @@ import * as ratingApi from "../services/ratingApi";
 import * as usersApi from "../services/usersApi";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
+import FiltersBox from "../pages/FiltersBox"
 import search from '../styles/images/search.gif';
 import { authTest, authTime, configVar } from "../hooks/auth";
 
@@ -22,6 +23,7 @@ export default function MainScreen() {
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const [logout,setLogout] = useState(false);
+    const [filterModal, setFilterModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
     const config = configVar();
@@ -63,6 +65,13 @@ export default function MainScreen() {
                 setUserData = {setUserData}
             />
         ): ""}
+
+        {filterModal ? (
+            <FiltersBox 
+                setFilterModal= {setFilterModal}
+            />
+        ) 
+        : ""}
         <Container>
             <Title>
                 <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
@@ -103,7 +112,7 @@ export default function MainScreen() {
             { auth ? (
             <CreatePlace onClick={() => navigate("/create/place")}>
                 <CreatePlaceMessage>
-                    <p>Dont found place ?</p>
+                    <p>Didn't find the place ?</p>
                     <p>Create it!</p>
                 </CreatePlaceMessage>
                 <ion-icon name="triangle" id="triangle"></ion-icon>
@@ -114,7 +123,7 @@ export default function MainScreen() {
             ) : "" }
 
             <FilterContainer>
-                <FilterBox>
+                <FilterBox onClick={() => setFilterModal(true)}>
                     <ion-icon name="filter"></ion-icon>
                     <span>Filters</span>
                 </FilterBox>
@@ -318,6 +327,7 @@ const CreatePlace = styled.div`
     position: fixed; 
     bottom: 100px;
     right: 30px;
+    transition: height 1s;
 
     ion-icon#triangle { 
         width: 25px;
@@ -330,13 +340,10 @@ const CreatePlace = styled.div`
         width: 45%;
     }
 
-    &:hover { 
+    &:hover,
+    &:focus { 
         cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        height: 8%;
     }
 `
 const CreatePlaceMessage = styled.div`
@@ -356,11 +363,6 @@ const CreatePlaceMessage = styled.div`
         font-weight: bold;
         font-size: 13px;
         margin: 5px 0px 0px 0px;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `
 const Circle = styled.div`

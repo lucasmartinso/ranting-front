@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as ratingApi from "../services/ratingApi"
+import * as ratingApi from "../services/ratingApi";
 import TokenContext from "../contexts/tokenContext";
+import { Background } from "../common-components/Boxes";
 
 export default function RatingBox({setRatingModel,user,id}) { 
     const [food,setFood] = useState(null);
@@ -296,19 +297,7 @@ export default function RatingBox({setRatingModel,user,id}) {
     )
 }
 
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    background-color: rgba(111, 111, 111, 0.9);
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: fixed;
-    left: 0; 
-    top: 0;
-    z-index: 2;
-`
+
 const Box = styled.div`
     width: 600px; 
     height: ${props => props.error ? ("780px") : ("650px")};
