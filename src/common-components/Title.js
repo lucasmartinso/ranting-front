@@ -1,18 +1,35 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../styles/images/Ranting.png";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import * as usersRequests from "../services/usersApi";
+import { authTest, authTime, configVar } from "../hooks/auth";
 
 export default function MainTitle({ setOpenModal, setUserModal, setLogout, logout }) { 
     const { userData } = useContext(UserContext);
     const { setToken } = useContext(TokenContext);
     const { auth, setAuth } = useContext(AuthContext);
     const user = JSON.parse(userData);
+    const config = configVar();
 
     const navigate = useNavigate();
+
+    useEffect(async () => {
+        try {
+          await usersRequests.auth(config);
+          setAuth(true);
+        } catch (error) {
+          console.log(error);
+        }
+    },[]);
+    
+    setInterval( async () => {
+        authTest(config);
+    }, authTime)
 
     function exit() { 
         setToken(null);

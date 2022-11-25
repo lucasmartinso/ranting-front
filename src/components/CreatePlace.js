@@ -7,7 +7,7 @@ import * as locationsApi from "../services/locationsApi";
 import * as usersRequests from "../services/usersApi";
 import * as  filtersAPi from "../services/filtersApi";
 import * as  placesApi from "../services/placesApi";
-import logo from "../styles/images/Ranting.png"
+import Title from "../common-components/Title";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
@@ -16,12 +16,12 @@ import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
 import SearchBox from "../pages/SearchBox";
 import { DebounceInput } from "react-debounce-input";
 import notFound from "../styles/images/NotFound.png";
-import { authTest, authTime, configVar } from "../hooks/auth";
+import { configVar } from "../hooks/auth";
 
 export default function CreatePlaceScreen() { 
   const { userData, setUserData } = useContext(UserContext);
-  const { token, setToken } = useContext(TokenContext);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { token } = useContext(TokenContext);
+  const { setAuth } = useContext(AuthContext);
   const [name,setName] = useState("");
   const [description, setDescription] = useState("");
   const [mainPhoto, setMainPhoto] = useState("");
@@ -57,18 +57,6 @@ export default function CreatePlaceScreen() {
       console.log(error);
     }
   },[]);
-
-  function exit() { 
-    setToken(null);
-    localStorage.setItem("MY_TOKEN",null);
-    setLogout(false);
-    setAuth(false);
-    navigate('/main');
-  }
-
-  setInterval( async () => {
-      authTest(config);
-  }, authTime)
 
   async function register(event) { 
     event.preventDefault();
@@ -133,44 +121,12 @@ export default function CreatePlaceScreen() {
 
     <Container>
     
-    <Title>
-      <ExitAndSearch>
-        <ion-icon name="home" id="home" onClick={() => navigate('/main')}></ion-icon>
-        <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
-      </ExitAndSearch>
-      <img src={logo} alt="logo"/>
-      {auth ? (
-        <UserProfile>
-          <span>Hello, {user.name}</span>
-          {user.mainPhoto ? (
-            <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-            ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
-          {logout ? ( 
-            <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
-          ) : ( 
-            <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
-          )}
-        </UserProfile>
-      ): (
-        <Sign>
-          <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-          <button id="login" onClick={() => navigate("/login")}>Login</button>
-        </Sign>
-      )}
-    </Title>
-
-    {logout ? (
-      <Logout>
-        <Line>
-          <div id="logout">.</div>
-        </Line>
-        <span onClick={() => setUserModal(true)}>Change your photo</span>
-        <Line>
-          <div id="logout">.</div>
-        </Line>
-        <span id="logout" onClick={exit}>Logout</span>
-      </Logout>
-    ) : ""}
+    <Title 
+      setOpenModal= {setOpenModal}
+      setUserModal= {setUserModal}
+      setLogout= {setLogout}
+      logout= {logout}
+    />
 
     <CreatePlace>
       <span>Create a Place 🍽️</span>
@@ -304,7 +260,7 @@ export default function CreatePlaceScreen() {
           </Categorys>
         </ContainerCategory>
 
-        <input 
+        <textarea 
             type="text"
             placeholder="Description"
             value={description}
@@ -349,180 +305,6 @@ const Container = styled.div`
   height: 100%; 
   display: flex; 
   flex-direction: column;
-`
-const Title = styled.div`
-  width: 100%; 
-  height: 10%;
-  display: flex; 
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 30px 0px 30px;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  background-color: #359FE4;
-  border-radius: 0px 0px 10px 10px;
-
-  span {
-    display: flex; 
-    align-items: center;
-    color: white;
-    font-weight: 500;
-
-    &:hover { 
-      cursor: pointer;
-    }
-    
-    &:active {  
-      transform: scale(0.98);
-      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-  }
-  
-  ion-icon { 
-    width: 25px; 
-    height: 25px;
-    margin-right: 5px;
-
-    &:hover { 
-      cursor: pointer;
-    }
-    
-    &:active {  
-      transform: scale(0.98);
-      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-  }
-
-  img { 
-    width: 140px;
-    height: 70px;
-    border-radius: 0px 0px 10px 10px;
-  }
-`
-const ExitAndSearch = styled.div`
-  width: 140px;
-  height: 100%; 
-  display: flex; 
-  justify-content: space-between;
-  align-items: center;
-
-  ion-icon#home { 
-    width: 30px; 
-    height: 30px;
-    color: rgba(0, 0, 0, 0.58);
-    transition: color 1s;
-
-    &:hover, 
-    &:focus{ 
-        cursor: pointer; 
-        color: white;
-    }
-  }
-}
-`
-const UserProfile = styled.div`
-    display: flex;
-    align-items: center;
-
-    img { 
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-left: 5px;
-    }
-
-    ion-icon { 
-      margin-left: 5px;
-      width: 30px;
-      height: 30px;
-      color: white;
-    }
-
-    ion-icon#photo { 
-        width: 40px;
-        height: 40px;
-        margin-left: 5px;
-    }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-`
-const Sign = styled.div`
-    display: flex;
-
-    button { 
-        width: 70px;
-        height: 40px;
-        margin-right: 10px;
-        border: 1px solid #359FE4;
-        border-radius: 15px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    button#login { 
-        background-color: black; 
-        color: white; 
-    } 
-
-    button#sign-up { 
-        background-color: white; 
-        color: black; 
-    }
-`
-const Logout = styled.div`
-    width: 230px;
-    height: 60px;
-    background-color: white; 
-    margin-top: 100px;
-    position: fixed;
-    right: 0;
-    top: 0px;
-    border-radius: 0px 0px 0px 10px;
-    display: flex;
-    flex-direction : column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0px 5px 5px 5px;
-    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
-
-    span { 
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover{ 
-            cursor: pointer; 
-        }
-        
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    span#logout { 
-        color: red;
-    }
 `
 const CreatePlace = styled.div`
   width: 100%;
@@ -599,7 +381,7 @@ const Main = styled.div`
   flex-direction: column;
   margin-bottom: ${props => props.error ? ("25px") : ("35px")};
 
-  input { 
+  input,textarea { 
     width: 80%; 
     height: 70px;
     display: flex;
@@ -612,6 +394,11 @@ const Main = styled.div`
     font-color: #D5D5D5;
     font-color: rgba(0, 0, 0, 1);
     margin-bottom: 25px;
+  }
+
+  textarea { 
+    height: 100px;
+    padding: 15px 20px 10px 25px;
   }
 
   input#search { 
@@ -678,21 +465,6 @@ const Error = styled.div`
     }
    }
   }
-`
-const Line = styled.div`
-    width: 100%; 
-    height: 1px;
-    display: flex; 
-    justify-content: center;
-    background-color: white;
-    padding-bottom: 10px;
-
-    div {
-        width: 90%;
-        height: 1px;
-        border: 1px solid #D4D4D4;
-        margin-top:2px;
-    }
 `
 const Places = styled.div`
     width: 80%; 
