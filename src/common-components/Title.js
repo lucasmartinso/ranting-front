@@ -259,7 +259,7 @@ const Logout = styled.div`
         margin-bottom: 3px;
     }
 `
-const Line = styled.div`
+export const Line = styled.div`
     width: 100%; 
     height: 1px;
     display: flex; 

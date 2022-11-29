@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function ErrorMessage({ error, errorMessage, setError }) { 
+function ErrorMessage({ error, errorMessage, setError }) { 
     return(
         <>
         {error ? (
@@ -13,6 +13,23 @@ export default function ErrorMessage({ error, errorMessage, setError }) {
             ) : ""}
         </>
     )
+}
+
+function Close({ setUserModal, setOpenModal, setRatingModel, type }) { 
+  
+  function closeModal() { 
+    setUserModal(false);
+    setOpenModal(false);
+    setRatingModel(false);
+  }
+
+  return( 
+    <>
+      <Cancel>
+        <span onClick={closeModal}>X</span>
+      </Cancel>
+    </>
+  )
 }
 
 export const Background = styled.div`
@@ -28,7 +45,6 @@ export const Background = styled.div`
     top: 0;
     z-index: 2;
 `
-
 const Error = styled.div` 
   width: 100%; 
   height: 100px; 
@@ -64,3 +80,53 @@ const Error = styled.div`
    }
   }
 `
+const Cancel = styled.div`
+    width: 100%; 
+    height: 10%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 18px 0px 0px;
+    margin-bottom: 20px;
+
+    button { 
+        width: 15%;
+        height: 90%;
+        background-color: red;
+        color: white;
+        font-weight: 700;
+        font-size: 20px;
+        border: 1px solid black;
+        border-radius: 12px;
+        font-family: 'Playball', cursive;
+        display: flex; 
+        justify-content: center;
+
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    span { 
+        font-weight: 700;
+        font-size: 20px;
+        color: black;
+
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+`
+export const Components = {
+  ErrorMessage,
+  Close
+}

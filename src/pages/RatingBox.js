@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import * as ratingApi from "../services/ratingApi";
 import TokenContext from "../contexts/tokenContext";
-import ErrorMessage, { Background } from "../common-components/Boxes";
+import { Background, Components } from "../common-components/Boxes";
 
 export default function RatingBox({setRatingModel,user,id}) { 
     const [food,setFood] = useState(null);
@@ -42,9 +42,11 @@ export default function RatingBox({setRatingModel,user,id}) {
     return(
         <Background>
             <Box error={error}>
+
                 <Cancel>
                     <span onClick={() => setRatingModel(false)}>X</span>
                 </Cancel>
+                
                 <Welcome>
                     <span>Hello, <strong>{user.name}</strong></span>
                 </Welcome>
@@ -279,7 +281,7 @@ export default function RatingBox({setRatingModel,user,id}) {
                         </Comment>
                     </Rating>
 
-                    <ErrorMessage 
+                    <Components.ErrorMessage 
                         error={error}
                         errorMessage={errorMessage}
                         setError={setError}
