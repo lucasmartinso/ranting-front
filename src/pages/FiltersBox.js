@@ -4,34 +4,36 @@ import { useState, useEffect } from "react";
 import { Background } from "../common-components/Boxes";
 import RenderTypes from "../subpages/RenderTypes";
 import RenderMetod from "../subpages/RenderMetod";
+import RenderFilterTypes from "../subpages/RenderFilterTypes";
 import * as  filtersAPi from "../services/filtersApi";
 
 export default function FiltersBox({ setFilterModal }) { 
     const [ error, setError ] = useState(false);
     const [ select, setSelect ] = useState(null);
     const [ model, setModel ] = useState(null);
+    const [ selectType, setSelectType ] = useState(null)
     const [ types, setTypes ] = useState([]);
-    const [ filter, setFilter ] = useState({});
+    const [ filter, setFilter ] = useState({ main: null });
     const filterTypes = [
         {
            id: 1,
-           type: 'Food' 
+           type: 'food'
         },
         {
             id: 2,
-            type: 'Attendance' 
+            type: 'attendance'
         },
         {
             id: 3,
-            type: 'Environment' 
+            type: 'environment', 
         },
         {
             id: 4,
-            type: 'Price' 
+            type: 'price', 
         },
         {
             id: 5,
-            type: 'Place Type' 
+            type: 'place Type'
         }
     ]
     console.log(filter);
@@ -59,6 +61,23 @@ export default function FiltersBox({ setFilterModal }) {
                     <TypeMetod>
                         <p>Type</p>
                         <ul>
+                            {filterTypes.map(type => (
+                                <RenderFilterTypes 
+                                    id={type.id}
+                                    type={type.type}
+                                    selectType={selectType}
+                                    setSelectType={setSelectType}
+                                    filter={filter}
+                                    setFilter={setFilter}
+                                />
+                            ))}
+                        </ul>
+                    </TypeMetod>
+
+                    {filter.main === "food-type" ? (
+                    <TypeMetod>
+                        <p>Metod</p>
+                        <ul>
                             {types.map(type => (
                                 <RenderTypes 
                                     id={type.id}
@@ -71,7 +90,7 @@ export default function FiltersBox({ setFilterModal }) {
                             ))}
                         </ul>
                     </TypeMetod>
-                    <Upright>.</Upright>
+                    ) : (
                     <TypeMetod>
                         <p>Metod</p>
                         <ul>
@@ -91,6 +110,7 @@ export default function FiltersBox({ setFilterModal }) {
                             />
                         </ul>
                     </TypeMetod>
+                    )}
                 </FilterBox>
             </Box>
         </Background>

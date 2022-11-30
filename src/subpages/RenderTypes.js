@@ -4,11 +4,11 @@ export default function RenderTypes({ id, name, select, setSelect, filter, setFi
     function moreThaOne() { 
         if(select === id) {
             setSelect(null);
-            setFilter({...filter, id: null})
+            setFilter({...filter, metod: null})
         }
         else {
             setSelect(id);
-            setFilter({...filter, id})
+            setFilter({...filter, metod: id })
         }
     }
 

@@ -4,12 +4,12 @@ export default function RenderMetod({ type, model, setModel, filter, setFilter }
     function moreThaOne() { 
         if(model === type) {
             setModel(null);
-            setFilter({...filter, type: null})
+            setFilter({...filter, metod: null})
         }
         else {
             setModel(type);
-            if(type==="Best to Worst 🔝") setFilter({...filter, type: "best"})
-            else setFilter({...filter, type: "last"})
+            if(type==="Best to Worst 🔝") setFilter({...filter, metod: "best"})
+            else setFilter({...filter, metod: "last"})
         }
     }
 
