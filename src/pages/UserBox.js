@@ -50,7 +50,7 @@ export default function UserBox({setUserModal,user,setUserData}) {
             
                 <Components.Close 
                     setUserModal= {setUserModal}
-                    type= 'userModal'
+                    type= 'user'
                 />
 
                 <Welcome>

@@ -15,12 +15,10 @@ function ErrorMessage({ error, errorMessage, setError }) {
     )
 }
 
-function Close({ setUserModal, setOpenModal, setRatingModel, type }) { 
+function Close({ setUserModal, type }) { 
   
   function closeModal() { 
     setUserModal(false);
-    setOpenModal(false);
-    setRatingModel(false);
   }
 
   return( 
