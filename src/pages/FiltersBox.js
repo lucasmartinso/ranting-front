@@ -5,6 +5,8 @@ import RenderTypes from "../subpages/RenderTypes";
 
 export default function FiltersBox({ setFilterModal }) { 
     const [ error, setError ] = useState(false);
+    const [ select, setSelect ] = useState(null);
+    const [ model, setModel ] = useState(null);
 
     return(
         <Background>
@@ -20,18 +22,23 @@ export default function FiltersBox({ setFilterModal }) {
                         <p>Type</p>
                         <ul>
                             <RenderTypes 
-
+                                id={1}
+                                select={select}
+                                setSelect={setSelect}
+                            /> 
+                            <RenderTypes 
+                                id={2}
+                                select={select}
+                                setSelect={setSelect}
                             />
-                             <RenderTypes 
-
-                            />
+                           
                         </ul>
                     </TypeMetod>
                     <Upright>.</Upright>
                     <TypeMetod>
                         <p>Metod</p>
                         <ul>
-
+                            
                         </ul>
                     </TypeMetod>
                 </FilterBox>
@@ -116,7 +123,6 @@ const FilterBox = styled.div`
 const TypeMetod = styled.div`
     width: 50%;
     height: 200px;
-    border: 1px solid black;
 
     p { 
         font-weight: bold;
@@ -124,10 +130,13 @@ const TypeMetod = styled.div`
     }
 
     ul { 
-        margin-top: 20px;
+        width: 100%;
+        height: 150px;
+        margin: 20px 0px;
         display: flex; 
         flex-direction: column; 
         align-items: center;
+        overflow-y: scroll;
     }
 `
 const Upright = styled.div`
