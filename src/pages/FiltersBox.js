@@ -1,13 +1,50 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Background } from "../common-components/Boxes";
 import RenderTypes from "../subpages/RenderTypes";
 import RenderMetod from "../subpages/RenderMetod";
+import * as  filtersAPi from "../services/filtersApi";
 
 export default function FiltersBox({ setFilterModal }) { 
     const [ error, setError ] = useState(false);
     const [ select, setSelect ] = useState(null);
     const [ model, setModel ] = useState(null);
+    const [ types, setTypes ] = useState([]);
+    const [ filter, setFilter ] = useState({});
+    const filterTypes = [
+        {
+           id: 1,
+           type: 'Food' 
+        },
+        {
+            id: 2,
+            type: 'Attendance' 
+        },
+        {
+            id: 3,
+            type: 'Environment' 
+        },
+        {
+            id: 4,
+            type: 'Price' 
+        },
+        {
+            id: 5,
+            type: 'Place Type' 
+        }
+    ]
+    console.log(filter);
+
+    useEffect(async () => {
+        try {
+            const promise = await filtersAPi.foodTypes();
+            setTypes(promise);
+        } catch (error) {
+            console.log(error);
+        }
+    },[]);
+
 
     return(
         <Background>
@@ -22,17 +59,16 @@ export default function FiltersBox({ setFilterModal }) {
                     <TypeMetod>
                         <p>Type</p>
                         <ul>
-                            <RenderTypes 
-                                id={1}
-                                select={select}
-                                setSelect={setSelect}
-                            /> 
-                            <RenderTypes 
-                                id={2}
-                                select={select}
-                                setSelect={setSelect}
-                            />
-                           
+                            {types.map(type => (
+                                <RenderTypes 
+                                    id={type.id}
+                                    name={type.name}
+                                    select={select}
+                                    setSelect={setSelect}
+                                    filter={filter}
+                                    setFilter={setFilter}
+                                />
+                            ))}
                         </ul>
                     </TypeMetod>
                     <Upright>.</Upright>
@@ -43,11 +79,15 @@ export default function FiltersBox({ setFilterModal }) {
                                 type="Best to Worst 🔝"
                                 model={model}
                                 setModel={setModel}
+                                filter={filter}
+                                setFilter={setFilter}
                             />
                             <RenderMetod 
                                 type="Worst to Best 👎"
                                 model={model}
                                 setModel={setModel}
+                                filter={filter}
+                                setFilter={setFilter}
                             />
                         </ul>
                     </TypeMetod>
@@ -136,7 +176,7 @@ const TypeMetod = styled.div`
 
     p { 
         font-weight: bold;
-        font-size: 20px;
+        font-size: 25px;
     }
 
     ul { 

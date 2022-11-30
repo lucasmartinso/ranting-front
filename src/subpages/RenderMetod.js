@@ -1,10 +1,16 @@
-//import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export default function RenderMetod({ type, model, setModel }) { 
+export default function RenderMetod({ type, model, setModel, filter, setFilter }) { 
     function moreThaOne() { 
-        if(model === type) setModel(null)
-        else setModel(type);
+        if(model === type) {
+            setModel(null);
+            setFilter({...filter, type: null})
+        }
+        else {
+            setModel(type);
+            if(type==="Best to Worst 🔝") setFilter({...filter, type: "best"})
+            else setFilter({...filter, type: "last"})
+        }
     }
 
     return(
