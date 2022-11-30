@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Background } from "../common-components/Boxes";
 import RenderTypes from "../subpages/RenderTypes";
+import RenderMetod from "../subpages/RenderMetod";
 
 export default function FiltersBox({ setFilterModal }) { 
     const [ error, setError ] = useState(false);
@@ -38,7 +39,16 @@ export default function FiltersBox({ setFilterModal }) {
                     <TypeMetod>
                         <p>Metod</p>
                         <ul>
-                            
+                            <RenderMetod 
+                                type="Best to Worst 🔝"
+                                model={model}
+                                setModel={setModel}
+                            />
+                            <RenderMetod 
+                                type="Worst to Best 👎"
+                                model={model}
+                                setModel={setModel}
+                            />
                         </ul>
                     </TypeMetod>
                 </FilterBox>

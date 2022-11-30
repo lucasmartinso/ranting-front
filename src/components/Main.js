@@ -276,7 +276,7 @@ const NotFound = styled.div`
     display: flex; 
     justify-content: center; 
     align-items: center;
-    margin-top: 250px;
+    margin-top: 100px;
     flex-direction: column;
 
     img { 

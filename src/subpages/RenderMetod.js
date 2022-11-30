@@ -1,15 +1,15 @@
 //import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export default function RenderTypes({ id, select, setSelect }) { 
+export default function RenderMetod({ type, model, setModel }) { 
     function moreThaOne() { 
-        if(select === id) setSelect(null)
-        else setSelect(id);
+        if(model === type) setModel(null)
+        else setModel(type);
     }
 
     return(
-        <Item onClick={moreThaOne} select={select} id={id}>
-            <span>Food</span>
+        <Item onClick={moreThaOne} model={model} type={type}>
+            <span>{type}</span>
             <ion-icon name="checkmark-sharp"></ion-icon>
         </Item>
     )
@@ -21,27 +21,27 @@ const Item = styled.li`
     display: flex; 
     align-items: center;
     justify-content: space-between;
-    padding: 5px 5px;
-    border: ${props => props.select === props.id ? ("2px solid green") : ("none")};
+    padding: 20px 5px;
+    border: ${props => props.model === props.type ? ("2px solid green") : ("none")};
     border-radius: 12px;
-    margin-bottom: 4px;
-    transition: ${props => props.select === props.id ? ("none") : ("background 1s")};
+    margin: 15px 0px 10px 0px;
+    transition: ${props => props.model === props.type ? ("none") : ("background 1s")};
 
     span { 
         font-weight: bold;
-        font-size 18px;
+        font-size 20px;
         color: black;
     }
 
     ion-icon { 
-        display: ${props => props.select === props.id ? ("inline") : ("none")}; 
+        display: ${props => props.model === props.type ? ("inline") : ("none")}; 
         color: green;
     }
 
     &:hover, 
     &:focus{ 
         cursor: pointer; 
-        background: ${props => props.select === props.id ? ("white") : ("#CDCDCD")};
+        background: ${props => props.model === props.type ? ("white") : ("#CDCDCD")};
     }
   
     &:active {  
