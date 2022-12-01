@@ -31,6 +31,7 @@ const Type = styled.li`
   align-items: center;
   padding: 10px 20px 10px 20px;
   justify-content: space-between;
+  transition: background 0.6s;
 
   span { 
     font-size: 20px;
@@ -41,8 +42,10 @@ const Type = styled.li`
     font-size: 30px;
   }
 
-  &:hover { 
-    cursor: pointer;
+  &:hover, 
+  &:focus{ 
+    cursor: pointer; 
+    background: #CDCDCD;
   }
 
   &:active {  

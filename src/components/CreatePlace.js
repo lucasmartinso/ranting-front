@@ -156,12 +156,12 @@ export default function CreatePlaceScreen() {
             required
         />
 
-        <Selector type={clickedType}>
+        <Selector type={clickedType} onClick={() => setClickedType(!clickedType)}>
           <span>{type ? (type.name):("Type")}</span>
           {clickedType ? ( 
-            <ion-icon name="chevron-up-outline" onClick={() => setClickedType(false)}></ion-icon>
+            <ion-icon name="chevron-up-outline"></ion-icon>
           ) : ( 
-            <ion-icon name="chevron-down-outline" onClick={() => setClickedType(true)}></ion-icon>
+            <ion-icon name="chevron-down-outline"></ion-icon>
           )}
         </Selector>
         {clickedType ? (
@@ -196,12 +196,12 @@ export default function CreatePlaceScreen() {
             required
         />
 
-        <Selector type={clickedState}>
+        <Selector type={clickedState} onClick={() => setClickedState(!clickedState)}>
           <span>{state ? (state.name) : ("State (requeried)")}</span>
           {clickedState ? ( 
-            <ion-icon name="chevron-up-outline" onClick={() => setClickedState(false)}></ion-icon>
+            <ion-icon name="chevron-up-outline"></ion-icon>
           ) : ( 
-            <ion-icon name="chevron-down-outline" onClick={() => setClickedState(true)}></ion-icon>
+            <ion-icon name="chevron-down-outline"></ion-icon>
           )}
         </Selector>
         {clickedState ? (
@@ -358,19 +358,12 @@ const Selector = styled.div`
   border-radius: ${props => props.type ? ("10px 10px 0px 0px"):("10px")};
   padding: 0px 20px 0px 20px;
   font-size: 20px;
-  color: grey;
+  color: black;
   margin-bottom: ${props => props.type ? ("0px") : ("25px")};
   background-color: white;
 
-  ion-icon { 
-    &:hover{ 
-      cursor: pointer; 
-    }
-  
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
+  &:hover { 
+    cursor: pointer; 
   }
 `
 const Types = styled.div`
@@ -379,6 +372,11 @@ const Types = styled.div`
   margin-bottom: 25px;
   border-radius: 0px 0px 10px 10px;
   padding-bottom: 5px;
+
+  ul {
+    height: 200px;
+    overflow-y: scroll;
+  }
 `
 const Main = styled.div`
   width: 100%; 
