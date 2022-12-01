@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as ratingApi from "../services/ratingApi";
 import TokenContext from "../contexts/tokenContext";
 import { Background, Components } from "../common-components/Boxes";
+import { ratingFunctions } from "../hooks/rating";
 
 export default function RatingBox({setRatingModel,user,id}) { 
     const [food,setFood] = useState(null);
@@ -13,31 +13,6 @@ export default function RatingBox({setRatingModel,user,id}) {
     const { token } = useContext(TokenContext);
     const [error,setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-
-    async function sendRating() { 
-        
-        const config = {
-            headers: { Authorization: `Bearer ${token}` },
-        };
-
-        const reviewData = { 
-            food,
-            environment,
-            attendance,
-            price,
-            comment
-        };
-
-        try {
-            await ratingApi.createReview(id,reviewData,config);
-            setRatingModel(false);
-            window.location.reload();
-        } catch (error) {
-            console.log(error);
-            setErrorMessage(error.response.data);
-            setError(true);
-        }
-    }
 
     return(
         <Background>
@@ -288,7 +263,7 @@ export default function RatingBox({setRatingModel,user,id}) {
                     />
 
                     <Buttons error={error}>
-                        <button id="save" onClick={sendRating}>Publish</button>
+                        <button id="save" onClick={() => ratingFunctions.sendRating(token,food,environment,attendance,price,comment,id,setRatingModel,setErrorMessage,setError)}>Publish</button>
                         <button id="cancel" onClick={() => setRatingModel(false)}>Cancel</button>
                     </Buttons>
             </Box>
