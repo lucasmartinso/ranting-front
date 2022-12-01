@@ -15,7 +15,7 @@ import FiltersBox from "../pages/FiltersBox";
 import Title from "../common-components/Title";
 import search from '../styles/images/search.gif';
 import { authTest, authTime, configVar } from "../hooks/auth";
-import { filterFunctions } from "../hooks/filters"
+import { filterFunctions } from "../hooks/filters";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);

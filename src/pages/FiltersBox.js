@@ -6,6 +6,7 @@ import RenderTypes from "../subpages/RenderTypes";
 import RenderMetod from "../subpages/RenderMetod";
 import RenderFilterTypes from "../subpages/RenderFilterTypes";
 import * as  filtersApi from "../services/filtersApi";
+import { filterFunctions } from "../hooks/filters";
 
 export default function FiltersBox({ setFilterModal }) { 
     const [ error, setError ] = useState(false);
@@ -47,39 +48,6 @@ export default function FiltersBox({ setFilterModal }) {
             console.log(error);
         }
     },[]);
-
-    async function filtering() { 
-        if(!filter.main) { 
-            console.log('entrou');
-            setErrorMessage('Choose a option at field type');
-            setError(true);
-            return;
-        } else if(!filter.metod) {
-            setErrorMessage('Choose a option at field metod');
-            setError(true);
-            return;
-        } else if((filter.main === 'food-type' && typeof filter.metod === 'string') || (filter.main !== 'food-type' && typeof filter.metod === 'number')) { 
-            setErrorMessage('Choose the options again');
-            setError(true);
-            return;
-        }
-
-        try {
-            await filtersApi.filter(filter.main,filter.metod);
-            const filterInfo = JSON.stringify({
-                "main": filter.main,
-                "metod": filter.metod
-            });
-            localStorage.setItem("FILTER",filterInfo);
-            setFilterModal(false);
-            window.location.reload();
-        } catch (error) {
-            console.log(error);
-            setErrorMessage(error.response.data);
-            setError(true);
-        }
-    }
-
 
     return(
         <Background>
@@ -153,7 +121,7 @@ export default function FiltersBox({ setFilterModal }) {
                 />
 
                 <Buttons error={error}>
-                    <button id="save" onClick={filtering}>Apply</button>
+                    <button id="save" onClick={() => filterFunctions.filtering(filter, setErrorMessage, setError, setFilterModal)}>Apply</button>
                     <button id="cancel" onClick={() => setFilterModal(false)}>Cancel</button>
                 </Buttons>
             </Box>
