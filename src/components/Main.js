@@ -60,6 +60,7 @@ export default function MainScreen() {
         {filterModal ? (
             <FiltersBox 
                 setFilterModal= {setFilterModal}
+                setPlaces={setPlaces}
             />
         ) 
         : ""}

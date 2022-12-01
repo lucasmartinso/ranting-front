@@ -1,19 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { Background } from "../common-components/Boxes";
+import { Background, Components } from "../common-components/Boxes";
 import RenderTypes from "../subpages/RenderTypes";
 import RenderMetod from "../subpages/RenderMetod";
 import RenderFilterTypes from "../subpages/RenderFilterTypes";
 import * as  filtersAPi from "../services/filtersApi";
 
-export default function FiltersBox({ setFilterModal }) { 
+export default function FiltersBox({ setFilterModal, setPlaces }) { 
     const [ error, setError ] = useState(false);
+    const [ errorMessage, setErrorMessage ] = useState(null);
     const [ select, setSelect ] = useState(null);
     const [ model, setModel ] = useState(null);
     const [ selectType, setSelectType ] = useState(null)
     const [ types, setTypes ] = useState([]);
     const [ filter, setFilter ] = useState({ main: null, metod: null });
+
     const filterTypes = [
         {
            id: 1,
@@ -36,7 +38,6 @@ export default function FiltersBox({ setFilterModal }) {
             type: 'place Type'
         }
     ]
-    console.log(filter);
 
     useEffect(async () => {
         try {
@@ -47,11 +48,31 @@ export default function FiltersBox({ setFilterModal }) {
         }
     },[]);
 
-    function filtering() { 
+    async function filtering() { 
+        if(!filter.main) { 
+            console.log('entrou');
+            setErrorMessage('Choose a option at field type');
+            setError(true);
+            return;
+        } else if(!filter.metod) {
+            setErrorMessage('Choose a option at field metod');
+            setError(true);
+            return;
+        } else if((filter.main === 'food-type' && typeof filter.metod === 'string') || (filter.main !== 'food-type' && typeof filter.metod === 'number')) { 
+            setErrorMessage('Choose the options again');
+            setError(true);
+            return;
+        }
+
         try {
-            
+            const promise = await filtersAPi.filter(filter.main,filter.metod);
+            setPlaces(promise);
+            console.log(promise);
+            setFilterModal(false);
+            window.location.reload();
         } catch (error) {
             console.log(error);
+            setErrorMessage(error.response.data);
             setError(true);
         }
     }
@@ -122,8 +143,14 @@ export default function FiltersBox({ setFilterModal }) {
                     )}
                 </FilterBox>
 
+                <Components.ErrorMessage 
+                    error={error}
+                    errorMessage={errorMessage}
+                    setError={setError}
+                />
+
                 <Buttons error={error}>
-                    <button id="save">Apply</button>
+                    <button id="save" onClick={filtering}>Apply</button>
                     <button id="cancel" onClick={() => setFilterModal(false)}>Cancel</button>
                 </Buttons>
             </Box>
@@ -133,7 +160,7 @@ export default function FiltersBox({ setFilterModal }) {
 
 const Box = styled.div`
     width: 700px; 
-    height: ${props => props.error ? ("780px") : ("400px")};
+    height: ${props => props.error ? ("550px") : ("400px")};
     background-color: white;
     border-radius: 12px;
     color: rgba(111, 111, 111, 1);

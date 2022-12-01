@@ -7,7 +7,7 @@ export async function foodTypes() {
 }
 
 export async function filter( main, metod ) { 
-    const promise = await api.get(``); 
+    const promise = await api.get(`places/${main}/${metod}`); 
 
     return promise.data;
 }
