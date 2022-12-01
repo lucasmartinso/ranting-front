@@ -6,9 +6,6 @@ import AuthContext from "../contexts/authContext";
 import FilterContext from "../contexts/filterContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
-import * as ratingApi from "../services/ratingApi";
-import * as usersApi from "../services/usersApi";
-import * as  filtersApi from "../services/filtersApi";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import FiltersBox from "../pages/FiltersBox";
@@ -16,6 +13,7 @@ import Title from "../common-components/Title";
 import search from '../styles/images/search.gif';
 import { authTest, authTime, configVar } from "../hooks/auth";
 import { filterFunctions } from "../hooks/filters";
+import { mainFunctions } from "../hooks/main";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -33,19 +31,7 @@ export default function MainScreen() {
     console.log(user);
 
     useEffect(async () => {
-        try {
-            if(filter) { 
-                const promise = await filtersApi.filter(filter.main,filter.metod);
-                setPlaces(promise);
-            } else {
-                const promise = await ratingApi.getPlaces();
-                setPlaces(promise);
-            }
-            await usersApi.auth(config);
-            setAuth(true);
-        } catch (error) {
-            console.log(error);
-        }
+        await mainFunctions.main(filter,setPlaces,config,setAuth)
     },[]);
 
     setInterval( async () => {

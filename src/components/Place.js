@@ -328,7 +328,8 @@ const New = styled.div`
     justify-content: center;
     align-items: flex-start;
     color: white;
-    margin-top: 30px;
+    margin-top: 85px;
+    padding-top: 25px;
 
     span { 
         font-weight: bold;
