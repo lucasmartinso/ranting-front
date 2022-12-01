@@ -205,8 +205,7 @@ const Photo = styled.div`
         width: 100%;
         height: 300px;
         object-fit: cover;
-        border-radius: 10px;;
-        -webkit-mask-image: linear-gradient(360deg, transparent 0%, black 80%);
+        border-radius: 10px;
     }
 `
 const Line = styled.div`
@@ -349,6 +348,12 @@ const New = styled.div`
     span { 
         font-weight: bold;
         font-size: 70px;
+    }
+
+    @media (max-width: 600px) { 
+        span { 
+            font-size: 55px;
+        }
     }
 `
 const Container2 = styled.div`

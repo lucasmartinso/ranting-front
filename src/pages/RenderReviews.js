@@ -99,6 +99,18 @@ const ProfileRating = styled.div`
         font-size: 20px;
         font-weight: bold;
     }
+
+    @media (max-width: 750px) { 
+        p#score { 
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 600px) { 
+        p#score { 
+            font-size: 15px;
+        }
+    }
  `
 const ReviewInfo = styled.div`
     width: 90%;
