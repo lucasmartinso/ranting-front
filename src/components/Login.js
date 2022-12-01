@@ -39,7 +39,6 @@ export default function LoginScreen() {
 
   async function register(event) { 
     event.preventDefault();
-    console.log("kkkk");
     try {
       await loginFunctions.register(usernameEmail,password,setClicked,setPassword,setAuth,setErrorMessage,setError)
       navigate("/main");

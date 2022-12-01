@@ -6,8 +6,6 @@ async function register(usernameEmail,password,setClicked,setPassword,setAuth,se
       password
     }
 
-    console.log(userData);
-
     try {
       setClicked(true);
       setPassword("");  

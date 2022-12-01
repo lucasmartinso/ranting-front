@@ -1,9 +1,9 @@
-import { useState } from "react"
-import styled from "styled-components"
-import logo from "../styles/images/Ranting.png"
-import { ThreeDots } from "react-loader-spinner"
+import { useState } from "react";
+import styled from "styled-components";
+import logo from "../styles/images/Ranting.png";
+import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import * as usersApi from "../services/usersApi"
+import { signupFunctions } from "../hooks/signup";
 
 export default function SignUpScreen() { 
   const [name,setName] = useState("");
@@ -19,25 +19,11 @@ export default function SignUpScreen() {
   async function register(event) { 
     event.preventDefault();
 
-    const userData = { 
-      name,
-      username,
-      email,
-      password,
-      confirmPassword
-    }
-
     try {
-      setClicked(true);
-      setConfirmPassword("");
-      setPassword("");  
-      await usersApi.signup(userData);
+      await signupFunctions.register(name,username,email,password,confirmPassword,setClicked,setConfirmPassword,setPassword,setErrorMessage,setError)
       navigate("/login");
     } catch (error) {
       console.log(error);
-      setErrorMessage(error.response.data);
-      setClicked(false);
-      setError(true);
     }
   }
 
