@@ -49,4 +49,11 @@ const Container = styled.div`
         margin-top: 10px;
         font-weight: bold;
     }
+
+    @media (max-width: 500px) {
+        img { 
+            width: 500px;
+            height: 280px;
+        }
+    }
 `
