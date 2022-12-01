@@ -109,7 +109,7 @@ const Title = styled.div`
     &:active {  
       transform: scale(0.98);
       box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
+    }    
   }
   
   ion-icon { 
@@ -166,8 +166,20 @@ const ExitAndSearch = styled.div`
         cursor: pointer; 
         color: white;
     }
+
+    @media (max-width: 600px) {
+        width: 23px;
+        height: 23px;
+    }
   }
-}
+
+  @media (max-width: 600px) {
+    width: 110px;
+    ion-icon { 
+        width: 20px;
+        height: 20px;
+    }
+  }
 `
 const UserProfile = styled.div`
     display: flex;
@@ -201,6 +213,12 @@ const UserProfile = styled.div`
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 600px) {
+        span { 
+            display: none;
+        }
     }
 `
 const Sign = styled.div`
@@ -272,6 +290,14 @@ const Logout = styled.div`
     span#logout { 
         color: red;
         margin-bottom: 3px;
+    }
+
+    @media (max-width: 600px) {
+        width: 170px;
+
+        span { 
+            font-size: 14px;
+        }
     }
 `
 export const Line = styled.div`
