@@ -7,7 +7,7 @@ import RenderMetod from "../subpages/RenderMetod";
 import RenderFilterTypes from "../subpages/RenderFilterTypes";
 import * as  filtersAPi from "../services/filtersApi";
 
-export default function FiltersBox({ setFilterModal, setPlaces }) { 
+export default function FiltersBox({ setFilterModal }) { 
     const [ error, setError ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState(null);
     const [ select, setSelect ] = useState(null);
@@ -65,9 +65,12 @@ export default function FiltersBox({ setFilterModal, setPlaces }) {
         }
 
         try {
-            const promise = await filtersAPi.filter(filter.main,filter.metod);
-            setPlaces(promise);
-            console.log(promise);
+            await filtersAPi.filter(filter.main,filter.metod);
+            const filterInfo = JSON.stringify({
+                "main": filter.main,
+                "metod": filter.metod
+            });
+            localStorage.setItem("FILTER",filterInfo);
             setFilterModal(false);
             window.location.reload();
         } catch (error) {

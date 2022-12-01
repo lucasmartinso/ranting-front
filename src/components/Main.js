@@ -3,10 +3,12 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
 import UserContext from "../contexts/userContext";
 import AuthContext from "../contexts/authContext";
+import FilterContext from "../contexts/filterContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as ratingApi from "../services/ratingApi";
 import * as usersApi from "../services/usersApi";
+import * as  filtersAPi from "../services/filtersApi";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import FiltersBox from "../pages/FiltersBox";
@@ -17,6 +19,7 @@ import { authTest, authTime, configVar } from "../hooks/auth";
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
     const { auth, setAuth } = useContext(AuthContext);
+    const { filterPlaces } = useContext(FilterContext); 
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
@@ -24,12 +27,19 @@ export default function MainScreen() {
     const [filterModal, setFilterModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
+    const filter = JSON.parse(filterPlaces);
     const config = configVar();
 
     useEffect(async () => {
         try {
-            const promise = await ratingApi.getPlaces();
-            setPlaces(promise);
+            if(filter) { 
+                const promise = await filtersAPi.filter(filter.main,filter.metod);
+                setPlaces(promise);
+                console.log(promise);
+            } else {
+                const promise = await ratingApi.getPlaces();
+                setPlaces(promise);
+            }
             await usersApi.auth(config);
             setAuth(true);
         } catch (error) {
@@ -60,7 +70,6 @@ export default function MainScreen() {
         {filterModal ? (
             <FiltersBox 
                 setFilterModal= {setFilterModal}
-                setPlaces={setPlaces}
             />
         ) 
         : ""}
@@ -94,7 +103,7 @@ export default function MainScreen() {
                     <span>Filters</span>
                 </FilterBox>
             </FilterContainer>
-
+            
             {places.length > 0 ? (
             <Main>
                 <ul>

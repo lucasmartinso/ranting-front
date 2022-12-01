@@ -17,7 +17,7 @@ export default function App() {
   const [token, setToken] = useState(localStorage.getItem("MY_TOKEN"));
   const [userData, setUserData] = useState(localStorage.getItem("USER_DATA"));
   const [auth, setAuth] = useState(false);
-  const [filterPlaces, setFilterPlaces] = useState([]);
+  const [filterPlaces, setFilterPlaces] = useState(localStorage.getItem("FILTER"));
 
   return (
     <TokenContext.Provider value={{token,setToken}}>
