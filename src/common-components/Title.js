@@ -44,12 +44,12 @@ export default function MainTitle({ setOpenModal, setUserModal, setLogout, logou
         <Title>
         <ExitAndSearch>
             <ion-icon name="home" id="home" onClick={() => navigate('/main')}></ion-icon>
-            <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
+            <span onClick={() => setOpenModal(true)} id="search"><ion-icon name="search-sharp"></ion-icon> Search</span>
         </ExitAndSearch>
         <img src={logo} alt="logo"/>
         {auth ? (
             <UserProfile>
-            <span>Hello, {user.name}</span>
+            <span onClick={() => setUserModal(true)}>Hello, {user.name}</span>
             {user.mainPhoto ? (
                 <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
                 ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
@@ -139,6 +139,21 @@ const ExitAndSearch = styled.div`
   display: flex; 
   justify-content: space-between;
   align-items: center;
+
+  span#search { 
+    transition: font-size 1s, width 1s, height 1s;
+
+    &:hover, 
+    &:focus{ 
+        cursor: pointer; 
+        font-size: 20px;
+
+        ion-icon { 
+            width: 28px;
+            height: 28px;
+        }
+    }
+  }
 
   ion-icon#home { 
     width: 30px; 

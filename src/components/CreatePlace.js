@@ -353,7 +353,6 @@ const Selector = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /*border: 2px solid rgba(120, 177, 89, 0.25);*/
   box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: ${props => props.type ? ("10px 10px 0px 0px"):("10px")};
   padding: 0px 20px 0px 20px;
