@@ -8,13 +8,14 @@ import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
 import * as ratingApi from "../services/ratingApi";
 import * as usersApi from "../services/usersApi";
-import * as  filtersAPi from "../services/filtersApi";
+import * as  filtersApi from "../services/filtersApi";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
 import FiltersBox from "../pages/FiltersBox";
 import Title from "../common-components/Title";
 import search from '../styles/images/search.gif';
 import { authTest, authTime, configVar } from "../hooks/auth";
+import { filterFunctions } from "../hooks/filters"
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -33,9 +34,8 @@ export default function MainScreen() {
     useEffect(async () => {
         try {
             if(filter) { 
-                const promise = await filtersAPi.filter(filter.main,filter.metod);
+                const promise = await filtersApi.filter(filter.main,filter.metod);
                 setPlaces(promise);
-                console.log(promise);
             } else {
                 const promise = await ratingApi.getPlaces();
                 setPlaces(promise);
@@ -98,10 +98,16 @@ export default function MainScreen() {
             ) : "" }
 
             <FilterContainer>
-                <FilterBox onClick={() => setFilterModal(true)}>
+                <FilterBox onClick={() => setFilterModal(true)} filter={filter}>
                     <ion-icon name="filter"></ion-icon>
                     <span>Filters</span>
                 </FilterBox>
+                {filter ? (
+                <FilterBox onClick={filterFunctions.cleanFilters} filter={filter}>
+                    <span>X</span>
+                    <span>Clean Filters</span>
+                </FilterBox>
+                ) : "" }
             </FilterContainer>
             
             {places.length > 0 ? (
@@ -252,12 +258,16 @@ const FilterBox = styled.div`
     color: white;
     border-radius: 12px;
     font-weight: bold;
+    margin-right: ${props => props.filter ? ("10px") : ("0px")};
     transition: background 2s, color 1s;
     
     ion-icon { 
-        margin-right: 12px;
         width: 20px;
         height: 20px;
+    }
+
+    span { 
+        margin-left: 12px;
     }
 
     &:hover, 
