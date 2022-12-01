@@ -13,7 +13,7 @@ export default function FiltersBox({ setFilterModal }) {
     const [ model, setModel ] = useState(null);
     const [ selectType, setSelectType ] = useState(null)
     const [ types, setTypes ] = useState([]);
-    const [ filter, setFilter ] = useState({ main: null });
+    const [ filter, setFilter ] = useState({ main: null, metod: null });
     const filterTypes = [
         {
            id: 1,
@@ -47,6 +47,15 @@ export default function FiltersBox({ setFilterModal }) {
         }
     },[]);
 
+    function filtering() { 
+        try {
+            
+        } catch (error) {
+            console.log(error);
+            setError(true);
+        }
+    }
+
 
     return(
         <Background>
@@ -73,7 +82,7 @@ export default function FiltersBox({ setFilterModal }) {
                             ))}
                         </ul>
                     </TypeMetod>
-
+                    <Upright>.</Upright>
                     {filter.main === "food-type" ? (
                     <TypeMetod>
                         <p>Metod</p>
@@ -112,6 +121,11 @@ export default function FiltersBox({ setFilterModal }) {
                     </TypeMetod>
                     )}
                 </FilterBox>
+
+                <Buttons error={error}>
+                    <button id="save">Apply</button>
+                    <button id="cancel" onClick={() => setFilterModal(false)}>Cancel</button>
+                </Buttons>
             </Box>
         </Background>
     )
@@ -217,5 +231,53 @@ const Upright = styled.div`
 
     @media (max-width: 800px) {
       display: none;
+    }
+`
+const Buttons = styled.div`
+    width: 100%;
+    display: flex;
+    margin-top: ${props => props.error ? ("10px") : ("30px")};
+    justify-content: flex-end;
+    padding-right: 50px;
+
+    button {
+        width: 60px;
+        height: 40px;
+        border-radius: 8px;
+        margin-left: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.25);
+
+        &:hover { 
+            cursor: pointer;
+        }
+    
+        &:active {  
+            transform: scale(0.98);
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+        }
+    }
+
+    button#cancel { 
+        width: 70px;
+        background-color: #EC7172;
+        border: 1px solid #EC7172; 
+        color: white; 
+        font-weight: bold;
+    }
+
+    button#save { 
+        width: 70px;
+        background-color: #1A587F;
+        border: 1px solid #1A587F; 
+        color: white; 
+        font-weight: bold;
+    }
+
+    @media (max-width: 700px) { 
+        padding-right: 25px;
     }
 `

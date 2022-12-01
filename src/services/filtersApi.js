@@ -5,3 +5,9 @@ export async function foodTypes() {
 
     return promise.data;
 }
+
+export async function filter( main, metod ) { 
+    const promise = await api.get(``); 
+
+    return promise.data;
+}
