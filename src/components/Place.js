@@ -6,12 +6,11 @@ import UserContext from "../contexts/userContext";
 import AuthContext from "../contexts/authContext";
 import Title from "../common-components/Title";
 import SearchBox from "../pages/SearchBox";
-import * as placesApi from "../services/placesApi";
-import * as usersApi from "../services/usersApi";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
 import { authTest, authTime, configVar } from "../hooks/auth";
+import { placeFunctions } from "../hooks/place";
 
 export default function PlaceScreen() { 
     const { userData, setUserData } = useContext(UserContext);
@@ -27,21 +26,7 @@ export default function PlaceScreen() {
     const config = configVar();
 
     useEffect(async() => { 
-        const promise = await placesApi.getPlace(id);
-        if(promise[0] !== undefined) {
-            setPlace(promise[0]);
-            setReviews(promise[0].ratings);
-        } else { 
-            setPlace(promise);
-            console.log(promise);
-        }
-
-        try {
-            await usersApi.auth(config);
-            setAuth(true);
-        } catch (error) {
-            setAuth(false)
-        }
+        await placeFunctions.place(id,setPlace,setReviews,config,setAuth);
     },[]);
 
     setInterval( async () => {
