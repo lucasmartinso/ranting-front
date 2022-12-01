@@ -30,6 +30,7 @@ export default function MainScreen() {
     const user = JSON.parse(userData);
     const filter = JSON.parse(filterPlaces);
     const config = configVar();
+    console.log(user);
 
     useEffect(async () => {
         try {

@@ -61,8 +61,8 @@ export default function MainTitle({ setOpenModal, setUserModal, setLogout, logou
             </UserProfile>
         ): (
             <Sign>
-            <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-            <button id="login" onClick={() => navigate("/login")}>Login</button>
+                <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
+                <button id="login" onClick={() => navigate("/login")}>Login</button>
             </Sign>
         )}
         </Title>

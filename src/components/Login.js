@@ -3,12 +3,12 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as usersApi from "../services/usersApi";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import closed from '../styles/images/closed.gif';
 import AuthContext from '../contexts/authContext';
 import redirectToGithub, { userGitInfo } from "../hooks/OAuth/gitHub";
+import { loginFunctions } from "../hooks/login";
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -21,41 +21,7 @@ export default function LoginScreen() {
   const [changeImage, setChangeImage] = useState(false);
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  console.log(gitUser);
-
-  async function register(event) { 
-    event.preventDefault();
-
-    const userData = { 
-      usernameEmail,
-      password
-    }
-
-    try {
-      setClicked(true);
-      setPassword("");  
-      const promise = await usersApi.login(userData);
-      localStorage.setItem("MY_TOKEN",promise.token);
-      
-      const userInfo = JSON.stringify({
-        "id": promise.user.id,
-        "name": promise.user.name,
-        "username": promise.user.username,
-        "mainPhoto": promise.user.mainPhoto
-      });
-
-      localStorage.setItem("USER_DATA",userInfo);
-      setAuth(true);
-      navigate("/main");
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-      setErrorMessage(error.response.data);
-      setClicked(false);
-      setError(true);
-    }
-  }
+  console.log(password); 
 
   async function gitHub() {
     setGitClick(() => ++gitClick);
@@ -70,6 +36,18 @@ export default function LoginScreen() {
       }
     }
   } 
+
+  async function register(event) { 
+    event.preventDefault();
+    console.log("kkkk");
+    try {
+      await loginFunctions.register(usernameEmail,password,setClicked,setPassword,setAuth,setErrorMessage,setError)
+      navigate("/main");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return(
     <Container>
