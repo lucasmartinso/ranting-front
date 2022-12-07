@@ -1,31 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
-import * as placesApi from "../services/placesApi"
 import RenderSearchPlaces from "../subpages/RenderSearchPlaces";
 import notFound from "../styles/images/NotFound.png";
 import { Background } from "../common-components/Boxes";
+import { searchFunctions } from "../hooks/search";
 
 export default function SearchBox({setOpenModal}) { 
     const [search,setSearch] = useState("");
     const [places,setPlaces] = useState([]);
-
-    async function searchPlace(event) {
-        setSearch(event);
-        const name = event;
-        console.log(name);
-        
-        try {
-            if(name.length>2) {
-                const promise = await placesApi.search(name);
-                setPlaces(promise);
-                if(promise.length === 0) setPlaces(null);
-            }
-        } catch (error) {
-            console.log(error);
-            setPlaces(null);
-        }
-    }   
 
     return( 
         <Background>
@@ -42,7 +25,7 @@ export default function SearchBox({setOpenModal}) {
                         minLength={2}
                         debounceTimeout={400}
                         value={search}
-                        onChange={(event) => searchPlace(event.target.value)}
+                        onChange={(event) => searchFunctions.searchPlace(event.target.value,setSearch,setPlaces)}
                         required
                     />
                 </Search>

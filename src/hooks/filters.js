@@ -46,8 +46,18 @@ function cleanFilters() {
     window.location.reload();
 }
 
+function changes(changeState,id,name,modalInput,chosed) { 
+    changeState({
+      id, 
+      name
+    });
+    modalInput(false);
+    if(chosed) chosed([]);
+}  
+
 export const filterFunctions = { 
     types,
     filtering,
-    cleanFilters
+    cleanFilters,
+    changes
 }
