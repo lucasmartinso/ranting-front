@@ -1,8 +1,16 @@
-import styled from "styled-components"
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-export default function RenderSearchPlaces(placeData) { 
+export default function RenderSearchPlaces(placeData) {
+    const navigate = useNavigate();
+
+    function chooseOption(id) { 
+        navigate(`/places/${id}`);
+        window.location.reload();
+    }
+
     return(
-        <Place id={placeData.id}>
+        <Place id={placeData.id} onClick={() => chooseOption(placeData.id)}>
             <span>{placeData.name}<ion-icon name="checkmark-circle"></ion-icon></span>
             <span>{Number(placeData.score) !== 0 ? (`${Number(placeData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</span>
         </Place>

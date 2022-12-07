@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import * as ratingApi from "../services/ratingApi"
 import TokenContext from "../contexts/tokenContext";
+import { Background, Components } from "../common-components/Boxes";
+import { ratingFunctions } from "../hooks/rating";
 
 export default function RatingBox({setRatingModel,user,id}) { 
     const [food,setFood] = useState(null);
@@ -13,37 +14,14 @@ export default function RatingBox({setRatingModel,user,id}) {
     const [error,setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    async function sendRating() { 
-        
-        const config = {
-            headers: { Authorization: `Bearer ${token}` },
-        };
-
-        const reviewData = { 
-            food,
-            environment,
-            attendance,
-            price,
-            comment
-        };
-
-        try {
-            await ratingApi.createReview(id,reviewData,config);
-            setRatingModel(false);
-            window.location.reload();
-        } catch (error) {
-            console.log(error);
-            setErrorMessage(error.response.data);
-            setError(true);
-        }
-    }
-
     return(
         <Background>
             <Box error={error}>
+
                 <Cancel>
                     <span onClick={() => setRatingModel(false)}>X</span>
                 </Cancel>
+                
                 <Welcome>
                     <span>Hello, <strong>{user.name}</strong></span>
                 </Welcome>
@@ -267,27 +245,25 @@ export default function RatingBox({setRatingModel,user,id}) {
                         </span>
                         <span id="comment">If you want to make an observation or comment (optional):</span>
                         <Comment>
-                            <input
+                            <textarea
                                 type="text"
                                 placeholder="Click to comment..."
                                 value={comment}
                                 onChange={(event) => setComment(event.target.value)}
+                                maxLength={100}
                                 required
                             />
                         </Comment>
                     </Rating>
 
-                    {error ? (
-                        <Error>
-                            <button>
-                                <span>{errorMessage}</span>
-                                <span id="x" onClick={() => setError(false)}>X</span>
-                            </button>
-                        </Error>
-                        ) : ""}
+                    <Components.ErrorMessage 
+                        error={error}
+                        errorMessage={errorMessage}
+                        setError={setError}
+                    />
 
                     <Buttons error={error}>
-                        <button id="save" onClick={sendRating}>Publish</button>
+                        <button id="save" onClick={() => ratingFunctions.sendRating(token,food,environment,attendance,price,comment,id,setRatingModel,setErrorMessage,setError)}>Publish</button>
                         <button id="cancel" onClick={() => setRatingModel(false)}>Cancel</button>
                     </Buttons>
             </Box>
@@ -295,21 +271,9 @@ export default function RatingBox({setRatingModel,user,id}) {
     )
 }
 
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    background-color: rgba(111, 111, 111, 0.9);
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: fixed;
-    left: 0; 
-    top: 0;
-    z-index: 2;
-`
+
 const Box = styled.div`
-    width: 60%; 
+    width: 600px; 
     height: ${props => props.error ? ("780px") : ("650px")};
     background-color: white;
     border-radius: 12px;
@@ -317,6 +281,10 @@ const Box = styled.div`
     display: flex; 
     align-items: center;
     flex-direction: column;
+
+    @media (max-width: 800px) { 
+        width: 80%;
+    }
 `
 const Cancel = styled.div`
     width: 100%; 
@@ -435,53 +403,36 @@ const Comment = styled.div`
     width: 490px;
     height: 100px;
 
-    input { 
+    textarea { 
         width: 490px;
         height: 100px;
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
         text-align: justify;
-        padding: 5px 10px 5px 15px;
+        padding: 8px 10px 5px 15px;
         font-size: 25px;
         border-radius: 8px;
         border: 1px dashed black;
     }
-`
-const Error = styled.div` 
-  width: 100%; 
-  height: 100px; 
-  display: flex; 
-  justify-content: center; 
-  margin-top: 60px;
 
-  button { 
-    width: 80%; 
-    height: 70px; 
-    display: flex;
-    align-items: center; 
-    justify-content: space-between;
-    padding: 0px 20px 0px 20px;
-    background-color: #FF7474;
-    color: rgba(255,255,255,1);
-    font-size: 20px;
-    font-weight: bold;
-    border: 2px solid rgba(120, 177, 89, 0.25);
-    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    transition: 0.2s all;
-
-   span#x { 
-    &:hover { 
-      cursor: pointer;
+    @media (max-width: 700px) { 
+        textarea { 
+            width: 450px;
+        }
     }
 
-    &:active {  
-      transform: scale(0.98);
-      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    @media (max-width: 650px) { 
+        textarea { 
+            width: 400px;
+        }
     }
-   }
-  }
+
+    @media (max-width: 550px) { 
+        textarea { 
+            width: 350px;
+        }
+    }
 `
 const Buttons = styled.div`
     width: 100%;
@@ -524,5 +475,9 @@ const Buttons = styled.div`
         border: 1px solid #1A587F; 
         color: white; 
         font-weight: bold;
+    }
+
+    @media (max-width: 700px) { 
+        padding-right: 25px;
     }
 `

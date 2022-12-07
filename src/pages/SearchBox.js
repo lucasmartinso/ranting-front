@@ -1,30 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
-import * as axiosRequest from "../services/AxiosRequests"
 import RenderSearchPlaces from "../subpages/RenderSearchPlaces";
-import notFound from "../styles/images/NotFound.png"
+import notFound from "../styles/images/NotFound.png";
+import { Background } from "../common-components/Boxes";
+import { searchFunctions } from "../hooks/search";
 
 export default function SearchBox({setOpenModal}) { 
     const [search,setSearch] = useState("");
     const [places,setPlaces] = useState([]);
-
-    async function searchPlace(event) {
-        setSearch(event);
-        const name = event;
-        console.log(name);
-        
-        try {
-            if(name.length>2) {
-                const promise = await axiosRequest.search(name);
-                setPlaces(promise);
-                if(promise.length === 0) setPlaces(null);
-            }
-        } catch (error) {
-            console.log(error);
-            setPlaces([]);
-        }
-    }   
 
     return( 
         <Background>
@@ -41,7 +25,7 @@ export default function SearchBox({setOpenModal}) {
                         minLength={2}
                         debounceTimeout={400}
                         value={search}
-                        onChange={(event) => searchPlace(event.target.value)}
+                        onChange={(event) => searchFunctions.searchPlace(event.target.value,setSearch,setPlaces)}
                         required
                     />
                 </Search>
@@ -50,13 +34,13 @@ export default function SearchBox({setOpenModal}) {
                 {places ? (
                 <ul>
                 {places.map(place => (
-                        <RenderSearchPlaces 
-                            id = {place.id}
-                            name = {place.name}
-                            score = {place.score}    
-                            mainPhoto = {place.mainPhoto} 
-                            verify = {place.verify}               
-                        />
+                    <RenderSearchPlaces 
+                        id = {place.id}
+                        name = {place.name}
+                        score = {place.score}    
+                        mainPhoto = {place.mainPhoto} 
+                        verify = {place.verify}               
+                    />
                     ))}
                 </ul>
                 ) : (
@@ -69,21 +53,8 @@ export default function SearchBox({setOpenModal}) {
     )
 }
 
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    background-color: rgba(111, 111, 111, 0.9);
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: fixed;
-    left: 0; 
-    top: 0;
-    z-index: 2;
-`
 const Box = styled.div`
-    width: 60%; 
+    width: 800px;
     height: 100px;
     background-color: white;
     border-radius: 10px 10px 0px 0px;
@@ -91,6 +62,14 @@ const Box = styled.div`
     display: flex; 
     align-items: center;
     flex-direction: column;
+
+    @media (max-width: 1200px) { 
+        width: 60%;
+    }
+
+    @media (max-width: 650px) { 
+        width: 80%;
+    }
 `
 const Search = styled.div`
     width: 100%;
@@ -113,6 +92,12 @@ const Search = styled.div`
         display: flex;
         justify-content: center;
         border: none;
+    }
+
+    @media (max-width: 800px) { 
+        ion-icon { 
+            margin-left: 20px;
+        }
     }
 `
 const Cancel = styled.div`
@@ -160,15 +145,29 @@ const Cancel = styled.div`
             box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
         }
     }
+
+    @media (max-width: 950px) { 
+        button { 
+            width: 22%;
+        }
+    }
 `
 const Places = styled.div`
-    width: 60%; 
+    width: 800px; 
     background-color: white;
     border-radius: 0px 0px 10px 10px;
     color: rgba(111, 111, 111, 1);
     display: flex; 
     flex-direction: column;
     padding-top: 20px;
+
+    @media (max-width: 1200px) { 
+        width: 60%;
+    }
+
+    @media (max-width: 650px) { 
+        width: 80%;
+    }
 `
 const NotFound = styled.div`
     width: 100%; 

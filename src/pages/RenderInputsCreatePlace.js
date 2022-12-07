@@ -1,22 +1,13 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { filterFunctions } from "../hooks/filters";
 
 export default function RenderTypes({id,name,changeState,flag,modalInput,chosed}) { 
-    function changes() { 
-      changeState({
-        id, 
-        name
-      });
-      modalInput(false);
-      if(chosed) chosed([]);
-    }  
-
-
     return( 
       <>
         <Line>
           <div>.</div>
         </Line>
-        <Type id={id} onClick={changes}>
+        <Type id={id} onClick={filterFunctions.changes(changeState,id,name,modalInput,chosed)}>
             <span>{name}</span>
             <span id="icon">{flag}</span>
         </Type>
@@ -31,6 +22,7 @@ const Type = styled.li`
   align-items: center;
   padding: 10px 20px 10px 20px;
   justify-content: space-between;
+  transition: background 0.6s;
 
   span { 
     font-size: 20px;
@@ -41,8 +33,10 @@ const Type = styled.li`
     font-size: 30px;
   }
 
-  &:hover { 
-    cursor: pointer;
+  &:hover, 
+  &:focus{ 
+    cursor: pointer; 
+    background: #CDCDCD;
   }
 
   &:active {  

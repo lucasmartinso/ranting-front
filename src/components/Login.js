@@ -3,12 +3,12 @@ import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
-import * as usersRequests from "../services/usersRequests";
 import google from "../styles/images/google-icon.png";
 import salad from '../styles/images/salad.gif';
 import closed from '../styles/images/closed.gif';
 import AuthContext from '../contexts/authContext';
 import redirectToGithub, { userGitInfo } from "../hooks/OAuth/gitHub";
+import { loginFunctions } from "../hooks/login";
 
 export default function LoginScreen() { 
   const [usernameEmail,setUsernameEmail] = useState("");
@@ -21,41 +21,7 @@ export default function LoginScreen() {
   const [changeImage, setChangeImage] = useState(false);
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  console.log(gitUser);
-
-  async function register(event) { 
-    event.preventDefault();
-
-    const userData = { 
-      usernameEmail,
-      password
-    }
-
-    try {
-      setClicked(true);
-      setPassword("");  
-      const promise = await usersRequests.login(userData);
-      localStorage.setItem("MY_TOKEN",promise.token);
-      
-      const userInfo = JSON.stringify({
-        "id": promise.user.id,
-        "name": promise.user.name,
-        "username": promise.user.username,
-        "mainPhoto": promise.user.mainPhoto
-      });
-
-      localStorage.setItem("USER_DATA",userInfo);
-      setAuth(true);
-      navigate("/main");
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-      setErrorMessage(error.response.data);
-      setClicked(false);
-      setError(true);
-    }
-  }
+  console.log(password); 
 
   async function gitHub() {
     setGitClick(() => ++gitClick);
@@ -70,6 +36,17 @@ export default function LoginScreen() {
       }
     }
   } 
+
+  async function register(event) { 
+    event.preventDefault();
+    try {
+      await loginFunctions.register(usernameEmail,password,setClicked,setPassword,setAuth,setErrorMessage,setError)
+      navigate("/main");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return(
     <Container>
@@ -115,23 +92,28 @@ export default function LoginScreen() {
 
         <Upright>.</Upright>
 
+        <Line>
+          <div>.</div>
+        </Line>
+
         <OAuthBox>
-          <ButtonAuth back="black" text="white" icon="white" onClick={() => gitHub(true)}>
+          <ButtonAuth back="black" text="white" icon="white" onClick={() => gitHub(true)} working={true}>
             <ion-icon name="logo-github"></ion-icon>
             <span>Login with GitHub</span>
           </ButtonAuth>
 
-          <ButtonAuth back="white" text="black" icon="black">
+          <ButtonAuth back="white" text="black" icon="black" working={false}>
             <img src={google} alt='google'/>
+            <ion-icon name="logo-google" id="google"></ion-icon>
             <span>Login with Google</span>
           </ButtonAuth>
 
-          <ButtonAuth back="#314A86" text="white" icon="white">
+          <ButtonAuth back="#314A86" text="white" icon="white" working={false}>
             <ion-icon name="logo-facebook"></ion-icon>
             <span>Login with Facebook</span>
           </ButtonAuth>
 
-          <ButtonAuth back="#2B9BF0" text="white" icon="white">
+          <ButtonAuth back="#2B9BF0" text="white" icon="white" working={false}>
             <ion-icon name="logo-twitter"></ion-icon>
             <span>Login with Twiter</span>
           </ButtonAuth>
@@ -165,6 +147,11 @@ const Container = styled.div`
   align-items: center; 
   justify-content: center; 
   flex-direction: column;
+
+  @media (max-width: 800px) {
+    position: absolute;
+  }
+  
 `
 const Title = styled.div`
   width: 100%; 
@@ -177,12 +164,25 @@ const Title = styled.div`
     width: 500px;
     height: 300px;
   }
+
+  @media (max-width: 800px) {
+    margin-top: 330px;
+    margin-bottom: 200px;
+  }
 `
 const SignInContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    height: 50%;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 250px;
+  }
 `
 const Main = styled.div`
   width: 400px; 
@@ -268,6 +268,33 @@ const Upright = styled.div`
     height: 100%;
     border: 1px solid #D4D4D4; 
     margin: 0px 30px;
+
+    @media (max-width: 800px) {
+      display: none;
+    }
+`
+const Line = styled.div`
+  display: none; 
+
+  @media (max-width: 800px) {
+    width: 100%; 
+    height: 30px;
+    display: flex; 
+    justify-content: center;
+    margin: 20px 0px;
+
+    div {
+      width: 70%;
+      height: 1px;
+      border: 1px solid #D4D4D4;
+      margin-top: 15px;
+      color: #359FE4;
+    }
+
+    div#logout { 
+    margin-top: 7px;
+    }
+  }
 `
 const OAuthBox = styled.div`
   width: 400px;
@@ -289,11 +316,16 @@ const ButtonAuth = styled.div`
   align-items: center;
   margin-bottom: 34px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);
+  transition: background color 2s;
 
   ion-icon { 
     color: ${props => props.icon ? (`${props.icon}`) : ('red')};
     width: 30px;
     height: 30px;
+  }
+
+  ion-icon#google { 
+    display: none;
   }
 
   span { 
@@ -307,9 +339,31 @@ const ButtonAuth = styled.div`
     height: 30px;
   }
 
-  &:hover { 
-    cursor: pointer;
-  }
+  ${props => !props.working ? (`
+    &:hover,   
+    &:focus{ 
+      cursor: not-allowed; 
+      background-color: rgba(0, 0, 0, 0.58);
+      span { 
+        color: black;
+      }
+      ion-icon#google { 
+        display: inline;
+      }
+      ion-icon { 
+        display: inline;
+        color: black;
+      }
+      img {
+        display: none;
+      } 
+    }
+  `): (`
+    &:hover { 
+      cursor: pointer;
+    }
+  `)}
+  
 
   &:active {  
     transform: scale(0.98);
@@ -372,6 +426,12 @@ const Message = styled.div`
     &:active {  
       transform: scale(0.98);
       box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+  }
+
+  @media (max-width: 800px) {
+    span { 
+      margin: 0px 0px 40px 0px;
     }
   }
 `

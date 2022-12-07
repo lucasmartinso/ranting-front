@@ -1,22 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/userContext";
-import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
-import logo from "../styles/images/Ranting.png";
+import Title from "../common-components/Title";
 import SearchBox from "../pages/SearchBox";
-import * as axiosRequest from "../services/AxiosRequests";
-import * as usersRequests from "../services/usersRequests";
 import RenderReviews from "../pages/RenderReviews";
 import UserBox from "../pages/UserBox";
 import RatingBox from "../pages/RatingBox";
 import { authTest, authTime, configVar } from "../hooks/auth";
+import { placeFunctions } from "../hooks/place";
 
 export default function PlaceScreen() { 
     const { userData, setUserData } = useContext(UserContext);
-    const { token, setToken } = useContext(TokenContext);
     const { auth, setAuth } = useContext(AuthContext);
     const [openModal, setOpenModal] = useState(false);
     const [place, setPlace] = useState([]);
@@ -25,34 +22,12 @@ export default function PlaceScreen() {
     const { id } = useParams();
     const [userModal, setUserModal] = useState(false);
     const [ratingModel,setRatingModel] = useState(false);
-    const navigate = useNavigate();
     const user = JSON.parse(userData);
     const config = configVar();
 
     useEffect(async() => { 
-        const promise = await axiosRequest.getPlace(id);
-        if(promise[0] !== undefined) {
-            setPlace(promise[0]);
-            setReviews(promise[0].ratings);
-        } else { 
-            setPlace(promise);
-            console.log(promise);
-        }
-
-        try {
-            await usersRequests.auth(config);
-            setAuth(true);
-        } catch (error) {
-            setAuth(false)
-        }
+        await placeFunctions.place(id,setPlace,setReviews,config,setAuth);
     },[]);
-
-    function exit() { 
-        setToken(null);
-        localStorage.setItem("MY_TOKEN",null);
-        setLogout(false);
-        setAuth(false);
-    }
 
     setInterval( async () => {
         authTest(config);
@@ -83,42 +58,13 @@ export default function PlaceScreen() {
         ): ""}
 
         <Container>
-            <Title>
-                <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
-                <img src={logo} alt="logo"/>
-                {auth ? (
-                <UserProfile>
-                    <span>Hello, {user.name}</span>
-                    {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-                    ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
-                    {logout ? ( 
-                        <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
-                    ) : ( 
-                        <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
-                    )}
-                </UserProfile>
-                ): (
-                    <Sign>
-                        <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-                        <button id="login" onClick={() => navigate("/login")}>Login</button>
-                    </Sign>
-                )}
-            </Title>
-
-            {logout ? (
-                <Logout>
-                    <Line>
-                        <div id="logout">.</div>
-                    </Line>
-                    <span onClick={() => setUserModal(true)}>Change your photo</span>
-                    <Line>
-                        <div id="logout">.</div>
-                    </Line>
-                    <span id="logout" onClick={exit}>Logout</span>
-                </Logout>
-            ) : ""}
-
+            <Title 
+                setOpenModal= {setOpenModal}
+                setUserModal= {setUserModal}
+                setLogout= {setLogout}
+                logout= {logout}
+                screen= "place"
+            />
 
             <Photo>
                 <img src={place.mainPhoto} alt="title"/>
@@ -148,7 +94,7 @@ export default function PlaceScreen() {
                     ) : ""}  
                     {place.website ? (
                     <TextBox>
-                        <span>Website:</span>
+                        <span id="website">Website:</span>
                         <h4 id="website" onClick={() => window.open(place.website)}>{place.website}</h4>
                     </TextBox> 
                     ) : ""}
@@ -160,41 +106,43 @@ export default function PlaceScreen() {
                 <Rating>
                     <TextBox>
                         <span id="score">Total Score:</span>
-                        <h4 id="score">{Number(place.score).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4 id="score">{Number(place.score).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                     <TextBox>
-                        <span>Specialty Food:</span>
-                        <h4>{place.type}</h4>
+                        <span id="type">Specialty Food:</span>
+                        <h4 id="type">{place.type}</h4>
                     </TextBox>  
                     <TextBox>
                         <span>Food:</span>
-                        <h4>{Number(place.food).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.food).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox>  
                     <TextBox>
                         <span>Price:</span>
-                        <h4>{Number(place.price).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.price).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                     <TextBox>
                         <span>Attendance:</span>
-                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.attendance).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                     <TextBox>
                         <span>Environment:</span>
-                        <h4>{Number(place.environment).toFixed(1).replace(".",",")} ⭐</h4>
+                        <h4>{Number(place.environment).toFixed(1).replace(".",",")}⭐</h4>
                     </TextBox> 
                 </Rating>
                 </>
                  ) : ""}
             </Main>
-  
-            <Container2>
-                <Review>
-                    <Box onClick={() => setRatingModel(true)}>Make a Review</Box>
-                </Review>
-            </Container2>
+            
+            {auth ? (
+                <Container2>
+                    <Review>
+                        <Box onClick={() => setRatingModel(true)}>Make a Review</Box>
+                    </Review>
+                </Container2>
+            ) : ('')}
 
             {place.score !== "0"  ? (
-            <Reviews token={token}>
+            <Reviews auth={auth}>
                 <ul>
                     {reviews.map(review => (
                         <RenderReviews 
@@ -229,152 +177,6 @@ const Container = styled.div`
   width: 100%; 
   height: 100%; 
 `
-const Title = styled.div`
-    width: 100%; 
-    height: 10%;
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px 0px 30px;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    background-color: #359FE4;
-    border-radius: 0px 0px 10px 10px;
-
-    span {
-        display: flex; 
-        align-items: center;
-        color: white;
-        font-weight: 500;
-
-        ion-icon { 
-            width: 25px; 
-            height: 25px;
-            margin-right: 5px;
-        }
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    img { 
-        width: 140px;
-        height: 70px;
-        border-radius: 0px 0px 10px 10px;
-    }
-`
-const UserProfile = styled.div`
-    display: flex;
-    align-items: center;
-
-    img { 
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-left: 5px;
-    }
-
-    ion-icon { 
-        margin-left: 5px;
-        width: 30px;
-        height: 30px;
-        color : white;
-    }
-
-    ion-icon#photo { 
-        width: 40px;
-        height: 40px;
-        margin-left: 5px;
-    }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-`
-const Sign = styled.div`
-    display: flex;
-
-    button { 
-        width: 70px;
-        height: 40px;
-        margin-right: 10px;
-        border: 1px solid #359FE4;
-        border-radius: 15px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    button#login { 
-        background-color: black; 
-        color: white; 
-    } 
-
-    button#sign-up { 
-        background-color: white; 
-        color: black; 
-    }
-`
-const Logout = styled.div`
-    width: 230px;
-    height: 80px;
-    background-color: white; 
-    margin-top: 100px;
-    position: fixed;
-    right: 0;
-    top: 0px;
-    border-radius: 0px 0px 0px 10px;
-    display: flex;
-    flex-direction : column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0px 5px 5px 5px;
-    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
-    z-index: 2;
-
-    span { 
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover{ 
-            cursor: pointer; 
-        }
-        
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    span#logout { 
-        color: red;
-        margin-bottom: 3px;
-    }
-`
 const Photo = styled.div`
     width: 100%; 
     height: 100%;
@@ -388,8 +190,7 @@ const Photo = styled.div`
         width: 100%;
         height: 300px;
         object-fit: cover;
-        border-radius: 10px;;
-        -webkit-mask-image: linear-gradient(360deg, transparent 0%, black 80%);
+        border-radius: 10px;
     }
 `
 const Line = styled.div`
@@ -464,12 +265,8 @@ const TextBox = styled.div`
         padding-top: 5px;
     }
 
-    span#score {
-        font-weight: 700;
-        font-size: 30px;
-    }
-
-    h4#score { 
+    span#score,
+    h4#score {
         font-weight: 700;
         font-size: 30px;
     }
@@ -483,6 +280,17 @@ const TextBox = styled.div`
             transform: scale(0.98);
             box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
         }
+    }
+
+    @media (max-width: 750px) { 
+        span#website,
+        h4#website,
+        span#type,
+        h4#type { 
+            display: none;
+        }
+
+        font-size: 19px;
     }
 `
 const TagName = styled.div`
@@ -505,7 +313,13 @@ const TagName = styled.div`
 const Reviews = styled.div`
     width: 100%; 
     height: 100%; 
-    margin-top: ${props => props.token ? ("0px") : ("70px")};
+    margin-top: ${props => props.auth ? ("0px") : ("70px")};
+
+    ul { 
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+    }
 `
 const New = styled.div`
     width: 100%; 
@@ -514,11 +328,18 @@ const New = styled.div`
     justify-content: center;
     align-items: flex-start;
     color: white;
-    margin-top: 30px;
+    margin-top: 85px;
+    padding-top: 25px;
 
     span { 
         font-weight: bold;
         font-size: 70px;
+    }
+
+    @media (max-width: 600px) { 
+        span { 
+            font-size: 55px;
+        }
     }
 `
 const Container2 = styled.div`
@@ -528,10 +349,18 @@ const Container2 = styled.div`
     justify-content: center;
 `
 const Review = styled.div`
-    width: 90%; 
+    width: 70%; 
     height: 100%;
     display: flex;
     align-items: center;
+
+    @media (max-width: 1100px) { 
+        width: 90%;
+    }
+
+    @media (max-width: 600px) { 
+        margin-left: 30px;
+    }
 `
 const Box = styled.button`
     width: 26%;
@@ -558,6 +387,10 @@ const Box = styled.button`
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 750px) { 
+        width: 50%;
     }
 `
 const LineCopright = styled.div`

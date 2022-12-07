@@ -3,9 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as AxiosRequest from "../services/AxiosRequests";
-import * as usersRequests from "../services/usersRequests";
-import logo from "../styles/images/Ranting.png"
+import Title from "../common-components/Title";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
@@ -14,16 +12,18 @@ import RenderInputsCreatePlace from "../pages/RenderInputsCreatePlace";
 import SearchBox from "../pages/SearchBox";
 import { DebounceInput } from "react-debounce-input";
 import notFound from "../styles/images/NotFound.png";
-import { authTest, authTime, configVar } from "../hooks/auth";
+import { configVar } from "../hooks/auth";
+import { createFunctions } from "../hooks/createPlace";
+import * as  placesApi from "../services/placesApi";
 
 export default function CreatePlaceScreen() { 
   const { userData, setUserData } = useContext(UserContext);
-  const { token, setToken } = useContext(TokenContext);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { token } = useContext(TokenContext);
+  const { setAuth } = useContext(AuthContext);
   const [name,setName] = useState("");
   const [description, setDescription] = useState("");
   const [mainPhoto, setMainPhoto] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState({ name: null });
   const [clickedType,setClickedType] = useState(false);
   const [city, setCity] = useState({id: null, name: ""}); 
   const [cities, setCities] = useState([]);
@@ -44,29 +44,8 @@ export default function CreatePlaceScreen() {
   const config = configVar();
 
   useEffect(async () => {
-    try {
-      await usersRequests.auth(config);
-      setAuth(true);
-      const promiseType = await AxiosRequest.foodTypes();
-      const promiseState = await AxiosRequest.states();
-      setTypes(promiseType);
-      setStates(promiseState);
-    } catch (error) {
-      console.log(error);
-    }
+    await createFunctions.initial(config,setAuth,setTypes,setStates);
   },[]);
-
-  function exit() { 
-    setToken(null);
-    localStorage.setItem("MY_TOKEN",null);
-    setLogout(false);
-    setAuth(false);
-    navigate('/main');
-  }
-
-  setInterval( async () => {
-      authTest(config);
-  }, authTime)
 
   async function register(event) { 
     event.preventDefault();
@@ -80,17 +59,15 @@ export default function CreatePlaceScreen() {
       address
     }
 
-    console.log(placeData);
-
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
 
     try {
       setClicked(true);
-      await AxiosRequest.createPlace(config,placeData);
-      navigate("/main");
+      await placesApi.createPlace(config,placeData);
       setClicked(false);
+      navigate("/main");
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);
@@ -100,17 +77,7 @@ export default function CreatePlaceScreen() {
   }
 
   async function searchCity(event) {
-    setCity({id: null,name: event});
-    const name = event;
-    
-    try {
-      const promise = await AxiosRequest.cities(state.id,name);
-      setCities(promise);
-      if(promise.length === 0) setCities(null);
-    } catch (error) {
-      console.log(error);
-      setCities([]);
-    }
+    await createFunctions.searchCity(event,setCity,state,setCities);
   }   
 
   return(
@@ -131,41 +98,13 @@ export default function CreatePlaceScreen() {
 
     <Container>
     
-    <Title>
-      <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
-      <img src={logo} alt="logo"/>
-      {auth ? (
-        <UserProfile>
-          <span>Hello, {user.name}</span>
-          {user.mainPhoto ? (
-            <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-            ): ( <ion-icon name="person-circle-sharp" id="photo"></ion-icon> )}
-          {logout ? ( 
-            <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
-          ) : ( 
-            <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
-          )}
-        </UserProfile>
-      ): (
-        <Sign>
-          <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-          <button id="login" onClick={() => navigate("/login")}>Login</button>
-        </Sign>
-      )}
-    </Title>
-
-    {logout ? (
-      <Logout>
-        <Line>
-          <div id="logout">.</div>
-        </Line>
-        <span onClick={() => setUserModal(true)}>Change your photo</span>
-        <Line>
-          <div id="logout">.</div>
-        </Line>
-        <span id="logout" onClick={exit}>Logout</span>
-      </Logout>
-    ) : ""}
+    <Title 
+      setOpenModal= {setOpenModal}
+      setUserModal= {setUserModal}
+      setLogout= {setLogout}
+      logout= {logout}
+      screen= "create"
+    />
 
     <CreatePlace>
       <span>Create a Place 🍽️</span>
@@ -194,12 +133,12 @@ export default function CreatePlaceScreen() {
             required
         />
 
-        <Selector type={clickedType}>
-          <span>{type ? (type.name):("Type")}</span>
+        <Selector type={clickedType} onClick={() => setClickedType(!clickedType)}>
+          <span>{type.name ? (type.name):("Type")}</span>
           {clickedType ? ( 
-            <ion-icon name="chevron-up-outline" onClick={() => setClickedType(false)}></ion-icon>
+            <ion-icon name="chevron-up-outline"></ion-icon>
           ) : ( 
-            <ion-icon name="chevron-down-outline" onClick={() => setClickedType(true)}></ion-icon>
+            <ion-icon name="chevron-down-outline"></ion-icon>
           )}
         </Selector>
         {clickedType ? (
@@ -234,12 +173,12 @@ export default function CreatePlaceScreen() {
             required
         />
 
-        <Selector type={clickedState}>
+        <Selector type={clickedState} onClick={() => setClickedState(!clickedState)}>
           <span>{state ? (state.name) : ("State (requeried)")}</span>
           {clickedState ? ( 
-            <ion-icon name="chevron-up-outline" onClick={() => setClickedState(false)}></ion-icon>
+            <ion-icon name="chevron-up-outline"></ion-icon>
           ) : ( 
-            <ion-icon name="chevron-down-outline" onClick={() => setClickedState(true)}></ion-icon>
+            <ion-icon name="chevron-down-outline"></ion-icon>
           )}
         </Selector>
         {clickedState ? (
@@ -299,7 +238,7 @@ export default function CreatePlaceScreen() {
           </Categorys>
         </ContainerCategory>
 
-        <input 
+        <textarea 
             type="text"
             placeholder="Description"
             value={description}
@@ -329,10 +268,11 @@ export default function CreatePlaceScreen() {
       </Error>
     ) : ""}
 
-      <LineCopright>
-        <div>.</div>
-        <h4>Copyright © Rating 2022</h4>
-      </LineCopright>
+    <LineCopright>
+      <div>.</div>
+      <h4>Copyright © Rating 2022</h4>
+    </LineCopright>
+    
     </Container>
     </>
   )
@@ -344,150 +284,6 @@ const Container = styled.div`
   display: flex; 
   flex-direction: column;
 `
-const Title = styled.div`
-    width: 100%; 
-    height: 10%;
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px 0px 30px;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    background-color: #359FE4;
-    border-radius: 0px 0px 10px 10px;
-
-    span {
-        display: flex; 
-        align-items: center;
-        color: white;
-        font-weight: 500;
-
-        ion-icon { 
-            width: 25px; 
-            height: 25px;
-            margin-right: 5px;
-        }
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    img { 
-        width: 140px;
-        height: 70px;
-        border-radius: 0px 0px 10px 10px;
-    }
-`
-const UserProfile = styled.div`
-    display: flex;
-    align-items: center;
-
-    img { 
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-left: 5px;
-    }
-
-    ion-icon { 
-      margin-left: 5px;
-      width: 30px;
-      height: 30px;
-      color: white;
-    }
-
-    ion-icon#photo { 
-        width: 40px;
-        height: 40px;
-        margin-left: 5px;
-    }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-`
-const Sign = styled.div`
-    display: flex;
-
-    button { 
-        width: 70px;
-        height: 40px;
-        margin-right: 10px;
-        border: 1px solid #359FE4;
-        border-radius: 15px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    button#login { 
-        background-color: black; 
-        color: white; 
-    } 
-
-    button#sign-up { 
-        background-color: white; 
-        color: black; 
-    }
-`
-const Logout = styled.div`
-    width: 230px;
-    height: 60px;
-    background-color: white; 
-    margin-top: 100px;
-    position: fixed;
-    right: 0;
-    top: 0px;
-    border-radius: 0px 0px 0px 10px;
-    display: flex;
-    flex-direction : column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0px 5px 5px 5px;
-    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
-
-    span { 
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover{ 
-            cursor: pointer; 
-        }
-        
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    span#logout { 
-        color: red;
-    }
-`
 const CreatePlace = styled.div`
   width: 100%;
   display: flex;
@@ -498,6 +294,12 @@ const CreatePlace = styled.div`
     color: white;
     font-family: 'Playball', cursive;
     font-size: 80px;
+  }
+
+  @media (max-width: 600px) { 
+    span { 
+      font-size: 63px;
+    }
   }
 `
 const ContainerCategory = styled.div`
@@ -528,24 +330,16 @@ const Selector = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /*border: 2px solid rgba(120, 177, 89, 0.25);*/
   box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: ${props => props.type ? ("10px 10px 0px 0px"):("10px")};
   padding: 0px 20px 0px 20px;
   font-size: 20px;
-  color: grey;
+  color: black;
   margin-bottom: ${props => props.type ? ("0px") : ("25px")};
   background-color: white;
 
-  ion-icon { 
-    &:hover{ 
-      cursor: pointer; 
-    }
-  
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
+  &:hover { 
+    cursor: pointer; 
   }
 `
 const Types = styled.div`
@@ -554,6 +348,11 @@ const Types = styled.div`
   margin-bottom: 25px;
   border-radius: 0px 0px 10px 10px;
   padding-bottom: 5px;
+
+  ul {
+    height: 200px;
+    overflow-y: scroll;
+  }
 `
 const Main = styled.div`
   width: 100%; 
@@ -563,7 +362,7 @@ const Main = styled.div`
   flex-direction: column;
   margin-bottom: ${props => props.error ? ("25px") : ("35px")};
 
-  input { 
+  input,textarea { 
     width: 80%; 
     height: 70px;
     display: flex;
@@ -576,6 +375,11 @@ const Main = styled.div`
     font-color: #D5D5D5;
     font-color: rgba(0, 0, 0, 1);
     margin-bottom: 25px;
+  }
+
+  textarea { 
+    height: 100px;
+    padding: 15px 20px 10px 25px;
   }
 
   input#search { 
@@ -642,21 +446,6 @@ const Error = styled.div`
     }
    }
   }
-`
-const Line = styled.div`
-    width: 100%; 
-    height: 1px;
-    display: flex; 
-    justify-content: center;
-    background-color: white;
-    padding-bottom: 10px;
-
-    div {
-        width: 90%;
-        height: 1px;
-        border: 1px solid #D4D4D4;
-        margin-top:2px;
-    }
 `
 const Places = styled.div`
     width: 80%; 

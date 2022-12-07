@@ -1,4 +1,4 @@
-import api from '../hooks/Api';
+import api from './api';
 
 export async function getPlaces() {
     const promise = await api.get(`/places`)

@@ -8,8 +8,8 @@ export default function RenderRestaurants(restaurantData) {
         <Place onClick={() => navigate(`/places/${restaurantData.id}`)}>
             <Container2>
                 <Overall score={restaurantData.score}>
-                    <span>{restaurantData.name} <ion-icon name="checkmark-circle"></ion-icon></span>
-                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")} ⭐`) : ("⭐ NEW ⭐")}</h3>
+                    <span>{restaurantData.name}<ion-icon name="checkmark-circle"></ion-icon></span>
+                    <h3>{Number(restaurantData.score) !== 0 ? (`${Number(restaurantData.score).toFixed(1).replace(".",",")}⭐`) : ("⭐NEW⭐")}</h3>
                 </Overall>
                 <Info>
                     <img src={restaurantData.mainPhoto} alt={restaurantData.mainPhoto}/>
@@ -19,28 +19,28 @@ export default function RenderRestaurants(restaurantData) {
             {Number(restaurantData.score) !== 0 ? (
                 <Ranting>
                     <TextBox>
-                        <span>Specialty Food:</span>
-                        <h4>{restaurantData.typefood}</h4>
+                        <span id="hidden">Specialty Food:</span>
+                        <h4 id="hidden">{restaurantData.typefood}</h4>
                     </TextBox> 
                     <TextBox>
-                        <span>Reviews:</span>
-                        <h4>{restaurantData.ratings}</h4>
+                        <span id="hidden">Reviews:</span>
+                        <h4 id="hidden">{restaurantData.ratings}</h4>
                     </TextBox>
                     <TextBox>
                         <span>Food:</span>
-                        <h4> {Number(restaurantData.food).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.food).toFixed(1)}⭐</h4>
                     </TextBox>
                     <TextBox>
                         <span>Attendance:</span>
-                        <h4> {Number(restaurantData.attendance).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.attendance).toFixed(1)}⭐</h4>
                     </TextBox>
                     <TextBox>
                         <span>Price:</span>
-                        <h4> {Number(restaurantData.price).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.price).toFixed(1)}⭐</h4>
                     </TextBox>
                     <TextBox>
                         <span>Environment:</span>
-                        <h4> {Number(restaurantData.environment).toFixed(1)} ⭐</h4>
+                        <h4> {Number(restaurantData.environment).toFixed(1)}⭐</h4>
                     </TextBox>
                 </Ranting>  
             ): (<NoRanting>
@@ -57,7 +57,7 @@ export default function RenderRestaurants(restaurantData) {
 }
 
 const Place = styled.li`
-    width: 90%;
+    width: 1100px;
     height: 350px;
     background-color: white;
     border-radius: 12px;
@@ -72,6 +72,10 @@ const Place = styled.li`
     &:active {  
         transform: scale(0.98);
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 1200px) { 
+        width: 90%;
     }
 `
 const Container2 = styled.div`
@@ -95,11 +99,11 @@ const Overall = styled.div`
         margin-bottom: 20px;
         text-decoration: overline;
         display: flex;
+        text-overflow: ellipsis;
 
         ion-icon { 
             color: #3797F0;
             margin-left: 8px;
-            transition: 0.2s all;
         }
     }
 
@@ -109,6 +113,21 @@ const Overall = styled.div`
 
     h4 { 
         color: red;
+    }
+
+    @media (max-width: 600px) {
+        span { 
+            font-size: 22px;
+            text-overflow: ellipsis;
+
+            ion-icon { 
+                margin-left: 4px;
+            }
+        }
+
+        h3 { 
+            font-size: 21px;
+        }
     }
 `
 const Info = styled.div`
@@ -157,5 +176,15 @@ const TextBox = styled.li`
 
     h4 { 
         padding-top: 5px;
+    }
+
+    @media (max-width: 800px) { 
+        span#hidden { 
+            display: none;
+        }
+
+        h4#hidden { 
+            display: none;
+        }
     }
 `

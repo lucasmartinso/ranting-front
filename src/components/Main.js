@@ -1,48 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
-import logo from "../styles/images/Ranting.png"
 import UserContext from "../contexts/userContext";
-import TokenContext from "../contexts/tokenContext";
 import AuthContext from "../contexts/authContext";
+import FilterContext from "../contexts/filterContext";
 import { useNavigate } from "react-router-dom";
 import RenderRestaurants from "../pages/RenderRestaurants";
-import * as ratingApi from "../services/ratingApi";
-import * as usersRequests from "../services/usersRequests";
 import SearchBox from "../pages/SearchBox";
 import UserBox from "../pages/UserBox";
+import FiltersBox from "../pages/FiltersBox";
+import Title from "../common-components/Title";
 import search from '../styles/images/search.gif';
 import { authTest, authTime, configVar } from "../hooks/auth";
+import { filterFunctions } from "../hooks/filters";
+import { mainFunctions } from "../hooks/main";
 
 export default function MainScreen() { 
     const { userData, setUserData } = useContext(UserContext);
-    const { token, setToken } = useContext(TokenContext);
     const { auth, setAuth } = useContext(AuthContext);
+    const { filterPlaces } = useContext(FilterContext); 
     const [places, setPlaces] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
     const [logout,setLogout] = useState(false);
+    const [filterModal, setFilterModal] = useState(false);
     const navigate = useNavigate();
     const user = JSON.parse(userData);
+    const filter = JSON.parse(filterPlaces);
     const config = configVar();
+    console.log(user);
 
     useEffect(async () => {
-        try {
-            const promise = await ratingApi.getPlaces();
-            setPlaces(promise);
-            await usersRequests.auth(config);
-            setAuth(true);
-        } catch (error) {
-            console.log(error);
-        }
+        await mainFunctions.main(filter,setPlaces,config,setAuth)
     },[]);
-
-    function exit() { 
-        setToken(null);
-        localStorage.setItem("MY_TOKEN",null);
-        setLogout(false);
-        setAuth(false);
-    }
 
     setInterval( async () => {
         authTest(config);
@@ -63,53 +53,52 @@ export default function MainScreen() {
                 setUserData = {setUserData}
             />
         ): ""}
+
+        {filterModal ? (
+            <FiltersBox 
+                setFilterModal= {setFilterModal}
+            />
+        ) 
+        : ""}
         <Container>
-            <Title>
-                <span onClick={() => setOpenModal(true)}><ion-icon name="search-sharp"></ion-icon> Search</span>
-                <img src={logo} alt="logo"/>
-                {auth ? (
-                <UserProfile>
-                    <span>Hello, {auth ? (user.name) : ("")}</span>
-                    {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="profile" onClick={() => setUserModal(true)}/>
-                    ): ( <ion-icon name="person-circle-sharp" onClick={() => setUserModal(true)} id="photo"></ion-icon> )}
-                    {logout ? ( 
-                        <ion-icon name="chevron-up-outline" onClick={() => setLogout(false)}></ion-icon>
-                    ) : ( 
-                        <ion-icon name="chevron-down-outline" onClick={() => setLogout(true)}></ion-icon>
-                    )}
-                </UserProfile>
-                ): (
-                    <Sign>
-                        <button id="sign-up" onClick={() => navigate("/sign-up")}>Sign-up</button>
-                        <button id="login" onClick={() => navigate("/login")}>Login</button>
-                    </Sign>
-                )}
-            </Title>
             
-            {logout ? (
-                <Logout>
-                    <Line>
-                        <div>.</div>
-                    </Line>
-                    <span onClick={() => setUserModal(true)}>Change your photo</span>
-                    <Line>
-                        <div>.</div>
-                    </Line>
-                    <span id="logout" onClick={exit}>Logout</span>
-                </Logout>
-            ) : ""}
+            <Title 
+                setOpenModal= {setOpenModal}
+                setUserModal= {setUserModal}
+                setLogout= {setLogout}
+                logout= {logout}
+                screen= "main"
+            />
+            
 
             { auth ? (
             <CreatePlace onClick={() => navigate("/create/place")}>
+                <CreatePlaceMessage>
+                    <p>Didn't find the place ?</p>
+                    <p>Create it!</p>
+                </CreatePlaceMessage>
+                <ion-icon name="triangle" id="triangle"></ion-icon>
                 <Circle>
-                    <ion-icon name="add">
-                </ion-icon></Circle>
+                    <ion-icon name="add"></ion-icon>
+                </Circle>
             </CreatePlace>
             ) : "" }
 
+            <FilterContainer>
+                <FilterBox onClick={() => setFilterModal(true)} filter={filter}>
+                    <ion-icon name="filter"></ion-icon>
+                    <span>Filters</span>
+                </FilterBox>
+                {filter ? (
+                <FilterBox onClick={filterFunctions.cleanFilters} filter={filter}>
+                    <span>X</span>
+                    <span>Clean Filters</span>
+                </FilterBox>
+                ) : "" }
+            </FilterContainer>
+            
             {places.length > 0 ? (
-            <Main token = {token}>
+            <Main>
                 <ul>
                     {places.map(place => (
                         <RenderRestaurants 
@@ -153,158 +142,53 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 `
-const Title = styled.div`
-    width: 90%; 
-    height: 10%;
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 30px;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    background-color: #359FE4;
-
-    span {
-        display: flex; 
-        align-items: center;
-        color: white;
-        font-weight: 500;
-
-        ion-icon { 
-            width: 25px; 
-            height: 25px;
-            margin-right: 5px;
-        }
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    img { 
-        width: 140px;
-        height: 70px;
-        border-radius: 0px 0px 10px 10px;
-    }
-`
-const UserProfile = styled.div`
-    display: flex;
-    align-items: center;
-
-    img { 
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-left: 8px;
-    }
-
-    ion-icon { 
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        color : white;
-    }
-
-    ion-icon#photo { 
-        width: 40px;
-        height: 40px;
-        margin-left: 5px;
-    }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
-`
-const Sign = styled.div`
-    display: flex;
-
-    button { 
-        width: 70px;
-        height: 40px;
-        margin-right: 10px;
-        border: 1px solid #359FE4;
-        border-radius: 15px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover { 
-            cursor: pointer;
-        }
-    
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    button#login { 
-        background-color: black; 
-        color: white; 
-    } 
-
-    button#sign-up { 
-        background-color: white; 
-        color: black; 
-    }
-`
-const Logout = styled.div`
-    width: 230px;
-    height: 60px;
-    background-color: white; 
-    margin-top: 100px;
-    position: fixed;
-    right: 5%;
-    top: 0px;
-    border-radius: 0px 0px 0px 10px;
-    display: flex;
-    flex-direction : column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0px 5px 5px 5px;
-    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.25);
-
-    span { 
-        font-weight: bold;
-        font-size: 16px;
-
-        &:hover{ 
-            cursor: pointer; 
-        }
-        
-        &:active {  
-            transform: scale(0.98);
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-        }
-    }
-
-    span#logout { 
-        color: red;
-    }
-`
 const CreatePlace = styled.div`
-    width: 20%;
+    width: 30%;
     height: 5%;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     margin-top: 130px;
     position: fixed; 
     bottom: 100px;
     right: 30px;
+    transition: height 1s;
+
+    ion-icon#triangle { 
+        width: 25px;
+        height: 25px;
+        transform: rotate(90deg);
+        color: red;
+    }
+    
+    @media (max-width: 800px) {
+        width: 45%;
+    }
+
+    &:hover,
+    &:focus { 
+        cursor: pointer;
+        height: 8%;
+    }
+`
+const CreatePlaceMessage = styled.div`
+    display: none;
+    width: 150px;
+    height: 55px;
+    background-color: red;
+    border-radius: 12px; 
+    text-align: left;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+
+    p { 
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        margin: 5px 0px 0px 0px;
+    }
 `
 const Circle = styled.div`
     width: 50px;
@@ -313,26 +197,17 @@ const Circle = styled.div`
     justify-content: center; 
     align-items: center; 
     border-radius: 50%;
-    background-color: #D74761;
+    background-color: red;
 
     ion-icon { 
         color: white;
         font-size: 30px;
     }
-
-    &:hover { 
-        cursor: pointer;
-    }
-
-    &:active {  
-        transform: scale(0.98);
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    }
 `
 const Main = styled.div`
     width: 100%; 
     height: 100%; 
-    margin: 130px 0px 80px 0px;
+    margin: 0px 0px 80px 0px;
 
     ul { 
         width: 100%; 
@@ -342,20 +217,64 @@ const Main = styled.div`
         align-items: center; 
     }
 `
-const Line = styled.div`
-    width: 100%; 
-    height: 1px;
+const FilterContainer = styled.div`
+    width: 60%; 
     display: flex; 
-    justify-content: center;
-    background-color: white;
-    padding-bottom: 10px;
+    justify-content: flex-start;
+    margin: 120px 0px 30px 0px;
 
-    div {
+    @media (max-width: 1800px) {
+        width: 70%;
+    }
+
+    @media (max-width: 1600px) {
+        width: 80%;
+    }
+
+    @media (max-width: 1300px) {
         width: 90%;
-        height: 1px;
-        border: 1px solid #D4D4D4;
-        margin-top:2px;
-        color: white;
+    }
+`
+const FilterBox = styled.div`
+    width: 150px;
+    height: 30px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    background-color: red;
+    color: white;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-right: ${props => props.filter ? ("10px") : ("0px")};
+    transition: background 2s, color 1s;
+    
+    ion-icon { 
+        width: 20px;
+        height: 20px;
+    }
+
+    span { 
+        margin-left: 12px;
+    }
+
+    &:hover, 
+    &:focus{ 
+        cursor: pointer; 
+        background: white;
+        color: black;
+    }
+    
+    &:active {  
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    }
+
+    @media (max-width: 750px) { 
+        width: 25%;
+    }
+
+    @media (max-width: 600px) { 
+        width: 30%;
     }
 `
 const NotFound = styled.div`
@@ -364,7 +283,7 @@ const NotFound = styled.div`
     display: flex; 
     justify-content: center; 
     align-items: center;
-    margin-top: 250px;
+    margin-top: 100px;
     flex-direction: column;
 
     img { 

@@ -1,6 +1,6 @@
 import qs from 'query-string';
 import dotenv from 'dotenv';
-import { gitHub } from '../../services/oauthRequest';
+import { gitHub } from '../../services/oauthApi';
 
 dotenv.config();
 
