@@ -3,9 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as locationsApi from "../services/locationsApi";
-import * as usersRequests from "../services/usersApi";
-import * as  filtersAPi from "../services/filtersApi";
 import Title from "../common-components/Title";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
@@ -47,16 +44,7 @@ export default function CreatePlaceScreen() {
   const config = configVar();
 
   useEffect(async () => {
-    try {
-      await usersRequests.auth(config);
-      setAuth(true);
-      const promiseType = await filtersAPi.foodTypes();
-      const promiseState = await locationsApi.states();
-      setTypes(promiseType);
-      setStates(promiseState);
-    } catch (error) {
-      console.log(error);
-    }
+    await createFunctions.initial(config,setAuth,setTypes,setStates);
   },[]);
 
   async function register(event) { 
