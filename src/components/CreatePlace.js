@@ -6,7 +6,6 @@ import styled from "styled-components";
 import * as locationsApi from "../services/locationsApi";
 import * as usersRequests from "../services/usersApi";
 import * as  filtersAPi from "../services/filtersApi";
-import * as  placesApi from "../services/placesApi";
 import Title from "../common-components/Title";
 import UserContext from "../contexts/userContext";
 import TokenContext from "../contexts/tokenContext";
@@ -17,6 +16,8 @@ import SearchBox from "../pages/SearchBox";
 import { DebounceInput } from "react-debounce-input";
 import notFound from "../styles/images/NotFound.png";
 import { configVar } from "../hooks/auth";
+import { createFunctions } from "../hooks/createPlace";
+import * as  placesApi from "../services/placesApi";
 
 export default function CreatePlaceScreen() { 
   const { userData, setUserData } = useContext(UserContext);
@@ -25,7 +26,7 @@ export default function CreatePlaceScreen() {
   const [name,setName] = useState("");
   const [description, setDescription] = useState("");
   const [mainPhoto, setMainPhoto] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState({ name: null });
   const [clickedType,setClickedType] = useState(false);
   const [city, setCity] = useState({id: null, name: ""}); 
   const [cities, setCities] = useState([]);
@@ -70,8 +71,6 @@ export default function CreatePlaceScreen() {
       address
     }
 
-    console.log(placeData);
-
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -79,8 +78,8 @@ export default function CreatePlaceScreen() {
     try {
       setClicked(true);
       await placesApi.createPlace(config,placeData);
-      navigate("/main");
       setClicked(false);
+      navigate("/main");
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data);
@@ -90,17 +89,7 @@ export default function CreatePlaceScreen() {
   }
 
   async function searchCity(event) {
-    setCity({id: null,name: event});
-    const name = event;
-    
-    try {
-      const promise = await locationsApi.cities(state.id,name);
-      setCities(promise);
-      if(promise.length === 0) setCities(null);
-    } catch (error) {
-      console.log(error);
-      setCities([]);
-    }
+    await createFunctions.searchCity(event,setCity,state,setCities);
   }   
 
   return(
@@ -157,7 +146,7 @@ export default function CreatePlaceScreen() {
         />
 
         <Selector type={clickedType} onClick={() => setClickedType(!clickedType)}>
-          <span>{type ? (type.name):("Type")}</span>
+          <span>{type.name ? (type.name):("Type")}</span>
           {clickedType ? ( 
             <ion-icon name="chevron-up-outline"></ion-icon>
           ) : ( 
