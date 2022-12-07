@@ -15,10 +15,6 @@ async function initial(config,setAuth,setTypes,setStates) {
   }
 }
 
-// async function create(name,description,mainPhoto,type,city,address,token,setClicked,setErrorMessage,setError) { 
-    
-// }
-
 async function searchCity(event,setCity,state,setCities) { 
   setCity({id: null,name: event});
   const name = event;

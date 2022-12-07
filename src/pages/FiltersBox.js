@@ -5,7 +5,6 @@ import { Background, Components } from "../common-components/Boxes";
 import RenderTypes from "../subpages/RenderTypes";
 import RenderMetod from "../subpages/RenderMetod";
 import RenderFilterTypes from "../subpages/RenderFilterTypes";
-import * as  filtersApi from "../services/filtersApi";
 import { filterFunctions } from "../hooks/filters";
 
 export default function FiltersBox({ setFilterModal }) { 
@@ -41,12 +40,7 @@ export default function FiltersBox({ setFilterModal }) {
     ]
 
     useEffect(async () => {
-        try {
-            const promise = await filtersApi.foodTypes();
-            setTypes(promise);
-        } catch (error) {
-            console.log(error);
-        }
+        await filterFunctions.types(setTypes);
     },[]);
 
     return(

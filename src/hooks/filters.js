@@ -1,5 +1,14 @@
 import * as  filtersApi from "../services/filtersApi";
 
+async function types(setTypes) {
+    try {
+        const promise = await filtersApi.foodTypes();
+        setTypes(promise);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function filtering(filter, setErrorMessage, setError, setFilterModal) { 
     if(!filter.main) { 
         console.log('entrou');
@@ -38,6 +47,7 @@ function cleanFilters() {
 }
 
 export const filterFunctions = { 
+    types,
     filtering,
     cleanFilters
 }
