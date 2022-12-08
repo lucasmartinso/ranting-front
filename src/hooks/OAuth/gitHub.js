@@ -25,7 +25,7 @@ export async function userGitInfo() {
       if(code) {
           try {
             const user = await gitHub(code);
-            console.log('FOIIIIIII');
+            console.log({user});
             return user;
           } catch (err) {
             console.log(err);

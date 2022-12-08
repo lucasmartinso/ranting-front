@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import logo from "../styles/images/Ranting.png"
 import { ThreeDots } from "react-loader-spinner"
@@ -22,6 +22,17 @@ export default function LoginScreen() {
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
   console.log(password); 
+  //console.log({gitUser});
+
+  async function getCode() { 
+    const user = await userGitInfo();
+    //console.log({user});
+    setGitUser(user);
+  }
+
+  useEffect( () => { 
+      getCode();
+  },[])
 
   async function gitHub() {
     setGitClick(() => ++gitClick);
@@ -29,8 +40,6 @@ export default function LoginScreen() {
 
       try {
         redirectToGithub();
-        const user = await userGitInfo();
-        setGitUser(user);
       } catch (error) {
         console.log(error);
       }
