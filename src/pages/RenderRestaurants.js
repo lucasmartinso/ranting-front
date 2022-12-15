@@ -116,6 +116,8 @@ const Overall = styled.div`
     }
 
     @media (max-width: 600px) {
+        width: 25%;
+
         span { 
             font-size: 22px;
             text-overflow: ellipsis;

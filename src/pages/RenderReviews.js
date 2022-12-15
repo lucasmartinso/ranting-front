@@ -64,7 +64,7 @@ const Review = styled.li`
   }
 
   @media (max-width: 600px) {
-    width: 100%;
+    width: 97%;
   }
 `;
 const ProfileRating = styled.div`
