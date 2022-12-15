@@ -26,7 +26,7 @@ export default function LoginScreen() {
 
   async function getCode() { 
     const user = await userGitInfo();
-    //console.log({user});
+    console.log({user});
     setGitUser(user);
   }
 
@@ -49,7 +49,7 @@ export default function LoginScreen() {
   async function register(event) { 
     event.preventDefault();
     try {
-      await loginFunctions.register(usernameEmail,password,setClicked,setPassword,setAuth,setErrorMessage,setError)
+      await loginFunctions.register(usernameEmail,password,setClicked,setPassword,setAuth,setErrorMessage,setError);
       navigate("/main");
       window.location.reload();
     } catch (error) {

@@ -25,11 +25,16 @@ export async function userGitInfo() {
       if(code) {
           try {
             const user = await gitHub(code);
-            console.log({user});
             return user;
           } catch (err) {
             console.log(err);
           }
         }
     }
+}
+
+export async function sign() { 
+  //ver se o user ja existe 
+  //se nn exister cadastrar ele 
+  //se ja existir puxar as infos do db
 }
